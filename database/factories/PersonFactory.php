@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
+use App\Models\IdentificationType;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,8 +23,26 @@ class PersonFactory extends Factory
      */
     public function definition()
     {
+        $cities = City::inRandomOrder()->limit(3)->get();
         return [
-            //
+            'identificacion' => $this->faker->numberBetween([1000, 100000]),
+            'nombre1' => $this->faker->firstName,
+            'nombre2' => $this->faker->firstName,
+            'apellido1' => $this->faker->lastName,
+            'apellido2' => $this->faker->lastName,
+            'fechaNac' => $this->faker->date,
+            'direccion' => $this->faker->streetAddress,
+            'email' => $this->faker->safeEmail,
+            'telefonoFijo' => $this->faker->phoneNumber,
+            'celular' => $this->faker->phoneNumber,
+            'perfil' => $this->faker->paragraph(),
+            'sexo' => $this->faker->randomElement(['M', 'F', 'O']),
+            'rh' => $this->faker->randomElement(["O+", "O-", "A+", "O-"]),
+            'rutaFoto' => $this->faker->imageUrl,
+            'idTipoIdentificacion' => IdentificationType::inRandomOrder()->first()->id,
+            'idCiudad' => $cities[0]->id,
+            'idCiudadNac' => $cities[1]->id,
+            'idCiudadUbicacion' => $cities[2]->id
         ];
     }
 }

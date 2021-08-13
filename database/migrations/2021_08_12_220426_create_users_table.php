@@ -23,9 +23,6 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('idPersona');
             $table->foreign('idPersona')->references('id')->on('people');
 
-            $table->unsignedBigInteger('idEstado');
-            $table->foreign('idEstado')->references('id')->on('statuses');
-
             $table->timestamps();
         });
     }
