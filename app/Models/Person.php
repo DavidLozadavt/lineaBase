@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Person extends Model
 {
     use HasFactory;
+
+    public function usuario() {
+        return $this->hasOne(User::class, 'idPersona');
+    }
 }

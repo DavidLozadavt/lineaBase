@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Person;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PersonSeeder extends Seeder
@@ -13,6 +15,5 @@ class PersonSeeder extends Seeder
      */
     public function run()
     {
-        //
     }
 }

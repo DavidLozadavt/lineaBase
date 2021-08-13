@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Person;
+use App\Models\User;
 use App\Permission\PermissionConst;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -36,5 +38,15 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_TIPO_CONTRATO,
             PermissionConst::GESTION_USUARIO,
         ]);
+
+        $emailAdmin = "admin@gmail.com";
+        Person::factory()
+        ->hasUsuario(1, ['email' => $emailAdmin])
+        ->create([
+            'email' => $emailAdmin
+        ]);
+
+        $usuario = User::where('email', $emailAdmin)->first();
+        $usuario->assignRole($vt);
     }
 }
