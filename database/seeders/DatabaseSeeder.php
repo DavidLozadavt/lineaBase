@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
         $path = 'database/seeders/sql/cities.sql';
         DB::unprepared(file_get_contents($path));
+        $path = 'database/seeders/sql/statuses.sql';
+        DB::unprepared(file_get_contents($path));
 
         $this->call(CompanySeeder::class);
         $this->call(PermissionSeeder::class);
