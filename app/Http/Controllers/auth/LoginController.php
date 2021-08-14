@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivationCompanyUser;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -25,11 +27,30 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return response()->json([], 204);
+            $activationCompanyUsers = ActivationCompanyUser::with('company')
+                ->where('user_id', auth()->user()->id)
+                ->where('state_id', Status::ID_ACTIVE)
+                ->get();
+
+
+            return response()->json($activationCompanyUsers);
         }
 
         return response()->json([
             'email' => 'The provided credentials do not match our records.',
         ], 400);
+    }
+
+
+    public function logout(Request $request)
+    {
+        Cache::flush('usuario' . auth()->user()->id);
+        Cache::flush('permissions' . auth()->user()->id);
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $request->session()->regenerate();
+
+        return response()->json([], 204);
     }
 }
