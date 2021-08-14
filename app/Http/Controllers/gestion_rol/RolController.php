@@ -30,7 +30,7 @@ class RolController extends Controller
         $roles = Rol::with("company");
 
         if ($nombre) {
-            $roles->where('nombreRol', '=', $nombre);
+            $roles->where('name', '=', $nombre);
         }
 
         if ($company) {
@@ -104,6 +104,8 @@ class RolController extends Controller
 
     // public function index()
     // {
-    //     return Rol::with('company')->get();
+    //     $roles = Rol::with('company')->get();
+
+    //     return response()->json($roles);
     // }
 }

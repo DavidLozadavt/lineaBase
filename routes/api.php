@@ -26,5 +26,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'logged']);
 });
 
-Route::get('list_roles', [RolController::class, 'index']);
+Route::resource('roles', RolController::class);
 Route::get('list_companies', [CompanyController::class, 'index']);
