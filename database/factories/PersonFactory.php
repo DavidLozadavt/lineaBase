@@ -38,7 +38,7 @@ class PersonFactory extends Factory
             'perfil' => $this->faker->paragraph(),
             'sexo' => $this->faker->randomElement(['M', 'F', 'O']),
             'rh' => $this->faker->randomElement(["O+", "O-", "A+", "O-"]),
-            'rutaFoto' => $this->faker->imageUrl,
+            'rutaFoto' => '/default/user.svg',
             'idTipoIdentificacion' => IdentificationType::inRandomOrder()->first()->id,
             'idCiudad' => $cities[0]->id,
             'idCiudadNac' => $cities[1]->id,

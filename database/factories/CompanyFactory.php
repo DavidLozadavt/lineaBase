@@ -25,7 +25,7 @@ class CompanyFactory extends Factory
             'nombre' => $this->faker->name(),
             'razonSocial' => $this->faker->name(),
             'nit' => $this->faker->name(),
-            'rutaLogo' => $this->faker->name(),
+            'rutaLogo' => '/default/logo.jpg',
             'representanteLegal' => $this->faker->name(),
             'digitoVerificacion' => $this->faker->numberBetween([1, 20]),
         ];
