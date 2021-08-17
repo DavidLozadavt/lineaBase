@@ -20,7 +20,7 @@ class CreateCitiesTable extends Migration
             $table->string('descripcion', 50);
 
             $table->unsignedBigInteger('iddepartamento');
-            $table->foreign('iddepartamento')->references('id')->on('countries');
+            $table->foreign('iddepartamento')->references('id')->on('departamento');
 
             $table->timestamps();
         });

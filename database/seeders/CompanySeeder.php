@@ -14,11 +14,11 @@ class CompanySeeder extends Seeder
     public function run()
     {
         \App\Models\Company::factory()->create([
-            'nombre' => "Virtual T"
+            'razonSocial' => "Virtual T"
         ]);
 
         \App\Models\Company::factory()->create([
-            'nombre' => "Rápido Tambo"
+            'razonSocial' => "Rápido Tambo"
         ]);
 
         \App\Models\Company::factory(10)->create();

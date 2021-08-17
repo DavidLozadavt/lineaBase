@@ -20,7 +20,7 @@ class CreateActivationCompanyUsersTable extends Migration
             $table->unsignedBigInteger('state_id');
             $table->foreign('state_id')->references('id')->on('statuses');
             $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('company_id')->references('id')->on('empresa');
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->timestamps();

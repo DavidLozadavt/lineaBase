@@ -20,7 +20,7 @@ class CreateContractsTable extends Migration
             $table->foreign('idpersona')->references('id')->on('people');
 
             $table->unsignedBigInteger('idcompany');
-            $table->foreign('idcompany')->references('id')->on('companies');
+            $table->foreign('idcompany')->references('id')->on('empresa');
 
             $table->unsignedBigInteger('idtipoContrato');
             $table->foreign('idtipoContrato')->references('id')->on('contract_types');

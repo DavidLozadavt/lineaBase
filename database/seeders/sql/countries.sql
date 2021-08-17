@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- Dumping data for table `departamento`
 --
 
-INSERT INTO `countries` (`id`, `codigo`, `descripcion`) VALUES
+INSERT INTO `departamento` (`id`, `codigo`, `descripcion`) VALUES
 (1, '5', 'ANTIOQUIA'),
 (2, '8', 'ATLANTICO'),
 (3, '11', 'BOGOTA'),

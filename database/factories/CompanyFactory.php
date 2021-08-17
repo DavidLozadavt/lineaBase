@@ -22,7 +22,6 @@ class CompanyFactory extends Factory
     public function definition()
     {
         return [
-            'nombre' => $this->faker->name(),
             'razonSocial' => $this->faker->name(),
             'nit' => $this->faker->name(),
             'rutaLogo' => '/default/logo.jpg',
