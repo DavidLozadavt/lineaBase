@@ -13,11 +13,11 @@ class CreateContractTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('contract_types', function (Blueprint $table) {
+        Schema::create('tipoContrato', function (Blueprint $table) {
             $table->id();
             $table->string('nombreTipoContrato');
             $table->string('descripcion');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class CreateContractTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contract_types');
+        Schema::dropIfExists('tipoContrato');
     }
 }

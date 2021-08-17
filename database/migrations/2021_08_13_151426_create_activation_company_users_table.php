@@ -16,7 +16,7 @@ class CreateActivationCompanyUsersTable extends Migration
         Schema::create('activation_company_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('usuario');
             $table->unsignedBigInteger('state_id');
             $table->foreign('state_id')->references('id')->on('estado');
             $table->unsignedBigInteger('company_id');

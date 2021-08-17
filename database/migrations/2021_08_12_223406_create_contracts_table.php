@@ -13,17 +13,17 @@ class CreateContractsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contracts', function (Blueprint $table) {
+        Schema::create('contrato', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('idpersona');
             $table->foreign('idpersona')->references('id')->on('people');
 
-            $table->unsignedBigInteger('idcompany');
-            $table->foreign('idcompany')->references('id')->on('empresa');
+            $table->unsignedBigInteger('idempresa');
+            $table->foreign('idempresa')->references('id')->on('empresa');
 
             $table->unsignedBigInteger('idtipoContrato');
-            $table->foreign('idtipoContrato')->references('id')->on('contract_types');
+            $table->foreign('idtipoContrato')->references('id')->on('tipoContrato');
 
             $table->date('fechaContratacion');
             $table->date('fechaFinalContrato');
@@ -34,7 +34,7 @@ class CreateContractsTable extends Migration
             $table->text('objetoContrato');
             $table->text('observacion');
             $table->text('perfilProfesional');
-            $table->char('otroSi', 1);
+            $table->char('otrosi', 1);
 
             $table->timestamps();
         });
