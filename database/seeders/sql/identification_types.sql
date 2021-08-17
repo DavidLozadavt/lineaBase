@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- Dumping data for table `tipoIdentificacion`
 --
 
-INSERT INTO `identification_types` (`id`, `detalle`, `codigo`) VALUES
+INSERT INTO `tipoIdentificacion` (`id`, `detalle`, `codigo`) VALUES
 (1, 'CEDULA', 'CC'),
 (2, 'TARJETA DE IDENTIDAD', 'TI'),
 (3, 'PASAPORTE', 'PAS'),

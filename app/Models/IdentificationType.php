@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class IdentificationType extends Model
 {
     use HasFactory;
+
+    protected $table = "tipoIdentificacion";
 }

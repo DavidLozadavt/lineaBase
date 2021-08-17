@@ -31,16 +31,16 @@ class CreatePeopleTable extends Migration
             $table->string('rutaFoto');
 
             $table->unsignedBigInteger('idTipoIdentificacion');
-            $table->foreign('idTipoIdentificacion')->references('id')->on('identification_types');
+            $table->foreign('idTipoIdentificacion')->references('id')->on('tipoIdentificacion');
 
             $table->unsignedBigInteger('idCiudad');
-            $table->foreign('idCiudad')->references('id')->on('cities');
+            $table->foreign('idCiudad')->references('id')->on('ciudad');
 
             $table->unsignedBigInteger('idCiudadNac');
-            $table->foreign('idCiudadNac')->references('id')->on('cities');
+            $table->foreign('idCiudadNac')->references('id')->on('ciudad');
 
             $table->unsignedBigInteger('idCiudadUbicacion');
-            $table->foreign('idCiudadUbicacion')->references('id')->on('cities');
+            $table->foreign('idCiudadUbicacion')->references('id')->on('ciudad');
 
             $table->timestamps();
         });

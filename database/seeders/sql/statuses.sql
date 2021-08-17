@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- Dumping data for table `estado`
 --
 
-INSERT INTO `statuses` (`id`, `estado`, `descripcion`) VALUES
+INSERT INTO `estado` (`id`, `estado`, `descripcion`) VALUES
 (1, 'ACTIVO', 'ESTADO PARA FUNCIONES Y USUARIOS EN USO DEL SISTEMA'),
 (2, 'INACTIVO', 'ESTADO PARA FUNCIONES O USUARIOS QUE YA NO SEAN NECESARIOS PARA EL SISTEMA'),
 (3, 'OCULTO', 'RESERVADO PARA EL SISTEMA'),

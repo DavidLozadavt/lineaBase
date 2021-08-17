@@ -13,7 +13,7 @@ class CreateIdentificationTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('identification_types', function (Blueprint $table) {
+        Schema::create('tipoIdentificacion', function (Blueprint $table) {
             $table->id();
             $table->string('codigo')->unique();
             $table->string('detalle');
@@ -28,6 +28,6 @@ class CreateIdentificationTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('identification_types');
+        Schema::dropIfExists('tipoIdentificacion');
     }
 }

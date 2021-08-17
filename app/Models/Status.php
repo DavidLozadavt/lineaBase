@@ -9,6 +9,7 @@ class Status extends Model
 {
     use HasFactory;
 
-    const ID_ACTIVE = 1;
+    protected $table = "estado";
 
+    const ID_ACTIVE = 1;
 }
