@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Models\Person;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -16,6 +17,7 @@ class UserController extends Controller
 
     public function logged()
     {
+
         $response = Session::get('usuario');
         return response($response);
     }
