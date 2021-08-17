@@ -28,8 +28,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $activationCompanyUsers = ActivationCompanyUser::with('company')
-                ->where('user_id', auth()->user()->id)
-                ->where('state_id', Status::ID_ACTIVE)
+                ->active(auth()->id())
                 ->get();
 
 

@@ -22,12 +22,11 @@ class UserController extends Controller
 
     public function setCompany($idCompany)
     {
-        $id = auth()->user()->id;
+        $id = auth()->id();
 
         $userActivate = ActivationCompanyUser::with('company')
-            ->where('user_id', $id)
+            ->active($id)
             ->where('company_id', $idCompany)
-            ->where('state_id', Status::ID_ACTIVE)
             ->first();
 
         $permissionsName = $this->permissionsToString($userActivate->getAllPermissions());

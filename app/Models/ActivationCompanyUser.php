@@ -10,7 +10,14 @@ class ActivationCompanyUser extends Model
 {
     use HasFactory, HasRoles;
 
-    public function company() {
+    public function company()
+    {
         return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function scopeActive($query, $idUser)
+    {
+        return $query->where('user_id', $idUser)
+            ->where('state_id', Status::ID_ACTIVE);
     }
 }
