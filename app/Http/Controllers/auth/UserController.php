@@ -34,7 +34,7 @@ class UserController extends Controller
         $permissionsName = $this->permissionsToString($userActivate->getAllPermissions());
 
         $response = new \stdClass();
-        $response->user = Person::where('id', auth()->user()->idPersona)->first();
+        $response->user = Person::where('id', auth()->user()->idpersona)->first();
         $response->permission = $permissionsName;
         $response->userActivate = $userActivate;
 

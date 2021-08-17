@@ -45,6 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->contrasena;
+    }
+
     public function persona()
     {
         return $this->belongsTo(Person::class, 'idPersona');

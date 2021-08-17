@@ -41,12 +41,12 @@ class RoleSeeder extends Seeder
 
         $emailAdmin = "admin@gmail.com";
         Person::factory()
-            ->hasUsuario(1, ['usuario' => $emailAdmin])
+            ->hasUsuario(1, ['email' => $emailAdmin])
             ->create([
                 'email' => $emailAdmin
             ]);
 
-        $usuario = User::where('usuario', $emailAdmin)->first();
+        $usuario = User::where('email', $emailAdmin)->first();
         $usuario->assignRole($vt);
     }
 }
