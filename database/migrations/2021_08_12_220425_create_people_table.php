@@ -14,7 +14,7 @@ class CreatePeopleTable extends Migration
     public function up()
     {
         Schema::create('persona', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('identificacion')->unique();
             $table->string('nombre1');
             $table->string('nombre2');
@@ -30,16 +30,16 @@ class CreatePeopleTable extends Migration
             $table->char('rh', 5);
             $table->string('rutaFoto');
 
-            $table->unsignedBigInteger('idTipoIdentificacion');
+            $table->unsignedInteger('idTipoIdentificacion');
             $table->foreign('idTipoIdentificacion')->references('id')->on('tipoIdentificacion');
 
-            $table->unsignedBigInteger('idCiudad');
+            $table->unsignedInteger('idCiudad');
             $table->foreign('idCiudad')->references('id')->on('ciudad');
 
-            $table->unsignedBigInteger('idCiudadNac');
+            $table->unsignedInteger('idCiudadNac');
             $table->foreign('idCiudadNac')->references('id')->on('ciudad');
 
-            $table->unsignedBigInteger('idCiudadUbicacion');
+            $table->unsignedInteger('idCiudadUbicacion');
             $table->foreign('idCiudadUbicacion')->references('id')->on('ciudad');
 
             $table->timestamps();

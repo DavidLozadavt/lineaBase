@@ -14,15 +14,15 @@ class CreateContractsTable extends Migration
     public function up()
     {
         Schema::create('contrato', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
 
-            $table->unsignedBigInteger('idpersona');
+            $table->unsignedInteger('idpersona');
             $table->foreign('idpersona')->references('id')->on('persona');
 
-            $table->unsignedBigInteger('idempresa');
+            $table->unsignedInteger('idempresa');
             $table->foreign('idempresa')->references('id')->on('empresa');
 
-            $table->unsignedBigInteger('idtipoContrato');
+            $table->unsignedInteger('idtipoContrato');
             $table->foreign('idtipoContrato')->references('id')->on('tipoContrato');
 
             $table->date('fechaContratacion');

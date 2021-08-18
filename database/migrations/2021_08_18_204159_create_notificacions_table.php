@@ -14,19 +14,19 @@ class CreateNotificacionsTable extends Migration
     public function up()
     {
         Schema::create('notificacion', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->date('fecha');
             $table->time('hora');
             $table->char('asunto', 50);
             $table->text('mensaje');
-            $table->unsignedBigInteger('estado_id');
+            $table->unsignedInteger('estado_id');
             $table->foreign('estado_id')->references('id')->on('estado');
             $table->foreign('idUsuarioReceptor')->references('id')->on('usuario');
-            $table->unsignedBigInteger('idUsuarioReceptor');
+            $table->unsignedInteger('idUsuarioReceptor');
             $table->foreign('idUsuarioRemitente')->references('id')->on('usuario');
-            $table->unsignedBigInteger('idUsuarioRemitente');
+            $table->unsignedInteger('idUsuarioRemitente');
             $table->foreign('idTipoNotificacion')->references('id')->on('tipoNotificacion');
-            $table->unsignedBigInteger('idTipoNotificacion');
+            $table->unsignedInteger('idTipoNotificacion');
 
 
             $table->timestamps();

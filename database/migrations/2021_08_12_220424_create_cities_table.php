@@ -14,12 +14,11 @@ class CreateCitiesTable extends Migration
     public function up()
     {
         Schema::create('ciudad', function (Blueprint $table) {
-            $table->id();
-
+            $table->increments('id');
             $table->string('codigo', 10)->unique();
             $table->string('descripcion', 50);
 
-            $table->unsignedBigInteger('iddepartamento');
+            $table->unsignedInteger('iddepartamento');
             $table->foreign('iddepartamento')->references('id')->on('departamento');
 
             $table->timestamps();

@@ -14,7 +14,7 @@ class CreateTipoNotificacionsTable extends Migration
     public function up()
     {
         Schema::create('tipoNotificacion', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->char('tipoNotificacion', 240);
             $table->text('observacion');
             $table->timestamps();
