@@ -24,7 +24,7 @@ class UserFactory extends Factory
     {
         return [
             'email' => $this->faker->unique()->safeEmail(),
-            'contrasena' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'contrasena' => '$2y$10$gEQV2vEiTeyV2kXlfs/uje0OGr0tZswDGJjy2DTOjJOPPPeNsLZ0.', // 123
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ];
