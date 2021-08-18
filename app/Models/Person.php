@@ -9,6 +9,7 @@ class Person extends Model
 {
     use HasFactory;
 
+    protected $table = "persona";
     const RUTA_FOTO = "images";
     const RUTA_FOTO_DEFAULT = "/default/user.svg";
 

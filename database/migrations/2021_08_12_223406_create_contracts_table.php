@@ -17,7 +17,7 @@ class CreateContractsTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('idpersona');
-            $table->foreign('idpersona')->references('id')->on('people');
+            $table->foreign('idpersona')->references('id')->on('persona');
 
             $table->unsignedBigInteger('idempresa');
             $table->foreign('idempresa')->references('id')->on('empresa');
