@@ -10,6 +10,8 @@ class ActivationCompanyUser extends Model
 {
     use HasFactory, HasRoles;
 
+    protected $guard_name = "web";
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');

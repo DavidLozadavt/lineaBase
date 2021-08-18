@@ -18,7 +18,8 @@ class CompanySeeder extends Seeder
         ]);
 
         \App\Models\Company::factory()->create([
-            'razonSocial' => "Rápido Tambo"
+            'razonSocial' => "Rápido Tambo",
+            'rutaLogo' => '/default/rapido-tambo-logo.jpg'
         ]);
 
         \App\Models\Company::factory(10)->create();

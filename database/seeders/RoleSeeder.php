@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ActivationCompanyUser;
 use App\Models\Person;
 use App\Models\User;
 use App\Permission\PermissionConst;
@@ -46,7 +47,21 @@ class RoleSeeder extends Seeder
                 'email' => $emailAdmin
             ]);
 
-        $usuario = User::where('email', $emailAdmin)->first();
-        $usuario->assignRole($vt);
+
+        $activation = ActivationCompanyUser::factory()->create([
+            'company_id' => 1,
+            'user_id' => 1,
+            'state_id' => 1
+        ]);
+
+        $activation->assignRole($vt);
+
+        $activation = ActivationCompanyUser::factory()->create([
+            'company_id' => 2,
+            'user_id' => 1,
+            'state_id' => 1
+        ]);
+
+        $activation->assignRole($rol1);
     }
 }
