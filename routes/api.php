@@ -33,6 +33,6 @@ Route::resource('roles', RolController::class);
 Route::get('list_companies', [CompanyController::class, 'index']);
 
 //permisos
-Route::post('permisos', [AsignacionRolPermiso::class, 'index']);
+Route::get('permisos', [AsignacionRolPermiso::class, 'index']);
 Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
-Route::post('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
+Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
