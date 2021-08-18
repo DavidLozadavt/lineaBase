@@ -23,10 +23,10 @@ class RoleSeeder extends Seeder
         $vt->idCompany = 1;
         $vt->save();
 
-        $rol1 = new Role();
-        $rol1->name = "Admin";
-        $rol1->idCompany = 2;
-        $rol1->save();
+        $rapidoTambo = new Role();
+        $rapidoTambo->name = "Admin";
+        $rapidoTambo->idCompany = 2;
+        $rapidoTambo->save();
 
         $vt->syncPermissions([
             PermissionConst::GESTION_ROL_PERMISOS,
@@ -35,7 +35,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_USUARIO,
         ]);
 
-        $rol1->syncPermissions([
+        $rapidoTambo->syncPermissions([
             PermissionConst::GESTION_TIPO_CONTRATO,
             PermissionConst::GESTION_USUARIO,
         ]);
@@ -62,6 +62,6 @@ class RoleSeeder extends Seeder
             'state_id' => 1
         ]);
 
-        $activation->assignRole($rol1);
+        $activation->assignRole($rapidoTambo);
     }
 }
