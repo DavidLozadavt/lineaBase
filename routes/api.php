@@ -4,6 +4,7 @@ use App\Http\Controllers\gestion_empresa\CompanyController;
 use App\Http\Controllers\gestion_rol\RolController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\UserController;
+use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_rol_permisos\AsignacionRolPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,7 @@ Route::get('list_companies', [CompanyController::class, 'index']);
 Route::get('permisos', [AsignacionRolPermiso::class, 'index']);
 Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
 Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
+
+// notificaciones
+Route::resource('notificaciones', NotificacionController::class);
+Route::put('notificaciones/read/{id}', [NotificacionController::class, 'read']);

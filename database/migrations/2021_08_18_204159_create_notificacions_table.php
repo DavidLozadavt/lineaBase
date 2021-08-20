@@ -27,8 +27,8 @@ class CreateNotificacionsTable extends Migration
             $table->unsignedInteger('idUsuarioRemitente');
             $table->foreign('idTipoNotificacion')->references('id')->on('tipoNotificacion');
             $table->unsignedInteger('idTipoNotificacion');
-
-
+            $table->foreign('idEmpresa')->references('id')->on('empresa');
+            $table->unsignedInteger('idEmpresa');
             $table->timestamps();
         });
     }

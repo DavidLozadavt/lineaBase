@@ -12,4 +12,5 @@ class Status extends Model
     protected $table = "estado";
 
     const ID_ACTIVE = 1;
+    const ID_INACTIVO = 2;
 }
