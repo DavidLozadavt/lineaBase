@@ -38,7 +38,8 @@ class UserController extends Controller
         $response->permission = $permissionsName;
         $response->userActivate = $userActivate;
 
-        Session::put('idEmpresa', $userActivate->company_id);
+        Session::put('company_id', $userActivate->company_id);
+        Session::put('user_activate_id', $userActivate->id);
         Session::put('permissions', $permissionsName);
         Session::put('usuario', json_encode($response));
     }
