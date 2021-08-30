@@ -16,6 +16,14 @@ class ActivationCompanyUser extends Model
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function estado()
+    {
+        return $this->belongsTo(Status::class, 'state_id');
+    }
 
     public function scopeActive($query, $idUser)
     {

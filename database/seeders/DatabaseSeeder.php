@@ -22,6 +22,12 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
         $path = 'database/seeders/sql/identification_types.sql';
         DB::unprepared(file_get_contents($path));
+        $path = 'database/seeders/sql/datosTipoTransaccion.sql';
+        DB::unprepared(file_get_contents($path));
+        $path = 'database/seeders/sql/medio_pago.sql';
+        DB::unprepared(file_get_contents($path));
+        $path = 'database/seeders/sql/tipo_pago.sql';
+        DB::unprepared(file_get_contents($path));
 
         $this->call(CompanySeeder::class);
         $this->call(PermissionSeeder::class);
