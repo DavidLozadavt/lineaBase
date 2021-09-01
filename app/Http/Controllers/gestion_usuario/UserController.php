@@ -4,6 +4,8 @@ namespace App\Http\Controllers\gestion_usuario;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
+use App\Models\Person;
+use App\Models\User;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session as FacadesSession;
@@ -19,4 +21,52 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $persona = new Person($data);
+        $persona->rutaFoto = Person::RUTA_FOTO_DEFAULT;
+        $persona->identificacion = rand(0, 99999);
+        $persona->save();
+
+        $usuario = new User($data);
+        $usuario->contrasena = bcrypt($request->input('contrasena'));
+        $usuario->idpersona = $persona->id;
+        $usuario->save();
+
+        $activacion = new ActivationCompanyUser();
+        $activacion->user_id = $usuario->id;
+        $activacion->state_id = 1;
+        $activacion->company_id = FacadesSession::get("company_id");
+        $activacion->fechaInicio = date('Y-m-d');
+        $activacion->fechaFin = date('Y-m-d');
+        $activacion->save();
+
+        return response()->json($usuario, 201);
+    }
+
+    // public function update(Request $request, int $id)
+    // {
+    //     $data = $request->all();
+    //     $tipoTransaccion = TipoTransaccion::findOrFail($id);
+    //     $tipoTransaccion->fill($data);
+    //     $tipoTransaccion->save();
+
+    //     return response()->json($tipoTransaccion);
+    // }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  *
+    //  * @param  int $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function destroy(int $id)
+    // {
+    //     $tipoTransaccion = TipoTransaccion::findOrFail($id);
+    //     $tipoTransaccion->delete();
+
+    //     return response()->json([], 204);
+    // }
 }

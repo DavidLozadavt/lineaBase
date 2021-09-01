@@ -10,6 +10,25 @@ class Person extends Model
     use HasFactory;
 
     protected $table = "persona";
+    protected $fillable = [
+        "identificacion",
+        "nombre1",
+        "nombre2",
+        "apellido1",
+        "apellido2",
+        "fechaNac",
+        "idCiudadNac",
+        "idCiudad",
+        "direccion",
+        "email",
+        "idTipoIdentificacion",
+        "telefonoFijo",
+        "celular",
+        "idCiudadUbicacion",
+        "perfil",
+        "sexo",
+        "rh",
+    ];
     const RUTA_FOTO = "images";
     const RUTA_FOTO_DEFAULT = "/default/user.svg";
 
