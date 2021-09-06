@@ -8,6 +8,7 @@ use App\Models\Person;
 use App\Models\User;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session as FacadesSession;
 
 class UserController extends Controller
@@ -47,6 +48,16 @@ class UserController extends Controller
         return response()->json($usuario, 201);
     }
 
+    public function asignation(Request $request)
+    {
+
+        DB::table('model_has_roles')
+            ->where('model_id', $request->idActivation)
+            ->delete();
+        $user = ActivationCompanyUser::find($request->input('idActivation'));
+        $user->assignRole($request->input('roles', []));
+        return $user;
+    }
     // public function update(Request $request, int $id)
     // {
     //     $data = $request->all();
@@ -62,11 +73,14 @@ class UserController extends Controller
     //  * @param  int $id
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function destroy(int $id)
-    // {
-    //     $tipoTransaccion = TipoTransaccion::findOrFail($id);
-    //     $tipoTransaccion->delete();
+    public function destroy(int $id)
+    {
+        ActivationCompanyUser::where('user_id', $id)->delete();
+        $user = User::findOrFail($id);
+        $idPersona = $user->idpersona;
+        User::where('id', $id)->delete();
+        Person::where('id', $idPersona)->delete();
 
-    //     return response()->json([], 204);
-    // }
+        return response()->json([], 204);
+    }
 }

@@ -64,3 +64,5 @@ Route::resource('tipo_transacciones', TipoTransaccionController::class);
 Route::get('lista_usuarios', [Gestion_usuarioUserController::class, 'getUsers']);
 
 Route::resource('usuarios', Gestion_usuarioUserController::class);
+
+Route::put('asignar_roles', [Gestion_usuarioUserController::class, 'asignation']);
