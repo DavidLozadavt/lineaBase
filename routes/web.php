@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// SPA
+Route::get(
+    '/{any?}',
+    [
+        App\Http\Controllers\WebController::class,
+        'index'
+    ]
+);
