@@ -25,9 +25,17 @@ class ActivationCompanyUser extends Model
         return $this->belongsTo(Status::class, 'state_id');
     }
 
-    public function scopeActive($query, $idUser)
+    public function scopeActive($query)
     {
-        return $query->where('user_id', $idUser)
-            ->where('state_id', Status::ID_ACTIVE);
+        $now = \Carbon\Carbon::now();
+        return $query
+            ->where('state_id', Status::ID_ACTIVE)
+            ->whereDate('fechaInicio', '<=', $now)
+            ->whereDate('fechaFin', '>=', $now);
+    }
+
+    public function scopeByUser($query, $idUser)
+    {
+        return $query->where('user_id', $idUser);
     }
 }

@@ -27,7 +27,8 @@ class UserController extends Controller
         $id = auth()->id();
 
         $userActivate = ActivationCompanyUser::with('company')
-            ->active($id)
+            ->active()
+            ->byUser($id)
             ->findOrFail($idUserActive);
 
         $permissionsName = $this->permissionsToString($userActivate->getAllPermissions());
