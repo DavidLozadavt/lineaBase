@@ -33,7 +33,7 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/user', [UserController::class, 'logged']);
-    Route::post('/user_company/{idCompany}', [UserController::class, 'setCompany']);
+    Route::post('/user_company/{idUserActive}', [UserController::class, 'setCompany']);
 });
 
 Route::resource('roles', RolController::class);
