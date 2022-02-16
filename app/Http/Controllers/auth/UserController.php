@@ -28,8 +28,7 @@ class UserController extends Controller
 
         $userActivate = ActivationCompanyUser::with('company')
             ->active($id)
-            ->where('id', $idUserActive)
-            ->first();
+            ->findOrFail($idUserActive);
 
         $permissionsName = $this->permissionsToString($userActivate->getAllPermissions());
 
