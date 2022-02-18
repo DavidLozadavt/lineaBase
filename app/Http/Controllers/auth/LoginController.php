@@ -29,7 +29,8 @@ class LoginController extends Controller
 
             $activationCompanyUsers = ActivationCompanyUser::with('company')
                 ->with('roles')
-                ->active(auth()->id())
+                ->active()
+                ->byUser(auth()->id())
                 ->get();
 
 
