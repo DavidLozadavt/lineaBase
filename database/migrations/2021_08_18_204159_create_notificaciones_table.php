@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotificacionsTable extends Migration
+class CreateNotificacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,13 +21,13 @@ class CreateNotificacionsTable extends Migration
             $table->text('mensaje');
             $table->unsignedInteger('estado_id');
             $table->foreign('estado_id')->references('id')->on('estado');
-            $table->foreign('idUsuarioReceptor')->references('id')->on('usuario');
+            $table->foreign('idUsuarioReceptor')->references('id')->on('user');
             $table->unsignedInteger('idUsuarioReceptor');
-            $table->foreign('idUsuarioRemitente')->references('id')->on('usuario');
+            $table->foreign('idUsuarioRemitente')->references('id')->on('user');
             $table->unsignedInteger('idUsuarioRemitente');
             $table->foreign('idTipoNotificacion')->references('id')->on('tipoNotificacion');
             $table->unsignedInteger('idTipoNotificacion');
-            $table->foreign('idEmpresa')->references('id')->on('empresa');
+            $table->foreign('idEmpresa')->references('id')->on('company');
             $table->unsignedInteger('idEmpresa');
             $table->timestamps();
         });

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TipoNotificacion;
+use App\Models\Ciudad;
 use Illuminate\Http\Request;
 
-class TipoNotificacionController extends Controller
+class CiudadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class TipoNotificacionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TipoNotificacion  $tipoNotificacion
+     * @param  \App\Models\Ciudad  $Ciudad
      * @return \Illuminate\Http\Response
      */
-    public function show(TipoNotificacion $tipoNotificacion)
+    public function show(Ciudad $Ciudad)
     {
         //
     }
@@ -52,10 +52,10 @@ class TipoNotificacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TipoNotificacion  $tipoNotificacion
+     * @param  \App\Models\Ciudad  $Ciudad
      * @return \Illuminate\Http\Response
      */
-    public function edit(TipoNotificacion $tipoNotificacion)
+    public function edit(Ciudad $Ciudad)
     {
         //
     }
@@ -64,10 +64,10 @@ class TipoNotificacionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TipoNotificacion  $tipoNotificacion
+     * @param  \App\Models\Ciudad  $Ciudad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoNotificacion $tipoNotificacion)
+    public function update(Request $request, Ciudad $Ciudad)
     {
         //
     }
@@ -75,10 +75,10 @@ class TipoNotificacionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TipoNotificacion  $tipoNotificacion
+     * @param  \App\Models\Ciudad  $Ciudad
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoNotificacion $tipoNotificacion)
+    public function destroy(Ciudad $Ciudad)
     {
         //
     }

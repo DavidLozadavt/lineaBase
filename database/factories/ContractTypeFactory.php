@@ -22,7 +22,7 @@ class ContractTypeFactory extends Factory
     public function definition()
     {
         return [
-            '
+            
         ];
     }
 }

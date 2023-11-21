@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Estado extends Model
 {
     use HasFactory;
 
-    protected $table = "departamento";
+    protected $table = "estado";
+
+    const ID_ACTIVE = 1;
+    const ID_INACTIVO = 2;
 }

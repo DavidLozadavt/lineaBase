@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $path = 'database/seeders/sql/countries.sql';
+        $path = 'database/seeders/sql/departamentos.sql';
         DB::unprepared(file_get_contents($path));
-        $path = 'database/seeders/sql/cities.sql';
+        $path = 'database/seeders/sql/ciudades.sql';
         DB::unprepared(file_get_contents($path));
-        $path = 'database/seeders/sql/statuses.sql';
+        $path = 'database/seeders/sql/estados.sql';
         DB::unprepared(file_get_contents($path));
-        $path = 'database/seeders/sql/identification_types.sql';
+        $path = 'database/seeders/sql/tipoIdentificacion.sql';
         DB::unprepared(file_get_contents($path));
         $path = 'database/seeders/sql/datosTipoTransaccion.sql';
         DB::unprepared(file_get_contents($path));

@@ -37,7 +37,7 @@ class CreatePermissionTables extends Migration
             $table->timestamps();
 
             $table->unsignedInteger('idCompany');
-            $table->foreign('idCompany')->references('id')->on('empresa');
+            $table->foreign('idCompany')->references('id')->on('company');
 
             $table->unique(['name', 'guard_name', 'idCompany']);
         });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeopleTable extends Migration
+class CreatePersonasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -32,9 +32,6 @@ class CreatePeopleTable extends Migration
 
             $table->unsignedInteger('idTipoIdentificacion');
             $table->foreign('idTipoIdentificacion')->references('id')->on('tipoIdentificacion');
-
-            $table->unsignedInteger('idCiudad');
-            $table->foreign('idCiudad')->references('id')->on('ciudad');
 
             $table->unsignedInteger('idCiudadNac');
             $table->foreign('idCiudadNac')->references('id')->on('ciudad');

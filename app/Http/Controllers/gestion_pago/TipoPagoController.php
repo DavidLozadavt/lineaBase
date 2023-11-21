@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\gestion_tipopago;
+namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoPago;

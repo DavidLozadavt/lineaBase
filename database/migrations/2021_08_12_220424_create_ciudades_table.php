@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipoTransaccionsTable extends Migration
+class CreateCiudadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateTipoTransaccionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipoTransaccion', function (Blueprint $table) {
+        Schema::create('ciudad', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('detalle');
-            $table->text('descripcion');
+            $table->string('codigo', 10)->unique();
+            $table->string('descripcion', 50);
+
+            $table->unsignedInteger('iddepartamento');
+            $table->foreign('iddepartamento')->references('id')->on('departamento');
+
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ class CreateTipoTransaccionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipoTransaccion');
+        Schema::dropIfExists('ciudad');
     }
 }

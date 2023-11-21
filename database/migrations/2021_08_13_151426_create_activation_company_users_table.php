@@ -16,11 +16,11 @@ class CreateActivationCompanyUsersTable extends Migration
         Schema::create('activation_company_users', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('usuario');
+            $table->foreign('user_id')->references('id')->on('user');
             $table->unsignedInteger('state_id');
             $table->foreign('state_id')->references('id')->on('estado');
             $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('empresa');
+            $table->foreign('company_id')->references('id')->on('company');
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->timestamps();

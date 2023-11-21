@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use Illuminate\Database\Seeder;
 
 class CompanySeeder extends Seeder
@@ -13,15 +14,15 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Company::factory()->create([
+        Company::factory()->create([
             'razonSocial' => "Virtual T"
         ]);
 
-        \App\Models\Company::factory()->create([
+        Company::factory()->create([
             'razonSocial' => "Rápido Tambo",
             'rutaLogo' => '/default/rapido-tambo-logo.jpg'
         ]);
 
-        \App\Models\Company::factory(10)->create();
+        Company::factory(10)->create();
     }
 }

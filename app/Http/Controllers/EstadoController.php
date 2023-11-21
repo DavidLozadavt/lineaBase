@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contrato;
+use App\Models\Estado;
 use Illuminate\Http\Request;
 
-class ContratoController extends Controller
+class EstadoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ContratoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Contrato  $Contrato
+     * @param  \App\Models\Estado  $Estado
      * @return \Illuminate\Http\Response
      */
-    public function show(Contrato $Contrato)
+    public function show(Estado $Estado)
     {
         //
     }
@@ -52,10 +52,10 @@ class ContratoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Contrato  $Contrato
+     * @param  \App\Models\Estado  $Estado
      * @return \Illuminate\Http\Response
      */
-    public function edit(Contrato $Contrato)
+    public function edit(Estado $Estado)
     {
         //
     }
@@ -64,10 +64,10 @@ class ContratoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Contrato  $Contrato
+     * @param  \App\Models\Estado  $Estado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contrato $Contrato)
+    public function update(Request $request, Estado $Estado)
     {
         //
     }
@@ -75,10 +75,10 @@ class ContratoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Contrato  $Contrato
+     * @param  \App\Models\Estado  $Estado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contrato $Contrato)
+    public function destroy(Estado $Estado)
     {
         //
     }

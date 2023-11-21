@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContractsTable extends Migration
+class CreateContratosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,7 @@ class CreateContractsTable extends Migration
             $table->foreign('idpersona')->references('id')->on('persona');
 
             $table->unsignedInteger('idempresa');
-            $table->foreign('idempresa')->references('id')->on('empresa');
+            $table->foreign('idempresa')->references('id')->on('company');
 
             $table->unsignedInteger('idtipoContrato');
             $table->foreign('idtipoContrato')->references('id')->on('tipoContrato');

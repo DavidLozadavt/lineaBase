@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\gestion_proceso;
 
-use App\Models\Pago;
+use App\Http\Controllers\Controller;
+use App\Models\AsignacionProcesoTipoDocumento;
 use Illuminate\Http\Request;
 
-class PagoController extends Controller
+class AsignacionProcesoTipoDocumentoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,16 +14,6 @@ class PagoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -41,21 +32,10 @@ class PagoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Pago  $pago
+     * @param  \App\Models\AsignacionProcesoTipoDocumento  $asignacionProcesoTipoDocumento
      * @return \Illuminate\Http\Response
      */
-    public function show(Pago $pago)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pago $pago)
+    public function show(AsignacionProcesoTipoDocumento $asignacionProcesoTipoDocumento)
     {
         //
     }
@@ -64,10 +44,10 @@ class PagoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pago  $pago
+     * @param  \App\Models\AsignacionProcesoTipoDocumento  $asignacionProcesoTipoDocumento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pago $pago)
+    public function update(Request $request, AsignacionProcesoTipoDocumento $asignacionProcesoTipoDocumento)
     {
         //
     }
@@ -75,10 +55,10 @@ class PagoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Pago  $pago
+     * @param  \App\Models\AsignacionProcesoTipoDocumento  $asignacionProcesoTipoDocumento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pago $pago)
+    public function destroy(AsignacionProcesoTipoDocumento $asignacionProcesoTipoDocumento)
     {
         //
     }

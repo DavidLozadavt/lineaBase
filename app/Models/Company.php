@@ -9,7 +9,7 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $table = "empresa";
+    protected $table = "company";
 
     const RUTA_LOGO_DEFAULT = "/default/logo.jpg";
 

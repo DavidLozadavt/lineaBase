@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\gestion_pago;
 
-use App\Models\IdentificationType;
+use App\Http\Controllers\Controller;
+use App\Models\Pago;
 use Illuminate\Http\Request;
 
-class IdentificationTypeController extends Controller
+class PagoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +42,10 @@ class IdentificationTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\IdentificationType  $identificationType
+     * @param  \App\Models\Pago  $pago
      * @return \Illuminate\Http\Response
      */
-    public function show(IdentificationType $identificationType)
+    public function show(Pago $pago)
     {
         //
     }
@@ -52,10 +53,10 @@ class IdentificationTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\IdentificationType  $identificationType
+     * @param  \App\Models\Pago  $pago
      * @return \Illuminate\Http\Response
      */
-    public function edit(IdentificationType $identificationType)
+    public function edit(Pago $pago)
     {
         //
     }
@@ -64,10 +65,10 @@ class IdentificationTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\IdentificationType  $identificationType
+     * @param  \App\Models\Pago  $pago
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, IdentificationType $identificationType)
+    public function update(Request $request, Pago $pago)
     {
         //
     }
@@ -75,10 +76,10 @@ class IdentificationTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\IdentificationType  $identificationType
+     * @param  \App\Models\Pago  $pago
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IdentificationType $identificationType)
+    public function destroy(Pago $pago)
     {
         //
     }

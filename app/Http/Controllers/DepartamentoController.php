@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContractType;
+use App\Models\Departamento;
 use Illuminate\Http\Request;
 
-class ContractTypeController extends Controller
+class DepartamentoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ContractTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ContractType  $contractType
+     * @param  \App\Models\Departamento  $Departamento
      * @return \Illuminate\Http\Response
      */
-    public function show(ContractType $contractType)
+    public function show(Departamento $Departamento)
     {
         //
     }
@@ -52,10 +52,10 @@ class ContractTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ContractType  $contractType
+     * @param  \App\Models\Departamento  $Departamento
      * @return \Illuminate\Http\Response
      */
-    public function edit(ContractType $contractType)
+    public function edit(Departamento $Departamento)
     {
         //
     }
@@ -64,10 +64,10 @@ class ContractTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContractType  $contractType
+     * @param  \App\Models\Departamento  $Departamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ContractType $contractType)
+    public function update(Request $request, Departamento $Departamento)
     {
         //
     }
@@ -75,10 +75,10 @@ class ContractTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ContractType  $contractType
+     * @param  \App\Models\Departamento  $Departamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ContractType $contractType)
+    public function destroy(Departamento $Departamento)
     {
         //
     }

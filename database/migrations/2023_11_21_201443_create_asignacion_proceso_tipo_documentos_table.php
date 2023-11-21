@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIdentificationTypesTable extends Migration
+class CreateAsignacionProcesoTipoDocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateIdentificationTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipoIdentificacion', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('codigo')->unique();
-            $table->string('detalle');
+        Schema::create('asignacion_proceso_tipo_documentos', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ class CreateIdentificationTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipoIdentificacion');
+        Schema::dropIfExists('asignacion_proceso_tipo_documentos');
     }
 }

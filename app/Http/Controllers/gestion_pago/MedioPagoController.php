@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\gestion_mediopago;
+namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
 use App\Models\MedioPago;
