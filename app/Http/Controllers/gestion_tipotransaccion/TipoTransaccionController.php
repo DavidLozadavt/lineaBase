@@ -4,11 +4,13 @@ namespace App\Http\Controllers\gestion_tipotransaccion;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoTransaccion;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TipoTransaccionController extends Controller
 {
+  
   /**
    * Get all data tipo transaccion
    *
@@ -29,9 +31,12 @@ class TipoTransaccionController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
-    $data = $request->all();
-    $tipoTransaccion = new TipoTransaccion($data);
-    $tipoTransaccion->save();
+    $request->validate([
+      'detalle' => 'required|string|max:50',
+      'descripcion' => 'nullable'
+    ]);
+
+    $tipoTransaccion = TipoTransaccion::create($request->all());
 
     return response()->json($tipoTransaccion, 201);
   }
@@ -44,10 +49,9 @@ class TipoTransaccionController extends Controller
    */
   public function show(int $id): JsonResponse
   {
-    $tipoTransaccion = TipoTransaccion::find($id);
-
-    if(!$tipoTransaccion)
-    {
+    try {
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
       return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
@@ -64,12 +68,15 @@ class TipoTransaccionController extends Controller
   public function update(Request $request, int $id): JsonResponse
   {
     try {
-      $data = $request->all();
+      $request->validate([
+        'detalle' => 'required|string|max:50',
+        'descripcion' => 'nullable'
+      ]);
+
       $tipoTransaccion = TipoTransaccion::findOrFail($id);
-      $tipoTransaccion->fill($data);
-      $tipoTransaccion->save();
-    } catch (\Exception $e) {
-      return response()->json(['Tipo transaccion no found or ' . $e]);
+      $tipoTransaccion->update($request->all());
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
     return response()->json($tipoTransaccion);
@@ -86,10 +93,11 @@ class TipoTransaccionController extends Controller
     try {
       $tipoTransaccion = TipoTransaccion::findOrFail($id);
       $tipoTransaccion->delete();
-    } catch (\Exception $e) {
-      return response()->json(['Tipo transaccion no found or ' . $e]);
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
-    return response()->json(['message' => 'Tipo transaccion delete successfully!!!'], 200);
+    return response()->json(null, 204);
   }
+
 }

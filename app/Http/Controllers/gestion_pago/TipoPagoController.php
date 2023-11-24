@@ -4,6 +4,7 @@ namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoPago;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -29,9 +30,11 @@ class TipoPagoController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
-    $data = $request->all();
-    $tipoPago = new TipoPago($data);
-    $tipoPago->save();
+    $request->validate([
+      'detalleTipoPago' => 'required|string|max:50',
+    ]);
+
+    $tipoPago = TipoPago::create($request->all());
 
     return response()->json($tipoPago, 201);
   }
@@ -44,13 +47,13 @@ class TipoPagoController extends Controller
    */
   public function show(int $id): JsonResponse
   {
-    $tipoPago = TipoPago::find($id);
-
-    if (!$tipoPago) {
+    try {
+      $tipoPago = TipoPago::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
       return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
-    return response()->json($tipoPago, 200);
+    return response()->json($tipoPago);
   }
 
   /**
@@ -62,14 +65,15 @@ class TipoPagoController extends Controller
    */
   public function update(Request $request, int $id): JsonResponse
   {
-
     try {
-      $data = $request->all();
+      $request->validate([
+        'detalleTipoPago' => 'required|string|max:50',
+      ]);
+
       $tipoPago = TipoPago::findOrFail($id);
-      $tipoPago->fill($data);
-      $tipoPago->save();
-    } catch (\Exception $e) {
-      return response()->json(['Tipo pago not found or ' . $e]);
+      $tipoPago->update($request->all());
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
     return response()->json($tipoPago);
@@ -86,11 +90,11 @@ class TipoPagoController extends Controller
     try {
       $tipoPago = TipoPago::findOrFail($id);
       $tipoPago->delete();
-    } catch (\Exception $e) {
-      return response()->json(['Tipo pago not found or ' . $e]);
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
-    return response()->json(['message' => 'Tipo pago delete successfully!!!'], 200);
-
+    return response()->json(null, 204);
   }
+
 }
