@@ -3,18 +3,18 @@
 namespace Database\Factories;
 
 use App\Models\Ciudad;
-use App\Models\Person;
+use App\Models\Persona;
 use App\Models\TipoIdentificacion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PersonFactory extends Factory
+class PersonaFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Person::class;
+    protected $model = Persona::class;
 
     /**
      * Define the model's default state.

@@ -22,14 +22,14 @@ class ActivationCompanyUser extends Model
     }
     public function estado()
     {
-        return $this->belongsTo(Status::class, 'state_id');
+        return $this->belongsTo(Estado::class, 'state_id');
     }
 
     public function scopeActive($query)
     {
         $now = \Carbon\Carbon::now();
         return $query
-            ->where('state_id', Status::ID_ACTIVE)
+            ->where('state_id', Estado::ID_ACTIVE)
             ->whereDate('fechaInicio', '<=', $now)
             ->whereDate('fechaFin', '>=', $now);
     }

@@ -3,16 +3,15 @@
 use App\Http\Controllers\gestion_empresa\CompanyController;
 use App\Http\Controllers\gestion_rol\RolController;
 use App\Http\Controllers\auth\LoginController;
-use App\Http\Controllers\auth\UserController;
-use App\Http\Controllers\gestion_mediopago\MedioPagoController;
+use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\gestion_pago\MedioPagoController;
 use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol_permisos\AsignacionRolPermiso;
 use App\Http\Controllers\gestion_tipo_documento\TipoDocumentoController;
 use App\Http\Controllers\gestion_tipopago\TipoPagoController;
 use App\Http\Controllers\gestion_tipotransaccion\TipoTransaccionController;
-use App\Http\Controllers\gestion_usuario\UserController as Gestion_usuarioUserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\gestion_usuario\UserController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -28,12 +27,16 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 */
 
 Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
-Route::post('/login', [LoginController::class, 'authenticate']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout']);
-    Route::get('/user', [UserController::class, 'logged']);
-    Route::post('/user_company/{idUserActive}', [UserController::class, 'setCompany']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function(){
+    Route::post('login',[AuthController::class,'login']);
+    Route::post('user',[AuthController::class,'me']);
+    Route::post('logout', [AuthController::class,'logout']);
+    Route::post('user_company',[AuthController::class,'setCompany']);
+    Route::post('permissions',[AuthController::class,'getPermissions']);
 });
 
 Route::resource('roles', RolController::class);

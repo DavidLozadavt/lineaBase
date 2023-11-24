@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\gestion_rol_permisos;
+namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

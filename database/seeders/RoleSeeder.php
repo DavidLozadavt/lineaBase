@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ActivationCompanyUser;
-use App\Models\Person;
+use App\Models\Persona;
 use App\Models\User;
 use App\Permission\PermissionConst;
 use Illuminate\Database\Seeder;
@@ -48,7 +48,7 @@ class RoleSeeder extends Seeder
         ]);
 
         $emailAdmin = "admin@gmail.com";
-        Person::factory()
+        Persona::factory()
             ->hasUsuario(1, ['email' => $emailAdmin])
             ->create([
                 'email' => $emailAdmin

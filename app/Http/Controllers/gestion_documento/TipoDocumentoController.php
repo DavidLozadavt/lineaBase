@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\gestion_tipo_documento;
+namespace App\Http\Controllers\gestion_documento;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoDocumento;

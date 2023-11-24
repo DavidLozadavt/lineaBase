@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Person;
+use App\Models\Persona;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class PersonSeeder extends Seeder
+class PersonaSeeder extends Seeder
 {
     /**
      * Run the database seeds.

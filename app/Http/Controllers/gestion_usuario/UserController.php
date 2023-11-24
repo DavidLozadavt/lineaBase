@@ -4,7 +4,7 @@ namespace App\Http\Controllers\gestion_usuario;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
-use App\Models\Person;
+use App\Models\Persona;
 use App\Models\User;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -27,14 +27,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $persona = new Person($data);
-        $persona->rutaFoto = Person::RUTA_FOTO_DEFAULT;
-        $persona->identificacion = rand(0, 99999);
-        $persona->save();
+        $Personaaa = new Persona($data);
+        $Personaaa->rutaFoto = Persona::RUTA_FOTO_DEFAULT;
+        $Personaaa->identificacion = rand(0, 99999);
+        $Personaaa->save();
 
         $usuario = new User($data);
         $usuario->contrasena = bcrypt($request->input('contrasena'));
-        $usuario->idpersona = $persona->id;
+        $usuario->idPersonaaa = $Personaaa->id;
         $usuario->save();
 
         $activacion = new ActivationCompanyUser();
@@ -77,9 +77,9 @@ class UserController extends Controller
     {
         ActivationCompanyUser::where('user_id', $id)->delete();
         $user = User::findOrFail($id);
-        $idPersona = $user->idpersona;
+        $idPersona = $user->idPersona;
         User::where('id', $id)->delete();
-        Person::where('id', $idPersona)->delete();
+        Persona::where('id', $idPersona)->delete();
 
         return response()->json([], 204);
     }
