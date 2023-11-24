@@ -29,12 +29,13 @@ Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
-], function(){
-    Route::post('login',[AuthController::class,'login']);
-    Route::post('user',[AuthController::class,'getUser']);
-    Route::post('logout', [AuthController::class,'logout']);
-    Route::post('user_company',[AuthController::class,'setCompany']);
-    Route::post('permissions',[AuthController::class,'getPermissions']);
+], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('user', [AuthController::class, 'getUser']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('set_company/{idUserActive}', [AuthController::class, 'setCompany']);
+    Route::post('roles', [AuthController::class, 'getRoles']);
+    Route::post('permissions', [AuthController::class, 'getPermissions']);
 });
 
 Route::resource('roles', RolController::class);
@@ -62,8 +63,8 @@ Route::resource('tipo_pagos', TipoPagoController::class);
 Route::resource('tipo_transacciones', TipoTransaccionController::class);
 
 // traer listado de los usuario por empresa
-Route::get('lista_usuarios', [Gestion_usuarioUserController::class, 'getUsers']);
+Route::get('lista_usuarios', [UserController::class, 'getUsers']);
 
-Route::resource('usuarios', Gestion_usuarioUserController::class);
+Route::resource('usuarios', UserController::class);
 
-Route::put('asignar_roles', [Gestion_usuarioUserController::class, 'asignation']);
+Route::put('asignar_roles', [UserController::class, 'asignation']);

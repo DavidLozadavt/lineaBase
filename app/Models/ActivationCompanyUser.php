@@ -11,7 +11,7 @@ class ActivationCompanyUser extends Model
 {
     use HasFactory, HasRoles;
 
-    protected $guard_name = "web";
+    protected $guard_name = "api";
 
     public function company()
     {
