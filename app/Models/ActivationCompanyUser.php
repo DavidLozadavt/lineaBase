@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
+use Carbon\Carbon;
 
 class ActivationCompanyUser extends Model
 {
@@ -27,7 +28,7 @@ class ActivationCompanyUser extends Model
 
     public function scopeActive($query)
     {
-        $now = \Carbon\Carbon::now();
+        $now = Carbon::now();
         return $query
             ->where('state_id', Estado::ID_ACTIVE)
             ->whereDate('fechaInicio', '<=', $now)
