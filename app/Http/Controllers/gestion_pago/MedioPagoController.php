@@ -51,7 +51,7 @@ class MedioPagoController extends Controller
     $medioPago = MedioPago::find($id);
 
     if (!$medioPago) {
-      return response()->json(['error' => 'Medio pago not found']);
+      return response()->json(['error' => 'Medio pago not found'], 404);
     }
 
     return response()->json($medioPago, 200);
