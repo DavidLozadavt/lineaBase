@@ -26,7 +26,7 @@ class ActivationCompanyUserFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'state_id' => $this->faker->randomElement([1, 2]),
-            'company_id' => Company::inRandomOrder()->first()->id,
+            'idCompany' => Company::inRandomOrder()->first()->id,
             'fechaInicio' => $this->faker->date,
             'fechaFin' => $this->faker->date,
         ];

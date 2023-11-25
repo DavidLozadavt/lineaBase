@@ -6,7 +6,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol_permisos\AsignacionRolPermiso;
-use App\Http\Controllers\gestion_tipo_documento\TipoDocumentoController;
+use App\Http\Controllers\gestion_documento\TipoDocumentoController;
 use App\Http\Controllers\gestion_tipotransaccion\TipoTransaccionController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
@@ -36,8 +36,17 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('user', [AuthController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('user_company', [AuthController::class, 'setCompany']);
+    Route::post('active_users',[AuthController::class,'getActiveUsers']);
+    Route::post('set_company', [AuthController::class, 'setCompany']);
+    Route::post('roles', [AuthController::class, 'getRoles']);
     Route::post('permissions', [AuthController::class, 'getPermissions']);
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'tipo_documento'
+],function (){
+    Route::resource('', TipoDocumentoController::class);
 });
 
 Route::resource('roles', RolController::class);
@@ -55,11 +64,8 @@ Route::put('notificaciones/read/{id}', [NotificacionController::class, 'read']);
 // proceso
 Route::resource('procesos', ProcesoController::class);
 
-// tipo documento
-Route::resource('tipo_documentos', TipoDocumentoController::class);
-
 Route::group([
-    'middleware' => 'auth:api',
+    'middleware' => 'api',
     'prefix' => 'pagos'
 ], function () {
 
@@ -74,8 +80,8 @@ Route::group([
 });
 
 // traer listado de los usuario por empresa
-Route::get('lista_usuarios', [Gestion_usuarioUserController::class, 'getUsers']);
+Route::get('lista_usuarios', [UserController::class, 'getUsers']);
 
-Route::resource('usuarios', Gestion_usuarioUserController::class);
+Route::resource('usuarios', UserController::class);
 
-Route::put('asignar_roles', [Gestion_usuarioUserController::class, 'asignation']);
+Route::put('asignar_roles', [UserController::class, 'asignation']);

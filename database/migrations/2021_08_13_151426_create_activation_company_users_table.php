@@ -19,8 +19,8 @@ class CreateActivationCompanyUsersTable extends Migration
             $table->foreign('user_id')->references('id')->on('user');
             $table->unsignedInteger('state_id');
             $table->foreign('state_id')->references('id')->on('estado');
-            $table->unsignedInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('company');
+            $table->unsignedInteger('idCompany');
+            $table->foreign('idCompany')->references('id')->on('company');
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->timestamps();

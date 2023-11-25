@@ -5,11 +5,13 @@ namespace App\Http\Controllers\auth;
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Models\Persona;
+use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use stdClass;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -26,7 +28,7 @@ class AuthController extends Controller
         ]);
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized por feo'], 401);
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -42,6 +44,14 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
+    public function getActiveUsers()
+    {
+        return ActivationCompanyUser::query()
+        ->where(function($query){
+            QueryUtil::whereUser($query);
+        })->get();
+    }
+
     public function logout(Request $request)
     {
         auth()->logout();
@@ -52,7 +62,13 @@ class AuthController extends Controller
     public function getPermissions()
     {
         $permissions = Session::get('permissions');
-        return response() -> json($permissions);
+        return response()->json($permissions);
+    }
+
+    public function getRoles()
+    {
+        $permissions = Session::get('roles');
+        return response()->json($permissions);
     }
 
     /**
@@ -71,32 +87,27 @@ class AuthController extends Controller
 
     public function setCompany(Request $request)
     {
-        $id = auth()->id();
-        $idUserActive = $request -> input('idUserActive');
+        $data = $request -> all();
 
-        $userActivate = ActivationCompanyUser::with('company')
-            ->active()
-            ->byUser($id)
-            ->findOrFail($idUserActive);
-
-        $permissionsName = $this->permissionsToString($userActivate->getAllPermissions());
-
-        $response = new stdClass();
-        $response->user = Persona::where('id', auth()->user()->idpersona)->first();
-        $response->permission = $permissionsName;
-        $response->userActivate = $userActivate;
-
-        Session::put('company_id', $userActivate->company_id);
-        Session::put('user_activate_id', $userActivate->id);
-        Session::put('permissions', $permissionsName);
-        Session::put('user', json_encode($response));
+        $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
+            ->where('id', $data['idUserActive'])
+            ->where(function ($query) {
+                QueryUtil::whereUser($query);
+                QueryUtil::whereActive($query);
+            });
+        
+        if ($user_active -> exists()) {
+            $user_active = $user_active -> first();
+            Session::put('idCompany',$user_active -> idCompany);
+            $roles = $user_active -> roles;
+            Session::put('roles',$roles);
+            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id');
+            Session::put('permissions',$permissions);
+            
+            return response() -> json(['Empresa seleccionada correctamente'],200);
+        }
+        session()->invalidate();
+        return response() -> json(['Usted no tiene un usuario activo para esta empresa'],404);
     }
 
-    protected function permissionsToString($permissions)
-    {
-        $permissions = collect($permissions)->map(function ($permission) {
-            return $permission->name;
-        });
-        return implode(',', $permissions->toArray());
-    }
 }
