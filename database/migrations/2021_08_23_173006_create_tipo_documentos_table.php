@@ -16,12 +16,12 @@ class CreateTipoDocumentosTable extends Migration
         Schema::create('tipoDocumento', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tituloDocumento');
-            $table->text('descripcion');
-            $table->foreign('idEstado')->references('id')->on('estado');
-            $table->unsignedInteger('idEstado');
-            $table->foreign('idProceso')->references('id')->on('proceso');
-            $table->unsignedInteger('idProceso');
+            $table->text('descripcion')->nullable();
+
+            $table->unsignedInteger('idCompany');
+            $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
+
         });
     }
 

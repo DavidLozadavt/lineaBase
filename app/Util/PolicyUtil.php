@@ -2,8 +2,7 @@
 
 namespace App\Util;
 
-use App\Models\ActivationCompanyUser;
-use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class PolicyUtil
 {
@@ -14,34 +13,26 @@ class PolicyUtil
      * @param User $user
      * @return boolean
      */
-    public static function isAdmin(User $user, int $idEmpresa)
+    public static function isAdmin()
     {
+        $idCompany = Session::get('idCompany');
 
-        if ($idEmpresa != 1) {
+        if ($idCompany != 1) {
             return false;
         }
 
-        return ActivationCompanyUser::with(['roles.permissions'])
-            ->byUser($user->id)
-            ->where('company_id', $idEmpresa)
-            ->active()
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'ADMIN');
-            })
+        return Session::get('roles')
+            ->where('idCompany', $idCompany)
+            ->where('name', "Admin")
             ->exists();
     }
 
-    public static function hasPermission(User $user, int $idEmpresa, array $spected_permissions)
+    public static function hasPermission(array $spected_permissions)
     {
-        $active_user = ActivationCompanyUser::with(['roles.permissions'])
-        ->byUser($user->id)
-        ->where('company_id',$idEmpresa)
-        ->active()
-        ->whereHas('roles',function($rol) use ($spected_permissions){
-            $rol->whereHas('permissions',function($permission) use ($spected_permissions){
-                $permission->whereIn('name',$spected_permissions);
-            });
-        })->exists();
-        return $active_user;
+        $permissions = Session::get('permissions');
+
+        return $permissions
+            ->whereIn('name', $spected_permissions)
+            ->exists();
     }
 }

@@ -3,11 +3,11 @@
 use App\Http\Controllers\gestion_empresa\CompanyController;
 use App\Http\Controllers\gestion_rol\RolController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\gestion_documento\TipoDocumentoController;
 use App\Http\Controllers\gestion_pago\MedioPagoController;
 use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol_permisos\AsignacionRolPermiso;
-use App\Http\Controllers\gestion_tipo_documento\TipoDocumentoController;
 use App\Http\Controllers\gestion_tipopago\TipoPagoController;
 use App\Http\Controllers\gestion_tipotransaccion\TipoTransaccionController;
 use Illuminate\Support\Facades\Route;
@@ -33,9 +33,17 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('user', [AuthController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('set_company/{idUserActive}', [AuthController::class, 'setCompany']);
+    Route::post('active_users',[AuthController::class,'getActiveUsers']);
+    Route::post('set_company', [AuthController::class, 'setCompany']);
     Route::post('roles', [AuthController::class, 'getRoles']);
     Route::post('permissions', [AuthController::class, 'getPermissions']);
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'tipo_documento'
+],function (){
+    Route::resource('', TipoDocumentoController::class);
 });
 
 Route::resource('roles', RolController::class);
@@ -54,7 +62,7 @@ Route::put('notificaciones/read/{id}', [NotificacionController::class, 'read']);
 Route::resource('procesos', ProcesoController::class);
 
 // tipo documento
-Route::resource('tipo_documentos', TipoDocumentoController::class);
+// Route::resource('tipo_documentos', TipoDocumentoController::class);
 // medio pagos
 Route::resource('medio_pagos', MedioPagoController::class);
 // tipo pagos

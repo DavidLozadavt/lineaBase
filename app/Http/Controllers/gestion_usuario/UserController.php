@@ -15,9 +15,9 @@ class UserController extends Controller
 {
     public function getUsers()
     {
-        $id = FacadesSession::get("company_id");
+        $id = FacadesSession::get("idCompany");
         $user = ActivationCompanyUser::with('company', 'user', 'user.persona', 'roles', 'estado')
-            ->where('company_id', $id)
+            ->where('idCompany', $id)
             ->get();
 
         return response()->json($user);
@@ -40,7 +40,7 @@ class UserController extends Controller
         $activacion = new ActivationCompanyUser();
         $activacion->user_id = $usuario->id;
         $activacion->state_id = 1;
-        $activacion->company_id = FacadesSession::get("company_id");
+        $activacion->idCompany = FacadesSession::get("idCompany");
         $activacion->fechaInicio = date('Y-m-d');
         $activacion->fechaFin = date('Y-m-d');
         $activacion->save();

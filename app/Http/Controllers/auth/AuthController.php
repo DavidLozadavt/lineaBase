@@ -44,6 +44,14 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
+    public function getActiveUsers()
+    {
+        return ActivationCompanyUser::query()
+        ->where(function($query){
+            QueryUtil::whereUser($query);
+        })->get();
+    }
+
     public function logout(Request $request)
     {
         auth()->logout();
@@ -77,11 +85,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function setCompany(int $idUserActive)
+    public function setCompany(Request $request)
     {
+        $data = $request -> all();
 
         $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
-            ->where('id', $idUserActive)
+            ->where('id', $data['idUserActive'])
             ->where(function ($query) {
                 QueryUtil::whereUser($query);
                 QueryUtil::whereActive($query);
@@ -89,6 +98,7 @@ class AuthController extends Controller
         
         if ($user_active -> exists()) {
             $user_active = $user_active -> first();
+            Session::put('idCompany',$user_active -> idCompany);
             $roles = $user_active -> roles;
             Session::put('roles',$roles);
             $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id');
@@ -96,6 +106,7 @@ class AuthController extends Controller
             
             return response() -> json(['Empresa seleccionada correctamente'],200);
         }
+        session()->invalidate();
         return response() -> json(['Usted no tiene un usuario activo para esta empresa'],404);
     }
 

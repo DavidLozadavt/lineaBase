@@ -13,11 +13,11 @@ class QueryUtil
 {
     public static function whereCompany(Builder $query): Builder
     {
-        $company_id = Session::get('company_id');
-        return $query->where(function ($query) use ($company_id) {
-            $query->where('company_id', $company_id)
-                ->orWhereHas('company', function ($query) use ($company_id) {
-                    $query->where('principal_id', $company_id);
+        $idCompany = Session::get('idCompany');
+        return $query->where(function ($query) use ($idCompany) {
+            $query->where('idCompany', $idCompany)
+                ->orWhereHas('company', function ($query) use ($idCompany) {
+                    $query->where('principal_id', $idCompany);
                 });
         });
     }
@@ -42,14 +42,13 @@ class QueryUtil
 
     public static function createWithCompany(array $request): array
     {
-        $request['company_id'] = Session::get('company_id');
+        $request['idCompany'] = Session::get('idCompany');
         return $request;
     }
 
     public static function handleQueryException(QueryException $exception, String $message)
     {
         $errorCode = $exception->errorInfo[1];
-        var_dump($errorCode);
         switch ($errorCode) {
             case 1062:
                 throw new Exception('No pueden haber ' . $message . ' duplicados', 500);
