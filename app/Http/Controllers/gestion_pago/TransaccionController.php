@@ -13,19 +13,6 @@ use Illuminate\Http\Request;
 class TransaccionController extends Controller
 {
 
-  private function validateTransactionData(Request $request)
-  {
-    return $request->validate([
-      'fechaTransaccion' => 'required|date',
-      'hora' => 'required|date',
-      'numFacturaInicial' => 'required|integer',
-      'valor' => 'required|numeric',
-      'idEstado' => 'required|integer',
-      'idTipoTransaccion' => 'required|integer',
-      'idTipoPago' => 'required|integer',
-    ]);
-  }
-
   /**
    * Get data of transacciones
    *
@@ -48,8 +35,6 @@ class TransaccionController extends Controller
 
     try {
       request()->validate(Transaccion::$rules);
-      // $validatedData = $this->validateTransactionData($request);
-      // $request->validated();
       $transaccion = Transaccion::create($request->all());
       return response()->json($transaccion, 201);
     } catch (Exception $e) {
@@ -82,12 +67,10 @@ class TransaccionController extends Controller
    */
   public function update(Request $request, $id): JsonResponse
   {
-
-    $validatedData = $this->validateTransactionData($request);
-
     try {
+      request()->validate(Transaccion::$rules);
       $transaccion = Transaccion::findOrFail($id);
-      $transaccion->update($validatedData);
+      $transaccion->update($request->all());
       return response()->json($transaccion, 200);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
