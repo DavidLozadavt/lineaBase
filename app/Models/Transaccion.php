@@ -18,7 +18,7 @@ class Transaccion extends Model
   static $rules = [
     'fechaTransaccion'  => 'required|date',
     'hora'              => 'required|date_format:H:i:s',
-    'numFacturaInicial' => 'required|integer',
+    'numFacturaInicial' => 'required|numeric',
     'valor'             => 'required|numeric',
     'idEstado'          => 'required|integer',
     'idTipoTransaccion' => 'required|integer',

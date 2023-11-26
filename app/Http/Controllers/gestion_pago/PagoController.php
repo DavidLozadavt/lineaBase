@@ -54,9 +54,10 @@ class PagoController extends Controller
   public function store(Request $request): JsonResponse
   {
     try {
-      // $this->authorize('create', Pago::class);
       $pago = Pago::create($request->all());
-      return response()->json($pago);
+      $idPago = $pago->id;
+      $pago = Pago::with($request['relations'] ?? $this->relations);
+      return response()->json($pago->find($idPago, $request['columns'] ?? $this->columns), 201);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
