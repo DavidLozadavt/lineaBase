@@ -54,6 +54,7 @@ class PagoController extends Controller
   public function store(Request $request): JsonResponse
   {
     try {
+      request()->validate(Pago::$rules);
       $pago = Pago::create($request->all());
       $idPago = $pago->id;
       $pago = Pago::with($request['relations'] ?? $this->relations);

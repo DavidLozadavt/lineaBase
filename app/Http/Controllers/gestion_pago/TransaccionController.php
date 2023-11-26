@@ -52,7 +52,9 @@ class TransaccionController extends Controller
     try {
       request()->validate(Transaccion::$rules);
       $transaccion = Transaccion::create($request->all());
-      return response()->json($transaccion, 201);
+      $idTransaccion = $transaccion->id;
+      $transaccion = Transaccion::with($request['relations'] ?? $this->relations);
+      return response()->json($transaccion->find($idTransaccion, $request['columns'] ?? $this->columns), 201);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
