@@ -14,6 +14,7 @@ class TipoDocumento extends Model
     protected $fillable = [
         "tituloDocumento",
         "descripcion",
+        "idCompany"
     ];
     protected $hiden = [
         'created_at',
@@ -21,14 +22,14 @@ class TipoDocumento extends Model
     ];
 
     public $timestamps = false;
-    public function proceso()
-    {
-        return $this->belongsTo(Proceso::class, 'idProceso');
-    }
+    // public function proceso()
+    // {
+    //     return $this->belongsTo(Proceso::class, 'idProceso');
+    // }
 
     public function estado()
     {
-        return $this->belongsTo(Status::class, 'idEstado');
+        return $this->belongsTo(Estado::class, 'idEstado');
     }
 
     public function company()
