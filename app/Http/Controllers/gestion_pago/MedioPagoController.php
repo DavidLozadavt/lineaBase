@@ -31,6 +31,8 @@ class MedioPagoController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
+
+    $this->authorize('create', MedioPago::class);
     $request->validate([
       'detalleMedioPago' => 'required|string|max:50',
     ]);

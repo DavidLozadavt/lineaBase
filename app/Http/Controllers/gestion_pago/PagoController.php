@@ -11,15 +11,34 @@ use App\Util\QueryUtil;
 
 class PagoController extends Controller
 {
+
+  private array $relations;
+  private array $columns;
+
+  function __construct()
+  {
+    $this->relations = [];
+    $this->columns = ['*'];
+  }
+
   /**
    * Get all pays
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $pagos = Pago::all();
-    return response()->json($pagos, 200);
+    $data = $request->all();
+    $pagos = Pago::with($data['relations'] ?? $this->relations)
+      ->where(function ($query) {
+        QueryUtil::whereCompany($query);
+      });
+
+    if (isset($data[''])) {
+      $pagos->where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
+    }
+
+    return response()->json($pagos->get($data['columns'] ?? $this->columns), 200);
   }
 
   /**
@@ -30,8 +49,8 @@ class PagoController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
-    try
-    {
+    try {
+      // $this->authorize('create', Pago::class);
       $pago = Pago::create($request->all());
       return response()->json($pago);
     } catch (Exception $e) {
@@ -47,8 +66,7 @@ class PagoController extends Controller
    */
   public function show($id): JsonResponse
   {
-    try
-    {
+    try {
       $pago = Pago::findOrFail($id);
       return response()->json($pago, 200);
     } catch (Exception $e) {

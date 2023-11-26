@@ -35,9 +35,9 @@ class TransaccionController extends Controller
       });
     
     if(isset($data['numFacturaInicial'])) {
-      $transacciones->where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial' . '%']);
+      $transacciones->where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
     }
-    return response()->json($transacciones, 200);
+    return response()->json($transacciones->get($data['columns'] ?? $this->columns), 200);
   }
 
   /**
