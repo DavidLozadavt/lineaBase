@@ -21,7 +21,7 @@ class QueryUtil
         return $query->where(function ($query) use ($idCompany) {
             $query->where('idCompany', $idCompany)
                 ->orWhereHas('company', function ($query) use ($idCompany) {
-                    $query->where('principal_id', $idCompany);
+                    $query->where('idPrincipal', $idCompany);
                 });
         });
     }

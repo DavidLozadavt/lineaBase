@@ -46,15 +46,12 @@ class TipoDocumentoController extends Controller
     {
         $this->authorize('create',TipoDocumento::class);
         $data = $request->all();
-        $tipoDocumento = QueryUtil::createWithCompany($data['tipoDocumento']);
-        $tipoDocumento = TipoDocumento::create($tipoDocumento);
+        $tipoDocumentoData = QueryUtil::createWithCompany($data['tipoDocumento']);
+        $tipoDocumento = TipoDocumento::create($tipoDocumentoData);
         $tipoDocumento->save();
-
-        $tipoDocumento -> load($data['relations'] ?? $this->relations);
-
-        $tipoDocumento = $tipoDocumento -> only($data['columns'] ?? $this->columns);
-
-        return response()->json($tipoDocumento, 201);
+        $idTipoDocumento = $tipoDocumento->id;
+        $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations);
+        return response()->json($tipoDocumento -> find($idTipoDocumento,$data['columns'] ?? $this->columns), 201);
     }
 
     /**
