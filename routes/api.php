@@ -73,7 +73,7 @@ Route::put('notificaciones/read/{id}', [NotificacionController::class, 'read']);
 Route::resource('procesos', ProcesoController::class);
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'auth:api',
     'prefix' => 'pagos'
 ], function () {
 
