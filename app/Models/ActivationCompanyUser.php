@@ -11,11 +11,11 @@ class ActivationCompanyUser extends Model
 {
     use HasFactory, HasRoles;
 
-    protected $guard_name = "web";
+    protected $guard_name = "api";
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(Company::class, 'idCompany');
     }
     public function user()
     {

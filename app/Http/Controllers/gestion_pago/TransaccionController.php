@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\auth;
+namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivationCompanyUser;
+use App\Models\Transaccion;
 use Illuminate\Http\Request;
 
-class ActivationCompanyUserController extends Controller
+class TransaccionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class ActivationCompanyUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ActivationCompanyUser  $activationCompanyUser
+     * @param  \App\Models\Transaccion  $transaccion
      * @return \Illuminate\Http\Response
      */
-    public function show(ActivationCompanyUser $activationCompanyUser)
+    public function show(Transaccion $transaccion)
     {
         //
     }
@@ -53,10 +53,10 @@ class ActivationCompanyUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ActivationCompanyUser  $activationCompanyUser
+     * @param  \App\Models\Transaccion  $transaccion
      * @return \Illuminate\Http\Response
      */
-    public function edit(ActivationCompanyUser $activationCompanyUser)
+    public function edit(Transaccion $transaccion)
     {
         //
     }
@@ -65,10 +65,10 @@ class ActivationCompanyUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ActivationCompanyUser  $activationCompanyUser
+     * @param  \App\Models\Transaccion  $transaccion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ActivationCompanyUser $activationCompanyUser)
+    public function update(Request $request, Transaccion $transaccion)
     {
         //
     }
@@ -76,10 +76,10 @@ class ActivationCompanyUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ActivationCompanyUser  $activationCompanyUser
+     * @param  \App\Models\Transaccion  $transaccion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ActivationCompanyUser $activationCompanyUser)
+    public function destroy(Transaccion $transaccion)
     {
         //
     }

@@ -4,10 +4,19 @@ namespace App\Http\Controllers\gestion_documento;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoDocumento;
+use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 
 class TipoDocumentoController extends Controller
 {
+    private array $relations;
+    private array $columns;
+
+    function __construct()
+    {
+        $this->relations = [];
+        $this->columns = ['*'];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,23 +25,15 @@ class TipoDocumentoController extends Controller
      */
     public function index(Request $request)
     {
-        $estado = $request->input('estado');
-        $proceso = $request->input('proceso');
-        $tipoDocumentos = TipoDocumento::with('estado', 'proceso');
-
-        if ($estado) {
-            $tipoDocumentos->whereHas('estado', function ($q) use ($estado) {
-                return $q->select('id')->where('id', $estado)->orWhere('estado', $estado);
-            });
+        $data = $request->all();
+        $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
+        ->where(function($query){
+            QueryUtil::whereCompany($query);
+        });
+        if (isset($data['tituloDocumento'])) {
+            $tipoDocumentos->where('tituloDocumento', 'like', '%' . $data['tituloDocumento'] . '%');
         }
-
-        if ($proceso) {
-            $tipoDocumentos->whereHas('proceso', function ($q) use ($proceso) {
-                return $q->select('id')->where('id', $proceso)->orWhere('nombreProceso', $proceso);
-            });
-        }
-
-        return response()->json($tipoDocumentos->get());
+        return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
     }
 
     /**
@@ -43,9 +44,15 @@ class TipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create',TipoDocumento::class);
         $data = $request->all();
-        $tipoDocumento = new TipoDocumento($data);
+        $tipoDocumento = QueryUtil::createWithCompany($data['tipoDocumento']);
+        $tipoDocumento = TipoDocumento::create($tipoDocumento);
         $tipoDocumento->save();
+
+        $tipoDocumento -> load($data['relations'] ?? $this->relations);
+
+        $tipoDocumento = $tipoDocumento -> only($data['columns'] ?? $this->columns);
 
         return response()->json($tipoDocumento, 201);
     }

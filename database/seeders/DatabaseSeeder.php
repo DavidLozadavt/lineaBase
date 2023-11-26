@@ -30,6 +30,10 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents($path));
 
         $this->call(CompanySeeder::class);
+
+        $path = 'database/seeders/sql/tipo_documento.sql';
+        DB::unprepared(file_get_contents($path));
+        
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         // $this->call(PersonSeeder::class);

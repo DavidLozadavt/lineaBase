@@ -4,78 +4,97 @@ namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoPago;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TipoPagoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $tipoPagos = TipoPago::all();
+  /**
+   * Get data all of tipo pago
+   *
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function index(): JsonResponse
+  {
+    $tipoPagos = TipoPago::all();
 
-        return response()->json($tipoPagos);
+    return response()->json($tipoPagos);
+  }
+
+  /**
+   * Store data of tipo pago
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function store(Request $request): JsonResponse
+  {
+    $request->validate([
+      'detalleTipoPago' => 'required|string|max:50',
+    ]);
+
+    $tipoPago = TipoPago::create($request->all());
+
+    return response()->json($tipoPago, 201);
+  }
+
+  /**
+   * Get data by id of tipo pago
+   *
+   * @param  int $id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function show(int $id): JsonResponse
+  {
+    try {
+      $tipoPago = TipoPago::findOrFail($id);
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        $tipoPago = new TipoPago($data);
-        $tipoPago->save();
+    return response()->json($tipoPago);
+  }
 
-        return response()->json($tipoPago, 201);
+  /**
+   * Update data tipo pago by id
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  int $id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function update(Request $request, int $id): JsonResponse
+  {
+    try {
+      $request->validate([
+        'detalleTipoPago' => 'required|string|max:50',
+      ]);
+
+      $tipoPago = TipoPago::findOrFail($id);
+      $tipoPago->update($request->all());
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $id)
-    {
-        $tipoPago = TipoPago::find($id);
+    return response()->json($tipoPago);
+  }
 
-        return response()->json($tipoPago);
+  /**
+   * Remove data of tipo pago by id
+   *
+   * @param  int $id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function destroy(int $id): JsonResponse
+  {
+    try {
+      $tipoPago = TipoPago::findOrFail($id);
+      $tipoPago->delete();
+    } catch (ModelNotFoundException $e) {
+      return response()->json(['error' => 'Tipo pago not found'], 404);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, int $id)
-    {
-        $data = $request->all();
-        $tipoPago = TipoPago::findOrFail($id);
-        $tipoPago->fill($data);
-        $tipoPago->save();
+    return response()->json(null, 204);
+  }
 
-        return response()->json($tipoPago);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(int $id)
-    {
-        $tipoPago = TipoPago::findOrFail($id);
-        $tipoPago->delete();
-
-        return response()->json([], 204);
-    }
 }

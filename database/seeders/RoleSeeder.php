@@ -56,7 +56,7 @@ class RoleSeeder extends Seeder
 
 
         $activation = ActivationCompanyUser::factory()->create([
-            'company_id' => 1,
+            'idCompany' => 1,
             'user_id' => 1,
             'state_id' => 1
         ]);
@@ -64,7 +64,7 @@ class RoleSeeder extends Seeder
         $activation->assignRole($vt);
 
         $activation = ActivationCompanyUser::factory()->create([
-            'company_id' => 2,
+            'idCompany' => 2,
             'user_id' => 1,
             'state_id' => 1
         ]);

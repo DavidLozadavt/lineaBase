@@ -34,7 +34,7 @@ class Notificacion extends Model
 
     public function empresa()
     {
-        return $this->belongsTo(Company::class, 'idEmpresa');
+        return $this->belongsTo(Company::class, 'idCompany');
     }
 
     public function tipoNotificacion()

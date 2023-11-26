@@ -3,28 +3,28 @@
 namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
-use App\Models\MedioPago;
+use App\Models\TipoTransaccion;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class MedioPagoController extends Controller
+class TipoTransaccionController extends Controller
 {
-
+  
   /**
-   * Get data of medios pay
+   * Get all data tipo transaccion
    *
    * @return \Illuminate\Http\JsonResponse
    */
   public function index(): JsonResponse
   {
-    $medioPagos = MedioPago::all();
+    $tipoTransacciones = TipoTransaccion::all();
 
-    return response()->json($medioPagos);
+    return response()->json($tipoTransacciones);
   }
 
   /**
-   * Store data of medios pay
+   * Store data of tipo transaccion
    *
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\JsonResponse
@@ -32,16 +32,17 @@ class MedioPagoController extends Controller
   public function store(Request $request): JsonResponse
   {
     $request->validate([
-      'detalleMedioPago' => 'required|string|max:50',
+      'detalle' => 'required|string|max:50',
+      'descripcion' => 'nullable'
     ]);
 
-    $tipoPago = MedioPago::create($request->all());
+    $tipoTransaccion = TipoTransaccion::create($request->all());
 
-    return response()->json($tipoPago, 201);
+    return response()->json($tipoTransaccion, 201);
   }
 
   /**
-   * Get medios pay by id
+   * Get data tipo transaccion by id
    *
    * @param  int $id
    * @return \Illuminate\Http\JsonResponse
@@ -49,16 +50,16 @@ class MedioPagoController extends Controller
   public function show(int $id): JsonResponse
   {
     try {
-      $medioPago = MedioPago::findOrFail($id);
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Medio pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
-    return response()->json($medioPago);
+    return response()->json($tipoTransaccion);
   }
 
   /**
-   * Update data by id of medios pay
+   * Update tipo transaccion by id
    *
    * @param  \Illuminate\Http\Request  $request
    * @param  int $id
@@ -68,20 +69,21 @@ class MedioPagoController extends Controller
   {
     try {
       $request->validate([
-        'detalleMedioPago' => 'required|string|max:50',
+        'detalle' => 'required|string|max:50',
+        'descripcion' => 'nullable'
       ]);
 
-      $medioPago = MedioPago::findOrFail($id);
-      $medioPago->update($request->all());
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
+      $tipoTransaccion->update($request->all());
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Tipo pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
-    return response()->json($medioPago);
+    return response()->json($tipoTransaccion);
   }
 
   /**
-   * Remove the specified resource by id medios pay
+   * Remove Tipo transaccion by id
    *
    * @param  int $id
    * @return \Illuminate\Http\JsonResponse
@@ -89,12 +91,13 @@ class MedioPagoController extends Controller
   public function destroy(int $id): JsonResponse
   {
     try {
-      $medioPago = MedioPago::findOrFail($id);
-      $medioPago->delete();
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
+      $tipoTransaccion->delete();
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Medio pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
     return response()->json(null, 204);
   }
+
 }
