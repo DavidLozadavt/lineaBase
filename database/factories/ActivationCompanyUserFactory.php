@@ -24,11 +24,11 @@ class ActivationCompanyUserFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'state_id' => $this->faker->randomElement([1, 2]),
-            'idCompany' => Company::inRandomOrder()->first()->id,
+            'user_id'     => User::inRandomOrder()->first()->id,
+            'state_id'    => $this->faker->randomElement([1, 2]),
+            'idCompany'   => Company::inRandomOrder()->first()->id,
             'fechaInicio' => $this->faker->date,
-            'fechaFin' => $this->faker->date,
+            'fechaFin'    => $this->faker->randomElement(['2100-12-12']),
         ];
     }
 }

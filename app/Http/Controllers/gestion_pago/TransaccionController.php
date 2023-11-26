@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TransaccionRequest;
 use App\Models\Transaccion;
 use App\Util\QueryUtil;
 use Exception;
@@ -13,14 +12,31 @@ use Illuminate\Http\Request;
 class TransaccionController extends Controller
 {
 
+  private array $relations;
+  private array $columns;
+
+  function __construct()
+  {
+    $this->relations = [];
+    $this->columns = ['*'];
+  }
+
   /**
    * Get data of transacciones
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $transacciones = Transaccion::all();
+    $data = $request->all();
+    $transacciones = Transaccion::with($data['relations'] ?? $this->relations)
+      ->where( function($query) {
+        QueryUtil::whereCompany($query);
+      });
+    
+    if(isset($data['numFacturaInicial'])) {
+      $transacciones->where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial' . '%']);
+    }
     return response()->json($transacciones, 200);
   }
 
