@@ -28,17 +28,21 @@ class PagoController extends Controller
    */
   public function index(Request $request): JsonResponse
   {
-    $data = $request->all();
-    $pagos = Pago::with($data['relations'] ?? $this->relations)
-      ->where(function ($query) {
-        QueryUtil::whereCompany($query);
-      });
+    $jsonData = $request->input('data');
 
-    if (isset($data[''])) {
-      $pagos->where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
+    $data = json_decode($jsonData, true);
+
+    if (isset($data['numeroFact']) && !empty($data['numeroFact'])) {
+      $pagos = Pago::where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
+    } else {
+      $pagos = Pago::query();
     }
 
-    return response()->json($pagos->get($data['columns'] ?? $this->columns), 200);
+    $pagos->with($data['relations'] ?? $this->relations);
+
+    $result = $pagos->get($data['columns'] ?? $this->columns);
+
+    return response()->json($result, 200);
   }
 
   /**
