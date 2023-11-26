@@ -13,4 +13,13 @@ class Transaccion extends Model
 
     protected $guarded = ['id'];
 
+    static $rules = [
+        'fechaTransaccion'  => 'required|date',
+        'hora'              => 'required|date',
+        'numFacturaInicial' => 'required|integer',
+        'valor'             => 'required|numeric',
+        'idEstado'          => 'required|integer',
+        'idTipoTransaccion' => 'required|integer',
+        'idTipoPago'        => 'required|integer',
+    ];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransaccionRequest;
 use App\Models\Transaccion;
 use App\Util\QueryUtil;
 use Exception;
@@ -11,6 +12,20 @@ use Illuminate\Http\Request;
 
 class TransaccionController extends Controller
 {
+
+  private function validateTransactionData(Request $request)
+  {
+    return $request->validate([
+      'fechaTransaccion' => 'required|date',
+      'hora' => 'required|date',
+      'numFacturaInicial' => 'required|integer',
+      'valor' => 'required|numeric',
+      'idEstado' => 'required|integer',
+      'idTipoTransaccion' => 'required|integer',
+      'idTipoPago' => 'required|integer',
+    ]);
+  }
+
   /**
    * Get data of transacciones
    *
@@ -30,7 +45,11 @@ class TransaccionController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
+
     try {
+      request()->validate(Transaccion::$rules);
+      // $validatedData = $this->validateTransactionData($request);
+      // $request->validated();
       $transaccion = Transaccion::create($request->all());
       return response()->json($transaccion, 201);
     } catch (Exception $e) {
@@ -63,10 +82,12 @@ class TransaccionController extends Controller
    */
   public function update(Request $request, $id): JsonResponse
   {
-    try
-    {
+
+    $validatedData = $this->validateTransactionData($request);
+
+    try {
       $transaccion = Transaccion::findOrFail($id);
-      $transaccion->update($request->all());
+      $transaccion->update($validatedData);
       return response()->json($transaccion, 200);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
