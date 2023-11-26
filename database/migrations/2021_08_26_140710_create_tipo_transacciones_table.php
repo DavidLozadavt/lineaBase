@@ -16,7 +16,7 @@ class CreateTipoTransaccionesTable extends Migration
         Schema::create('tipoTransaccion', function (Blueprint $table) {
             $table->increments('id');
             $table->string('detalle');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->timestamps();
         });
     }
