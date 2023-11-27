@@ -40,7 +40,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'auth:api',
     'prefix' => 'tipo_documento'
 ],function (){
     Route::resource('', TipoDocumentoController::class);

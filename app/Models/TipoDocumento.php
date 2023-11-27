@@ -11,12 +11,8 @@ class TipoDocumento extends Model
 
     public static $snakeAttributes = false;
     protected $table = "tipoDocumento";
-    protected $fillable = [
-        "tituloDocumento",
-        "descripcion",
-        "idCompany"
-    ];
-    protected $hiden = [
+    protected $guarded = [];
+    protected $hidden = [
         'created_at',
         'updated_at'
     ];

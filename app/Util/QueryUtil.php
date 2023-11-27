@@ -24,9 +24,9 @@ class QueryUtil
 
     public static function whereUser(Builder $query): Builder
     {
-        $user_id = auth() -> id();
-        $query = $query -> whereHas('user',function($query) use ($user_id){
-            $query -> where('id',$user_id);
+        $user_id = auth()->id();
+        $query = $query->whereHas('user', function ($query) use ($user_id) {
+            $query->where('id', $user_id);
         });
         return $query;
     }
@@ -44,6 +44,14 @@ class QueryUtil
     {
         $request['idCompany'] = Session::get('idCompany');
         return $request;
+    }
+
+    public static function whereLike(Builder $query,array $data,string $dataKey): Builder
+    {
+        if (isset($data[$dataKey])) {
+            return $query -> where($dataKey,'LIKE','%'.$data[$dataKey].'%');
+        }
+        return $query;
     }
 
     public static function handleQueryException(QueryException $exception, String $message)
