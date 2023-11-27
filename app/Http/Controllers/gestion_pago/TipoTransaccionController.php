@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
-use App\Models\TipoPago;
+use App\Models\TipoTransaccion;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TipoPagoController extends Controller
+class TipoTransaccionController extends Controller
 {
+  
   /**
-   * Get data all of tipo pago
+   * Get all data tipo transaccion
    *
    * @return \Illuminate\Http\JsonResponse
    */
   public function index(): JsonResponse
   {
-    $tipoPagos = TipoPago::all();
+    $tipoTransacciones = TipoTransaccion::all();
 
-    return response()->json($tipoPagos);
+    return response()->json($tipoTransacciones);
   }
 
   /**
-   * Store data of tipo pago
+   * Store data of tipo transaccion
    *
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\JsonResponse
@@ -31,16 +32,17 @@ class TipoPagoController extends Controller
   public function store(Request $request): JsonResponse
   {
     $request->validate([
-      'detalleTipoPago' => 'required|string|max:50',
+      'detalle' => 'required|string|max:50',
+      'descripcion' => 'nullable'
     ]);
 
-    $tipoPago = TipoPago::create($request->all());
+    $tipoTransaccion = TipoTransaccion::create($request->all());
 
-    return response()->json($tipoPago, 201);
+    return response()->json($tipoTransaccion, 201);
   }
 
   /**
-   * Get data by id of tipo pago
+   * Get data tipo transaccion by id
    *
    * @param  int $id
    * @return \Illuminate\Http\JsonResponse
@@ -48,16 +50,16 @@ class TipoPagoController extends Controller
   public function show(int $id): JsonResponse
   {
     try {
-      $tipoPago = TipoPago::findOrFail($id);
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Tipo pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
-    return response()->json($tipoPago);
+    return response()->json($tipoTransaccion);
   }
 
   /**
-   * Update data tipo pago by id
+   * Update tipo transaccion by id
    *
    * @param  \Illuminate\Http\Request  $request
    * @param  int $id
@@ -67,20 +69,21 @@ class TipoPagoController extends Controller
   {
     try {
       $request->validate([
-        'detalleTipoPago' => 'required|string|max:50',
+        'detalle' => 'required|string|max:50',
+        'descripcion' => 'nullable'
       ]);
 
-      $tipoPago = TipoPago::findOrFail($id);
-      $tipoPago->update($request->all());
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
+      $tipoTransaccion->update($request->all());
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Tipo pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
-    return response()->json($tipoPago);
+    return response()->json($tipoTransaccion);
   }
 
   /**
-   * Remove data of tipo pago by id
+   * Remove Tipo transaccion by id
    *
    * @param  int $id
    * @return \Illuminate\Http\JsonResponse
@@ -88,10 +91,10 @@ class TipoPagoController extends Controller
   public function destroy(int $id): JsonResponse
   {
     try {
-      $tipoPago = TipoPago::findOrFail($id);
-      $tipoPago->delete();
+      $tipoTransaccion = TipoTransaccion::findOrFail($id);
+      $tipoTransaccion->delete();
     } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Tipo pago not found'], 404);
+      return response()->json(['error' => 'Tipo transaccion not found'], 404);
     }
 
     return response()->json(null, 204);

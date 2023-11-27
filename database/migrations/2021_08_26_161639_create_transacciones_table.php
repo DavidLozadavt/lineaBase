@@ -16,9 +16,9 @@ class CreateTransaccionesTable extends Migration
         Schema::create('transaccion', function (Blueprint $table) {
             $table->increments('id');
             $table->date('fechaTransaccion');
-            $table->date('hora');
-            $table->integer('numFacturaInicial');
-            $table->float('valor');
+            $table->time('hora');
+            $table->double('numFacturaInicial');
+            $table->double('valor');
             $table->unsignedInteger('idEstado');
             $table->foreign('idEstado')->references('id')->on('estado');
             $table->unsignedInteger('idTipoTransaccion');

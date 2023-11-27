@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\JsonResponse;
 
 class QueryUtil
 {
@@ -66,4 +70,28 @@ class QueryUtil
                 break;
         }
     }
+
+
+    /**
+     * Return exception in function
+     *
+     * @param \Exception $e
+     * @return JsonResponse
+     */
+    public static function showExceptions(\Exception $e): JsonResponse
+    {
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json(['error' => 'Registro no encontrado ' . $e], 404);
+        } elseif ($e instanceof QueryException) {
+            return response()->json(['error' => 'Error de base de datos ' . $e], 500);
+        } elseif ($e instanceof ValidationException) {
+            return response()->json(['error' => 'Error de validación', 'detalle' => $e->errors()], 422);
+        } elseif ($e instanceof HttpException) {
+            return response()->json(['error' => 'Error HTTP', 'codigo' => $e->getStatusCode()], $e->getStatusCode());
+        } else {
+            return response()->json(['error' => 'Error interno del servidor ' . $e], 500);
+        }
+    }
+
+
 }
