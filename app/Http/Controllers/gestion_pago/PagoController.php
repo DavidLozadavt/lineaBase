@@ -105,12 +105,15 @@ class PagoController extends Controller
   public function update(Request $request, $id): JsonResponse
   {
     try {
-      // $request->validate([
-      //   'detalleTipoPago' => 'required|string|max:50',
-      // ]);
+      request()->validate(Pago::$rules);
+
       $pago = Pago::findOrFail($id);
+
       $pago->update($request->all());
-      return response()->json($pago, 200);
+
+      $pago = Pago::with($request['relations'] ?? $this->relations);
+      return response()->json($pago->find($id, $request['columns'] ?? $this->columns), 200);
+
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }

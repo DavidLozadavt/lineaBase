@@ -33,16 +33,16 @@ class TransaccionController extends Controller
 
     $data = json_decode($jsonData, true);
 
-    if(isset($data['numFacturaInicial']) && !empty($data['numFacturaInicial'])) {
+    if (isset($data['numFacturaInicial']) && !empty($data['numFacturaInicial'])) {
       $transacciones = Transaccion::where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
     } else {
       $transacciones = Transaccion::query();
     }
 
     $transacciones->with($data['relations'] ?? $this->relations);
-    
+
     $result = $transacciones->get($data['columns'] ?? $this->columns);
-   
+
     return response()->json($result, 200);
   }
 
@@ -72,11 +72,26 @@ class TransaccionController extends Controller
    * @param  \App\Models\Transaccion  $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function show($id): JsonResponse
+  public function show(Request $request, $id): JsonResponse
   {
     try {
       $transaccion = Transaccion::findOrFail($id);
-      return response()->json($transaccion, 200);
+
+      $jsonData = $request->input('data');
+
+      $data = json_decode($jsonData, true);
+
+      if (isset($data['numFacturaInicial']) && !empty($data['numFacturaInicial'])) {
+        $transaccion = Transaccion::where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
+      } else {
+        $transaccion = Transaccion::query();
+      }
+
+      $transaccion->with($data['relations'] ?? $this->relations);
+
+      $result = $transaccion->get($data['columns'] ?? $this->columns);
+
+      return response()->json($result, 200);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
@@ -92,14 +107,20 @@ class TransaccionController extends Controller
   public function update(Request $request, $id): JsonResponse
   {
     try {
-      request()->validate(Transaccion::$rules);
+      $request->validate(Transaccion::$rules);
+
       $transaccion = Transaccion::findOrFail($id);
       $transaccion->update($request->all());
-      return response()->json($transaccion, 200);
+
+      $updatedTransaccion = Transaccion::with($request['relations'] ?? $this->relations)
+        ->find($id, $request['columns'] ?? $this->columns);
+
+      return response()->json($updatedTransaccion, 200);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
   }
+
 
   /**
    * Delete transaccion by id
