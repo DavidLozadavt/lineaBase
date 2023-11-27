@@ -15,6 +15,11 @@ class TipoPago extends Model
     "detalleTipoPago"
   ];
 
+  protected $hidden = [
+    'created_at',
+    'updated_at'
+  ];
+
   public $timestamps = false;
 
   public function transacciones(): HasMany
