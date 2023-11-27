@@ -18,7 +18,7 @@ class PagoController extends Controller
   function __construct()
   {
     $this->relations = [];
-    $this->columns = ['*'];
+    $this->columns = ["*"];
   }
 
   /**
@@ -70,11 +70,26 @@ class PagoController extends Controller
    * @param  \App\Models\Pago  $pago
    * @return \Illuminate\Http\JsonResponse
    */
-  public function show($id): JsonResponse
+  public function show(Request $request, $id): JsonResponse
   {
     try {
       $pago = Pago::findOrFail($id);
-      return response()->json($pago, 200);
+
+      $jsonData = $request->input('data');
+
+      $data = json_decode($jsonData, true);
+
+      if (isset($data['numeroFact']) && !empty($data['numeroFact'])) {
+        $pago = Pago::where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
+      } else {
+        $pago = Pago::query();
+      }
+
+      $pago->with($data['relations'] ?? $this->relations);
+
+      $result = $pago->get($data['columns'] ?? $this->columns);
+
+      return response()->json($result, 200);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }

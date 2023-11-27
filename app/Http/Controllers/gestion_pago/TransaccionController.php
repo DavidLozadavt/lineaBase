@@ -28,16 +28,22 @@ class TransaccionController extends Controller
    */
   public function index(Request $request): JsonResponse
   {
-    $data = $request->all();
-    $transacciones = Transaccion::with($data['relations'] ?? $this->relations)
-      ->where( function($query) {
-        QueryUtil::whereCompany($query);
-      });
-    
-    if(isset($data['numFacturaInicial'])) {
-      $transacciones->where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
+
+    $jsonData = $request->input('data');
+
+    $data = json_decode($jsonData, true);
+
+    if(isset($data['numFacturaInicial']) && !empty($data['numFacturaInicial'])) {
+      $transacciones = Transaccion::where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
+    } else {
+      $transacciones = Transaccion::query();
     }
-    return response()->json($transacciones->get($data['columns'] ?? $this->columns), 200);
+
+    $transacciones->with($data['relations'] ?? $this->relations);
+    
+    $result = $transacciones->get($data['columns'] ?? $this->columns);
+   
+    return response()->json($result, 200);
   }
 
   /**
