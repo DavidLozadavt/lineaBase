@@ -8,7 +8,6 @@ use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Http\Controllers\gestion_documento\TipoDocumentoController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 use App\Http\Controllers\gestion_pago\MedioPagoController;
 use App\Http\Controllers\gestion_pago\TipoPagoController;
@@ -27,8 +26,6 @@ use App\Http\Controllers\gestion_usuario\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::group([
     'middleware' => 'api',
