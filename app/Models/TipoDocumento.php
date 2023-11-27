@@ -10,6 +10,7 @@ class TipoDocumento extends Model
     use HasFactory;
 
     public static $snakeAttributes = false;
+    public $timestamps = true;
     protected $table = "tipoDocumento";
     protected $guarded = [];
     protected $hidden = [
@@ -17,19 +18,18 @@ class TipoDocumento extends Model
         'updated_at'
     ];
 
-    public $timestamps = false;
-    // public function proceso()
-    // {
-    //     return $this->belongsTo(Proceso::class, 'idProceso');
-    // }
-
-    public function estado()
-    {
-        return $this->belongsTo(Estado::class, 'idEstado');
-    }
-
     public function company()
     {
-        return $this->belongsTo(Company::class,'idCompany');
+        return $this->belongsTo(Company::class, 'idCompany');
+    }
+
+    public function procesos()
+    {
+        return $this->belongsToMany(
+            Proceso::class,
+            AsignacionProcesoTipoDocumento::class,
+            'idProceso',
+            'idTipoDocumento'
+        )->withPivot('id');
     }
 }

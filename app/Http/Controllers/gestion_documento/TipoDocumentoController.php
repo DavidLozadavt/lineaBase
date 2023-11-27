@@ -5,7 +5,9 @@ namespace App\Http\Controllers\gestion_documento;
 use App\Http\Controllers\Controller;
 use App\Models\TipoDocumento;
 use App\Util\QueryUtil;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Exception;
 
 class TipoDocumentoController extends Controller
 {
@@ -26,12 +28,19 @@ class TipoDocumentoController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
-            ->where(function ($query) {
-                QueryUtil::whereCompany($query);
-            });
-        $tipoDocumentos = QueryUtil::whereLike($tipoDocumentos, $data, 'tituloDocumento');
-        return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
+
+        try {
+            $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                });
+            $tipoDocumentos = QueryUtil::whereLike($tipoDocumentos, $data, 'tituloDocumento');
+            return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -44,11 +53,17 @@ class TipoDocumentoController extends Controller
     {
         $this->authorize('create', TipoDocumento::class);
         $data = $request->all();
-        $tipoDocumentoData = QueryUtil::createWithCompany($data["tipoDocumento"]);
-        $tipoDocumento = TipoDocumento::create($tipoDocumentoData);
-        $idTipoDocumento = $tipoDocumento->id;
-        $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations);
-        return response()->json($tipoDocumento->find($idTipoDocumento, $data['columns'] ?? $this->columns), 201);
+        try {
+            $tipoDocumentoData = QueryUtil::createWithCompany($data["tipoDocumento"]);
+            $tipoDocumento = TipoDocumento::create($tipoDocumentoData);
+            $idTipoDocumento = $tipoDocumento->id;
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations);
+            return response()->json($tipoDocumento->find($idTipoDocumento, $data['columns'] ?? $this->columns), 201);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -57,19 +72,21 @@ class TipoDocumentoController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,int $id)
+    public function show(Request $request, int $id)
     {
         $data = $request->all();
 
-        $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
-            ->where(function ($query) {
-                QueryUtil::whereCompany($query);
-            })->findOrFail($id,$data['columns'] ?? $this->columns);
-
-        if (!$tipoDocumento) {
-            return response()->json(['Tipo documento no encontrado'], 404);
+        try {
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
+            return response()->json($tipoDocumento);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
         }
-        return response()->json($tipoDocumento);
     }
 
     /**
@@ -79,22 +96,27 @@ class TipoDocumentoController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,int $id)
+    public function update(Request $request, int $id)
     {
-        // $this->authorize('update', TipoDocumento::class);
+        $this->authorize('update', TipoDocumento::class);
         $data = $request->all();
 
-        return response() -> json($id);
-        // $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
-        //     ->where(function ($query) {
-        //         QueryUtil::whereCompany($query);
-        //     })->find($id, $data['columns'] ?? $this->columns);
+        try {
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
 
-        // $tipoDocumentoData = QueryUtil::createWithCompany($data['tipoDocumento']);
-        // $tipoDocumento->fill($tipoDocumentoData);
-        // $tipoDocumento->save();
+            $tipoDocumentoData = QueryUtil::createWithCompany($data['tipoDocumento']);
+            $tipoDocumento->fill($tipoDocumentoData);
+            $tipoDocumento->save();
 
-        // return response()->json($tipoDocumento);
+            return response()->json($tipoDocumento);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -106,12 +128,18 @@ class TipoDocumentoController extends Controller
     public function destroy(int $id)
     {
         $this->authorize('delete', TipoDocumento::class);
-        $tipoDocumento = TipoDocumento::query()
-            ->where(function ($query) {
-                QueryUtil::whereCompany($query);
-            })->findOrFail($id);
-        $tipoDocumento->delete();
 
-        return response()->json([], 204);
+        try {
+            $tipoDocumento = TipoDocumento::query()
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id);
+            $tipoDocumento->delete();
+            return response()->json(['message' => 'Eliminado correctamente'], 204);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\gestion_pago\TipoPagoController;
 use App\Http\Controllers\gestion_pago\PagoController;
 use App\Http\Controllers\gestion_pago\TipoTransaccionController;
 use App\Http\Controllers\gestion_pago\TransaccionController;
+use App\Http\Controllers\gestion_proceso\AsignacionProcesoTipoDocumentoController;
 use App\Http\Controllers\gestion_usuario\UserController;
 
 /*
@@ -45,9 +46,17 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:api',
-    'prefix' => 'tipo_documento'
+    'prefix' => 'documentos'
 ],function (){
-    Route::resource('', TipoDocumentoController::class);
+    Route::resource('tipo_documento', TipoDocumentoController::class);
+});
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'procesos'
+],function (){
+    Route::resource('proceso', ProcesoController::class);
+    Route::resource('tipo_documento_proceso', AsignacionProcesoTipoDocumentoController::class);
 });
 
 Route::resource('roles', RolController::class);
