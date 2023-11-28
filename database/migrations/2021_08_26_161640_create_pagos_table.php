@@ -18,7 +18,7 @@ class CreatePagosTable extends Migration
             $table->date('fechaPago');
             $table->date('fechaReg');
             $table->float('valor');
-            $table->integer('numeroFact');
+            $table->double('numeroFact');
             $table->float('excedente');
             $table->unsignedInteger('idEstado');
             $table->foreign('idEstado')->references('id')->on('estado');

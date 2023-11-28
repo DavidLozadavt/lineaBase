@@ -8,13 +8,13 @@ use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Http\Controllers\gestion_documento\TipoDocumentoController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 use App\Http\Controllers\gestion_pago\MedioPagoController;
 use App\Http\Controllers\gestion_pago\TipoPagoController;
 use App\Http\Controllers\gestion_pago\PagoController;
 use App\Http\Controllers\gestion_pago\TipoTransaccionController;
 use App\Http\Controllers\gestion_pago\TransaccionController;
+use App\Http\Controllers\gestion_proceso\AsignacionProcesoTipoDocumentoController;
 use App\Http\Controllers\gestion_usuario\UserController;
 
 /*
@@ -27,8 +27,6 @@ use App\Http\Controllers\gestion_usuario\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::group([
     'middleware' => 'api',
@@ -44,10 +42,18 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'api',
-    'prefix' => 'tipo_documento'
+    'middleware' => 'auth:api',
+    'prefix' => 'documentos'
 ],function (){
-    Route::resource('', TipoDocumentoController::class);
+    Route::resource('tipo_documento', TipoDocumentoController::class);
+});
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'procesos'
+],function (){
+    Route::resource('proceso', ProcesoController::class);
+    Route::resource('tipo_documento_proceso', AsignacionProcesoTipoDocumentoController::class);
 });
 
 Route::resource('roles', RolController::class);

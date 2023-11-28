@@ -101,7 +101,7 @@ class AuthController extends Controller
             Session::put('idCompany',$user_active -> idCompany);
             $roles = $user_active -> roles;
             Session::put('roles',$roles);
-            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id');
+            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id')-> pluck('name');
             Session::put('permissions',$permissions);
             
             return response() -> json(['Empresa seleccionada correctamente'],200);

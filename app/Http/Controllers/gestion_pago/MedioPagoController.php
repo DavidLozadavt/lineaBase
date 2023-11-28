@@ -4,6 +4,8 @@ namespace App\Http\Controllers\gestion_pago;
 
 use App\Http\Controllers\Controller;
 use App\Models\MedioPago;
+use App\Util\QueryUtil;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -91,10 +93,9 @@ class MedioPagoController extends Controller
     try {
       $medioPago = MedioPago::findOrFail($id);
       $medioPago->delete();
-    } catch (ModelNotFoundException $e) {
-      return response()->json(['error' => 'Medio pago not found'], 404);
+      return response()->json(null, 204);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
     }
-
-    return response()->json(null, 204);
   }
 }

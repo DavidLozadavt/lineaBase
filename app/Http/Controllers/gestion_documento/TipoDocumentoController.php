@@ -5,7 +5,9 @@ namespace App\Http\Controllers\gestion_documento;
 use App\Http\Controllers\Controller;
 use App\Models\TipoDocumento;
 use App\Util\QueryUtil;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Exception;
 
 class TipoDocumentoController extends Controller
 {
@@ -26,14 +28,19 @@ class TipoDocumentoController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-        $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
-        ->where(function($query){
-            QueryUtil::whereCompany($query);
-        });
-        if (isset($data['tituloDocumento'])) {
-            $tipoDocumentos->where('tituloDocumento', 'like', '%' . $data['tituloDocumento'] . '%');
+
+        try {
+            $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                });
+            $tipoDocumentos = QueryUtil::whereLike($tipoDocumentos, $data, 'tituloDocumento');
+            return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
         }
-        return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
     }
 
     /**
@@ -44,17 +51,19 @@ class TipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create',TipoDocumento::class);
+        $this->authorize('create', TipoDocumento::class);
         $data = $request->all();
-        $tipoDocumento = QueryUtil::createWithCompany($data['tipoDocumento']);
-        $tipoDocumento = TipoDocumento::create($tipoDocumento);
-        $tipoDocumento->save();
-
-        $tipoDocumento -> load($data['relations'] ?? $this->relations);
-
-        $tipoDocumento = $tipoDocumento -> only($data['columns'] ?? $this->columns);
-
-        return response()->json($tipoDocumento, 201);
+        try {
+            $tipoDocumentoData = QueryUtil::createWithCompany($data["tipoDocumento"]);
+            $tipoDocumento = TipoDocumento::create($tipoDocumentoData);
+            $idTipoDocumento = $tipoDocumento->id;
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations);
+            return response()->json($tipoDocumento->find($idTipoDocumento, $data['columns'] ?? $this->columns), 201);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -63,11 +72,21 @@ class TipoDocumentoController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
-        $tipoDocumento = TipoDocumento::find($id);
+        $data = $request->all();
 
-        return response()->json($tipoDocumento);
+        try {
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
+            return response()->json($tipoDocumento);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -79,12 +98,25 @@ class TipoDocumentoController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $this->authorize('update', TipoDocumento::class);
         $data = $request->all();
-        $tipoDocumento = TipoDocumento::findOrFail($id);
-        $tipoDocumento->fill($data);
-        $tipoDocumento->save();
 
-        return response()->json($tipoDocumento);
+        try {
+            $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
+
+            $tipoDocumentoData = QueryUtil::createWithCompany($data['tipoDocumento']);
+            $tipoDocumento->fill($tipoDocumentoData);
+            $tipoDocumento->save();
+
+            return response()->json($tipoDocumento);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -95,9 +127,19 @@ class TipoDocumentoController extends Controller
      */
     public function destroy(int $id)
     {
-        $tipoDocumento = TipoDocumento::findOrFail($id);
-        $tipoDocumento->delete();
+        $this->authorize('delete', TipoDocumento::class);
 
-        return response()->json([], 204);
+        try {
+            $tipoDocumento = TipoDocumento::query()
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id);
+            $tipoDocumento->delete();
+            return response()->json(['message' => 'Eliminado correctamente'], 204);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 }

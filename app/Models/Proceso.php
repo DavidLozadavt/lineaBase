@@ -9,11 +9,22 @@ class Proceso extends Model
 {
     use HasFactory;
     public static $snakeAttributes = false;
+    public $timestamps = true;
     protected $table = "proceso";
-    protected $fillable = [
-        "nombreProceso",
-        "descripcion"
-    ];
+    protected $guarded = [];
 
-    public $timestamps = false;
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'idCompany');
+    }
+
+    public function tipoDocumentos()
+    {
+        return $this->belongsToMany(
+            TipoDocumento::class,
+            AsignacionProcesoTipoDocumento::class,
+            'idProceso',
+            'idTipoDocumento'
+        )->withPivot('id');
+    }
 }

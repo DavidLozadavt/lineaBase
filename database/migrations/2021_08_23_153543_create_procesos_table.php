@@ -16,7 +16,10 @@ class CreateProcesosTable extends Migration
         Schema::create('proceso', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombreProceso');
-            $table->text('descripcion');
+            $table->text('descripcion') -> nullable();
+
+            $table->unsignedInteger('idCompany');
+            $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
         });
     }
