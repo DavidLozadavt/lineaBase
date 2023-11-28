@@ -13,8 +13,13 @@ class CreateAsignacionProcesoTipoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('asignacion_proceso_tipo_documentos', function (Blueprint $table) {
+        Schema::create('asignacionProcesoTipoDocumento', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('idProceso');
+            $table ->foreign('idProceso')->references('id')->on('proceso');
+            $table->unsignedInteger('idTipoDocumento');
+            $table->foreign('idTipoDocumento')->references('id')->on('tipoDocumento');
+            $table->unique(['idProceso','idTipoDocumento']);
             $table->timestamps();
         });
     }

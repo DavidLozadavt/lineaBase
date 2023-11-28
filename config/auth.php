@@ -54,7 +54,7 @@ return [
     | The time int minutes that the token has until expiration
     */
 
-    'ttl' => 60,
+    'ttl' => 60*24,
 
     /*
     |--------------------------------------------------------------------------

@@ -10,6 +10,7 @@ use App\Models\TipoTransaccion;
 use App\Models\Transaccion;
 use App\Policies\MedioPagoPolicy;
 use App\Policies\PagoPolicy;
+use App\Policies\ProcesoPolicy;
 use App\Policies\TipoDocumentoPolicy;
 use App\Policies\TipoPagoPolicy;
 use App\Policies\TipoTransaccionPolicy;
@@ -30,7 +31,8 @@ class AuthServiceProvider extends ServiceProvider
         Pago::class            => PagoPolicy::class,
         TipoPago::class        => TipoPagoPolicy::class,
         TipoTransaccion::class => TipoTransaccionPolicy::class,
-        Transaccion::class     => TransaccionPolicy::class
+        Transaccion::class     => TransaccionPolicy::class,
+        Proceso::class => ProcesoPolicy::class
     ];
 
     /**
