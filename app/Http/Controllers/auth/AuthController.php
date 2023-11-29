@@ -59,16 +59,10 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function getPermissions()
-    {
-        $permissions = Session::get('permissions');
-        return response()->json($permissions);
-    }
-
     public function getRoles()
     {
-        $permissions = Session::get('roles');
-        return response()->json($permissions);
+        $roles = Session::get('roles');
+        return response()->json($roles);
     }
 
     /**
@@ -104,7 +98,7 @@ class AuthController extends Controller
             $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id')-> pluck('name');
             Session::put('permissions',$permissions);
             
-            return response() -> json(['Empresa seleccionada correctamente'],200);
+            return response() -> json($permissions,200);
         }
         session()->invalidate();
         return response() -> json(['Usted no tiene un usuario activo para esta empresa'],404);
