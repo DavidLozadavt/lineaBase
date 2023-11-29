@@ -27,9 +27,10 @@ class ProcesoController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $request->all();
 
         try {
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
             $proceso = Proceso::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
@@ -74,9 +75,11 @@ class ProcesoController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $data = $request->all();
 
         try {
+
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
             $proceso = Proceso::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);

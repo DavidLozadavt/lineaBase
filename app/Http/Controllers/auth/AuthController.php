@@ -4,14 +4,11 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
-use App\Models\Persona;
+use App\Models\User;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use stdClass;
-use Exception;
 
 class AuthController extends Controller
 {
@@ -41,12 +38,13 @@ class AuthController extends Controller
      */
     public function getUser()
     {
-        return response()->json(auth()->user());
+        $user = User::with(['persona'])->find(auth()->id());
+        return response()->json($user);
     }
 
     public function getActiveUsers()
     {
-        return ActivationCompanyUser::query()
+        return ActivationCompanyUser::with(['company'])
         ->where(function($query){
             QueryUtil::whereUser($query);
         })->get();
