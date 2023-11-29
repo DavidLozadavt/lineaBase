@@ -48,16 +48,6 @@ class UserController extends Controller
         return response()->json($usuario, 201);
     }
 
-    public function asignation(Request $request)
-    {
-
-        DB::table('model_has_roles')
-            ->where('model_id', $request->idActivation)
-            ->delete();
-        $user = ActivationCompanyUser::find($request->input('idActivation'));
-        $user->assignRole($request->input('roles', []));
-        return $user;
-    }
     // public function update(Request $request, int $id)
     // {
     //     $data = $request->all();

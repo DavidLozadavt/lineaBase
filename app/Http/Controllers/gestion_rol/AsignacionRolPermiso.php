@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivationCompanyUser;
 use App\Util\QueryUtil;
 use Exception;
 use Illuminate\Http\Request;
@@ -63,5 +64,22 @@ class AsignacionRolPermiso extends Controller
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
+  }
+
+  /**
+   * Assign roles
+   *
+   * @param Request $request
+   * @return void
+   */
+  public function asignation(Request $request)
+  {
+
+    DB::table('model_has_roles')
+      ->where('model_id', $request->idActivation)
+      ->delete();
+    $user = ActivationCompanyUser::find($request->input('idActivation'));
+    $user->assignRole($request->input('roles', []));
+    return $user;
   }
 }

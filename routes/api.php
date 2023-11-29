@@ -45,9 +45,14 @@ Route::group([
     'middleware' => 'auth:api',
     'prefix' => 'permisos'
 ], function () {
+
     Route::apiResource('permisos', AsignacionRolPermiso::class)->only(['index']);
+
     Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
+
     Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
+
+    Route::put('asignar_roles', [AsignacionRolPermiso::class, 'asignation']);
 });
 
 Route::group([
@@ -73,7 +78,6 @@ Route::get('lista_usuarios', [UserController::class, 'getUsers']);
 
 Route::resource('usuarios', UserController::class);
 
-Route::put('asignar_roles', [UserController::class, 'asignation']);
 
 // notificaciones
 Route::resource('notificaciones', NotificacionController::class);
