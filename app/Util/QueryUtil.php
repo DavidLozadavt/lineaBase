@@ -50,9 +50,9 @@ class QueryUtil
         return $request;
     }
 
-    public static function whereLike(Builder $query, array $data, string $dataKey): Builder
+    public static function whereLike(Builder $query, ?array $data, string $dataKey): Builder
     {
-        if (isset($data[$dataKey])) {
+        if ($data !== null && isset($data[$dataKey])) {
             return $query->where($dataKey, 'LIKE', '%' . $data[$dataKey] . '%');
         }
         return $query;
