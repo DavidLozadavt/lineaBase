@@ -75,11 +75,6 @@ Route::resource('usuarios', UserController::class);
 
 Route::put('asignar_roles', [UserController::class, 'asignation']);
 
-//permisos
-Route::get('permisos', [AsignacionRolPermiso::class, 'index']);
-Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
-Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
-
 // notificaciones
 Route::resource('notificaciones', NotificacionController::class);
 Route::put('notificaciones/read/{id}', [NotificacionController::class, 'read']);
