@@ -35,7 +35,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('user', [AuthController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('active_users',[AuthController::class,'getActiveUsers']);
+    Route::post('active_users', [AuthController::class, 'getActiveUsers']);
     Route::post('set_company', [AuthController::class, 'setCompany']);
     Route::post('roles', [AuthController::class, 'getRoles']);
     Route::post('permissions', [AuthController::class, 'getPermissions']);
@@ -43,15 +43,24 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:api',
+    'prefix' => 'permisos'
+], function () {
+    Route::apiResource('permisos', AsignacionRolPermiso::class)->only(['index']);
+    Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
+    Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
+});
+
+Route::group([
+    'middleware' => 'auth:api',
     'prefix' => 'documentos'
-],function (){
+], function () {
     Route::resource('tipo_documento', TipoDocumentoController::class);
 });
 
 Route::group([
     'middleware' => 'auth:api',
     'prefix' => 'procesos'
-],function (){
+], function () {
     Route::resource('proceso', ProcesoController::class);
     Route::resource('tipo_documento_proceso', AsignacionProcesoTipoDocumentoController::class);
 });
@@ -92,5 +101,4 @@ Route::group([
     Route::apiResource('transacciones', TransaccionController::class);
 
     Route::apiResource('tipo_transacciones', TipoTransaccionController::class);
-
 });

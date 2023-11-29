@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
+use App\Util\QueryUtil;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -31,14 +33,14 @@ class AsignacionRolPermiso extends Controller
    */
   public function permissionsByRole(Request  $request)
   {
-
-    $rol = $request->input('rol');
-
-    $role = Role::findOrFail($rol);
-    $groupsWithRoles = $role->getPermissionNames();
-
-
-    return response()->json($groupsWithRoles);
+    try {
+      $rol = $request->input('rol');
+      $role = Role::findOrFail($rol);
+      $groupsWithRoles = $role->getPermissionNames();
+      return response()->json($groupsWithRoles);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
 
   /**
@@ -49,14 +51,17 @@ class AsignacionRolPermiso extends Controller
    */
   public function assignFunctionality(Request $request)
   {
+    try {
+      $roles = Role::find($request->idRol);
 
-    $roles = Role::find($request->idRol);
+      DB::table('role_has_permissions')
+        ->where('role_id', $request->idRol)
+        ->delete();
 
-    DB::table('role_has_permissions')
-      ->where('role_id', $request->idRol)
-      ->delete();
-
-    $roles->syncPermissions($request->input('funciones', []));
-    return $roles;
+      $roles->syncPermissions($request->input('funciones', []));
+      return response()->json($roles, 200);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
 }
