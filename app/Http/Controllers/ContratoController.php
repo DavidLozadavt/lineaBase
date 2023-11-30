@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ciudad;
 use App\Models\Contrato;
 use Illuminate\Http\Request;
 
@@ -15,8 +14,7 @@ class ContratoController extends Controller
      */
     public function index()
     {
-        $ciudades = Ciudad::all();
-        return response() -> json($ciudades);
+        
     }
 
     /**
