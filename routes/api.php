@@ -3,6 +3,8 @@
 use App\Http\Controllers\gestion_empresa\CompanyController;
 use App\Http\Controllers\gestion_rol\RolController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\CiudadController;
+use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
@@ -69,6 +71,9 @@ Route::group([
     Route::resource('proceso', ProcesoController::class);
     Route::resource('tipo_documento_proceso', AsignacionProcesoTipoDocumentoController::class);
 });
+
+Route::resource('ciudades', CiudadController::class);
+Route::resource('departamentos', DepartamentoController::class);
 
 Route::resource('roles', RolController::class);
 Route::get('list_companies', [CompanyController::class, 'index']);

@@ -27,13 +27,15 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $request->all();
-
+    
         try {
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
             $procesoTipoDocumentos = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations)
                 ->whereHas('proceso', function ($query) {
                     QueryUtil::whereCompany($query);
                 });
+            $procesoTipoDocumentos = QueryUtil::where($procesoTipoDocumentos,$data,'idProceso');
             return response()->json($procesoTipoDocumentos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
@@ -50,7 +52,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', AsignacionProcesoTipoDocumento::class);
+        // $this->authorize('create', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
         try {
             $procesoTipoDocumento = AsignacionProcesoTipoDocumento::create($data['asignacionProcesoTipoDocumento']);
@@ -96,7 +98,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $this->authorize('update', AsignacionProcesoTipoDocumento::class);
+        // $this->authorize('update', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
 
         try {
@@ -124,7 +126,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function destroy(int $id)
     {
-        $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
+        // $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
 
         try {
             $procesoTipoDocumento = AsignacionProcesoTipoDocumento::query()
