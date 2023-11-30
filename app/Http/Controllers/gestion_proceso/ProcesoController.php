@@ -7,6 +7,7 @@ use App\Models\Proceso;
 use App\Util\QueryUtil;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Exception;
 
 class ProcesoController extends Controller
@@ -27,7 +28,7 @@ class ProcesoController extends Controller
      */
     public function index(Request $request)
     {
-
+        // var_dump(Session::get('idCompany'));
         try {
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
@@ -52,7 +53,7 @@ class ProcesoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Proceso::class);
+        // $this->authorize('create', Proceso::class);
         $data = $request->all();
         try {
             $procesoData = QueryUtil::createWithCompany($data["proceso"]);
@@ -101,7 +102,7 @@ class ProcesoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $this->authorize('update', Proceso::class);
+        // $this->authorize('update', Proceso::class);
         $data = $request->all();
 
         try {
@@ -130,7 +131,7 @@ class ProcesoController extends Controller
      */
     public function destroy(int $id)
     {
-        $this->authorize('delete', Proceso::class);
+        // $this->authorize('delete', Proceso::class);
 
         try {
             $proceso = Proceso::query()

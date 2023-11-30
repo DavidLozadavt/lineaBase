@@ -16,7 +16,6 @@ class PolicyUtil
     public static function isAdmin()
     {
         $idCompany = Session::get('idCompany');
-
         if ($idCompany != 1) {
             return false;
         }

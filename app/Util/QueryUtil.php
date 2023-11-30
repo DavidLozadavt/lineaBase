@@ -57,6 +57,13 @@ class QueryUtil
         }
         return $query;
     }
+    public static function where(Builder $query, ?array $data, string $dataKey): Builder
+    {
+        if ($data !== null && isset($data[$dataKey])) {
+            return $query->where($dataKey,$data[$dataKey]);
+        }
+        return $query;
+    }
 
     public static function handleQueryException(QueryException $exception)
     {
