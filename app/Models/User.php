@@ -61,6 +61,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Persona::class, 'idPersona');
     }
 
+    public function activationCompanyUsers()
+    {
+        return $this->hasMany(ActivationCompanyUser::class, 'user_id');
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
