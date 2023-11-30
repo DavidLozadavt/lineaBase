@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Models\AsignacionProcesoTipoDocumento;
 use App\Models\MedioPago;
 use App\Models\Pago;
@@ -10,6 +11,7 @@ use App\Models\TipoPago;
 use App\Models\TipoTransaccion;
 use App\Models\Transaccion;
 use App\Policies\AsignacionProcesoTipoDocumentoPolicy;
+use App\Policies\AsignacionRolPermisoPolicy;
 use App\Policies\MedioPagoPolicy;
 use App\Policies\PagoPolicy;
 use App\Policies\ProcesoPolicy;
@@ -28,14 +30,15 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        TipoDocumento::class   => TipoDocumentoPolicy::class,
-        MedioPago::class       => MedioPagoPolicy::class,
-        Pago::class            => PagoPolicy::class,
-        TipoPago::class        => TipoPagoPolicy::class,
-        TipoTransaccion::class => TipoTransaccionPolicy::class,
-        Transaccion::class     => TransaccionPolicy::class,
-        Proceso::class => ProcesoPolicy::class,
-        AsignacionProcesoTipoDocumento::class => AsignacionProcesoTipoDocumentoPolicy::class
+        TipoDocumento::class        => TipoDocumentoPolicy::class,
+        MedioPago::class            => MedioPagoPolicy::class,
+        Pago::class                 => PagoPolicy::class,
+        TipoPago::class             => TipoPagoPolicy::class,
+        TipoTransaccion::class      => TipoTransaccionPolicy::class,
+        Transaccion::class          => TransaccionPolicy::class,
+        Proceso::class              => ProcesoPolicy::class,
+        AsignacionRolPermiso::class => AsignacionRolPermisoPolicy::class,
+        AsignacionProcesoTipoDocumento::class => AsignacionProcesoTipoDocumentoPolicy::class,
     ];
 
     /**
