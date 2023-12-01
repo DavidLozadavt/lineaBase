@@ -17,8 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('email')->unique();
             $table->string('contrasena');
-            $table->unsignedInteger('idpersona');
-            $table->foreign('idpersona')->references('id')->on('persona');
+            $table->unsignedInteger('idPersona');
+            $table->foreign('idPersona')->references('id')->on('persona');
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

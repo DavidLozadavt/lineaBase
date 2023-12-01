@@ -16,23 +16,22 @@ class PolicyUtil
     public static function isAdmin()
     {
         $idCompany = Session::get('idCompany');
-
         if ($idCompany != 1) {
             return false;
         }
 
         return Session::get('roles')
             ->where('idCompany', $idCompany)
-            ->where('name', "Admin")
-            ->exists();
+            ->where('name','Admin')
+            ->contains('name', 'Admin');
     }
 
-    public static function hasPermission(array $spected_permissions)
+    public static function hasPermission(array $expected_permissions)
     {
         $permissions = Session::get('permissions');
 
-        return $permissions
-            ->whereIn('name', $spected_permissions)
-            ->exists();
+        return collect($expected_permissions)
+            ->intersect($permissions->pluck('name'))
+            ->isNotEmpty();
     }
 }

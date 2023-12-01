@@ -14,5 +14,10 @@ class MedioPago extends Model
         "detalleMedioPago"
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
     public $timestamps = false;
 }

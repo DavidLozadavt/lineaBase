@@ -4,10 +4,22 @@ namespace App\Http\Controllers\gestion_proceso;
 
 use App\Http\Controllers\Controller;
 use App\Models\Proceso;
+use App\Util\QueryUtil;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Exception;
 
 class ProcesoController extends Controller
 {
+    private array $relations;
+    private array $columns;
+
+    function __construct()
+    {
+        $this->relations = [];
+        $this->columns = ['*'];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,15 +28,21 @@ class ProcesoController extends Controller
      */
     public function index(Request $request)
     {
-        $nombreProceso = $request->input('nombreProceso');
-
-        $procesos = Proceso::query();
-        if ($nombreProceso) {
-            $procesos->where('nombreProceso', $nombreProceso);
+        // var_dump(Session::get('idCompany'));
+        try {
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
+            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                });
+            $proceso = QueryUtil::whereLike($proceso, $data, 'nombreProceso');
+            return response()->json($proceso->get($data['columns'] ?? $this->columns));
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
         }
-
-
-        return response()->json($procesos->get());
     }
 
     /**
@@ -35,11 +53,19 @@ class ProcesoController extends Controller
      */
     public function store(Request $request)
     {
+        // $this->authorize('create', Proceso::class);
         $data = $request->all();
-        $proceso = new Proceso($data);
-        $proceso->save();
-
-        return response()->json($proceso, 201);
+        try {
+            $procesoData = QueryUtil::createWithCompany($data["proceso"]);
+            $proceso = Proceso::create($procesoData);
+            $idproceso = $proceso->id;
+            $proceso = Proceso::with($data['relations'] ?? $this->relations);
+            return response()->json($proceso->find($idproceso, $data['columns'] ?? $this->columns), 201);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -48,11 +74,23 @@ class ProcesoController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
-        $proceso = Proceso::find($id);
 
-        return response()->json($proceso);
+        try {
+
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
+            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
+            return response()->json($proceso);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -64,12 +102,25 @@ class ProcesoController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        // $this->authorize('update', Proceso::class);
         $data = $request->all();
-        $proceso = Proceso::findOrFail($id);
-        $proceso->fill($data);
-        $proceso->save();
 
-        return response()->json($proceso);
+        try {
+            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id, $data['columns'] ?? $this->columns);
+
+            $procesoData = QueryUtil::createWithCompany($data['proceso']);
+            $proceso->fill($procesoData);
+            $proceso->save();
+
+            return response()->json($proceso);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 
     /**
@@ -80,9 +131,19 @@ class ProcesoController extends Controller
      */
     public function destroy(int $id)
     {
-        $proceso = Proceso::findOrFail($id);
-        $proceso->delete();
+        // $this->authorize('delete', Proceso::class);
 
-        return response()->json([], 204);
+        try {
+            $proceso = Proceso::query()
+                ->where(function ($query) {
+                    QueryUtil::whereCompany($query);
+                })->findOrFail($id);
+            $proceso->delete();
+            return response()->json(['message' => 'Eliminado correctamente'], 204);
+        } catch (QueryException $th) {
+            QueryUtil::handleQueryException($th);
+        } catch (Exception $th) {
+            QueryUtil::showExceptions($th);
+        }
     }
 }

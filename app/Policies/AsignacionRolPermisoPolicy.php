@@ -2,14 +2,24 @@
 
 namespace App\Policies;
 
-use App\Models\TipoDocumento;
+use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Models\User;
 use App\Util\PolicyUtil;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TipoDocumentoPolicy
+class AsignacionRolPermisoPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Create a new policy instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -26,10 +36,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, TipoDocumento $tipoDocumento)
+    public function view(User $user, AsignacionRolPermiso $tipoTransaccion)
     {
         //
     }
@@ -49,10 +59,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user)
+    public function update(User $user, AsignacionRolPermiso $tipoTransaccion)
     {
         return PolicyUtil::isAdmin();
     }
@@ -61,10 +71,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user)
+    public function delete(User $user, AsignacionRolPermiso $tipoTransaccion)
     {
         return PolicyUtil::isAdmin();
     }
@@ -73,10 +83,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user)
+    public function restore(User $user, AsignacionRolPermiso $tipoTransaccion)
     {
         return PolicyUtil::isAdmin();
     }
@@ -85,10 +95,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user)
+    public function forceDelete(User $user, AsignacionRolPermiso $tipoTransaccion)
     {
         return PolicyUtil::isAdmin();
     }

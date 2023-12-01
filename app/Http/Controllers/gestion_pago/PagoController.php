@@ -8,18 +8,42 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Util\QueryUtil;
+use Illuminate\Database\QueryException;
 
 class PagoController extends Controller
 {
+
+  private array $relations;
+  private array $columns;
+
+  function __construct()
+  {
+    $this->relations = [];
+    $this->columns = ["*"];
+  }
+
   /**
    * Get all pays
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $pagos = Pago::all();
-    return response()->json($pagos, 200);
+    $jsonData = $request->input('data');
+
+    $data = json_decode($jsonData, true);
+
+    if (isset($data['numeroFact']) && !empty($data['numeroFact'])) {
+      $pagos = Pago::where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
+    } else {
+      $pagos = Pago::query();
+    }
+
+    $pagos->with($data['relations'] ?? $this->relations);
+
+    $result = $pagos->get($data['columns'] ?? $this->columns);
+
+    return response()->json($result, 200);
   }
 
   /**
@@ -30,10 +54,12 @@ class PagoController extends Controller
    */
   public function store(Request $request): JsonResponse
   {
-    try
-    {
+    try {
+      request()->validate(Pago::$rules);
       $pago = Pago::create($request->all());
-      return response()->json($pago);
+      $idPago = $pago->id;
+      $pago = Pago::with($request['relations'] ?? $this->relations);
+      return response()->json($pago->find($idPago, $request['columns'] ?? $this->columns), 201);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
@@ -45,12 +71,20 @@ class PagoController extends Controller
    * @param  \App\Models\Pago  $pago
    * @return \Illuminate\Http\JsonResponse
    */
-  public function show($id): JsonResponse
+  public function show(Request $request, int $id): JsonResponse
   {
-    try
-    {
-      $pago = Pago::findOrFail($id);
-      return response()->json($pago, 200);
+    try {
+      $data = json_decode($request->input('data'), true);
+
+      $columns = $data['columns'] ?? $this->columns;
+      $relations = $data['relations'] ?? $this->relations;
+
+      $transaccion = Pago::with($relations)
+        ->findOrFail($id, $columns);
+
+      return response()->json($transaccion);
+    } catch (QueryException $th) {
+      QueryUtil::handleQueryException($th);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
@@ -66,12 +100,15 @@ class PagoController extends Controller
   public function update(Request $request, $id): JsonResponse
   {
     try {
-      // $request->validate([
-      //   'detalleTipoPago' => 'required|string|max:50',
-      // ]);
+      request()->validate(Pago::$rules);
+
       $pago = Pago::findOrFail($id);
+
       $pago->update($request->all());
-      return response()->json($pago, 200);
+
+      $pago = Pago::with($request['relations'] ?? $this->relations);
+      return response()->json($pago->find($id, $request['columns'] ?? $this->columns), 200);
+
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }

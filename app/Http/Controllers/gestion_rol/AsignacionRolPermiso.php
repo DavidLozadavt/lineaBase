@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivationCompanyUser;
+use App\Util\QueryUtil;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -11,45 +14,72 @@ use Spatie\Permission\Models\Role;
 class AsignacionRolPermiso extends Controller
 {
 
+  /**
+   * Get all permissions
+   *
+   * @return void
+   */
+  public function index()
+  {
+    $permisos = Permission::All();
 
-    public function index()
-    {
-        $permisos = Permission::All();
+    return response()->json($permisos);
+  }
 
-        return response()->json($permisos);
+  /**
+   * Assign permission by role
+   *
+   * @param Request $request
+   * @return void
+   */
+  public function permissionsByRole(Request  $request)
+  {
+    try {
+      $rol = $request->input('rol');
+      $role = Role::findOrFail($rol);
+      $groupsWithRoles = $role->getPermissionNames();
+      return response()->json($groupsWithRoles);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
     }
+  }
 
-    public function permissionsByRole(Request  $request)
-    {
+  /**
+   * Assign functionality
+   *
+   * @param Request $request
+   * @return void
+   */
+  public function assignFunctionality(Request $request)
+  {
+    try {
+      $roles = Role::find($request->idRol);
 
-        $rol = $request->input('rol');
+      DB::table('role_has_permissions')
+        ->where('role_id', $request->idRol)
+        ->delete();
 
-        $role = Role::findOrFail($rol);
-        $groupsWithRoles = $role->getPermissionNames();
-
-
-        return response()->json($groupsWithRoles);
+      $roles->syncPermissions($request->input('funciones', []));
+      return response()->json($roles, 200);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
     }
+  }
 
+  /**
+   * Assign roles
+   *
+   * @param Request $request
+   * @return void
+   */
+  public function asignation(Request $request)
+  {
 
-    public function assignFunctionality(Request $request)
-    {
-
-        // $user= User::find(auth()->user()->id);
-        // $user->assignRole("ADMINISTRADOR_VT");
-        // $user=Rol::all();
-
-        $roles = Role::find($request->idRol);
-        // dd($roles);
-        DB::table('role_has_permissions')
-            ->where('role_id', $request->idRol)
-            ->delete();
-
-
-        $roles->syncPermissions($request->input('funciones', []));
-        // $permisos= auth()->user();
-        // dd($request->all());
-
-        return $roles;
-    }
+    DB::table('model_has_roles')
+      ->where('model_id', $request->idActivation)
+      ->delete();
+    $user = ActivationCompanyUser::find($request->input('idActivation'));
+    $user->assignRole($request->input('roles', []));
+    return $user;
+  }
 }

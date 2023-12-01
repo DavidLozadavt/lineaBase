@@ -25,4 +25,12 @@ class Company extends Model
         }
         return url(self::RUTA_LOGO_DEFAULT);
     }
+
+    public function principal(){
+        return $this->belongsTo(Company::class,'idPrincipal');
+    }
+
+    public function sedes(){
+        return $this->hasMany(Company::class,'idPrincipal');
+    }
 }

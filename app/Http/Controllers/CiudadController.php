@@ -14,7 +14,8 @@ class CiudadController extends Controller
      */
     public function index()
     {
-        //
+        $ciudades = Ciudad::all();
+        return response() -> json($ciudades);
     }
 
     /**

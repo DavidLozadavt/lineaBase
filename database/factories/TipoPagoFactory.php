@@ -22,7 +22,7 @@ class TipoPagoFactory extends Factory
     public function definition()
     {
         return [
-            //
+            
         ];
     }
 }

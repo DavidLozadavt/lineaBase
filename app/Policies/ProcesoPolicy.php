@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\TipoDocumento;
+use App\Models\Proceso;
 use App\Models\User;
 use App\Util\PolicyUtil;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TipoDocumentoPolicy
+class ProcesoPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class TipoDocumentoPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\Proceso  $proceso
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, TipoDocumento $tipoDocumento)
+    public function view(User $user, Proceso $proceso)
     {
         //
     }
@@ -49,7 +49,7 @@ class TipoDocumentoPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\Proceso  $proceso
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user)
@@ -61,7 +61,7 @@ class TipoDocumentoPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\Proceso  $proceso
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user)
@@ -73,7 +73,7 @@ class TipoDocumentoPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\Proceso  $proceso
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user)
@@ -85,7 +85,7 @@ class TipoDocumentoPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\TipoDocumento  $tipoDocumento
+     * @param  \App\Models\Proceso  $proceso
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function forceDelete(User $user)

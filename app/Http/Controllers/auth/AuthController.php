@@ -4,14 +4,11 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
-use App\Models\Persona;
+use App\Models\User;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use stdClass;
-use Exception;
 
 class AuthController extends Controller
 {
@@ -41,12 +38,13 @@ class AuthController extends Controller
      */
     public function getUser()
     {
-        return response()->json(auth()->user());
+        $user = User::with(['persona'])->find(auth()->id());
+        return response()->json($user);
     }
 
     public function getActiveUsers()
     {
-        return ActivationCompanyUser::query()
+        return ActivationCompanyUser::with(['company'])
         ->where(function($query){
             QueryUtil::whereUser($query);
         })->get();
@@ -59,16 +57,14 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function getPermissions()
-    {
-        $permissions = Session::get('permissions');
-        return response()->json($permissions);
+    public function getPermissions(){
+        return Session::get('permissions');
     }
 
     public function getRoles()
     {
-        $permissions = Session::get('roles');
-        return response()->json($permissions);
+        $roles = Session::get('roles');
+        return response()->json($roles);
     }
 
     /**
@@ -99,12 +95,13 @@ class AuthController extends Controller
         if ($user_active -> exists()) {
             $user_active = $user_active -> first();
             Session::put('idCompany',$user_active -> idCompany);
+            // var_dump(Session::get('idCompany'));
             $roles = $user_active -> roles;
             Session::put('roles',$roles);
-            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id');
+            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id')-> pluck('name');
             Session::put('permissions',$permissions);
             
-            return response() -> json(['Empresa seleccionada correctamente'],200);
+            return response() -> json($permissions,200);
         }
         session()->invalidate();
         return response() -> json(['Usted no tiene un usuario activo para esta empresa'],404);

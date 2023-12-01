@@ -20,6 +20,10 @@ class CreateCompaniesTable extends Migration
             $table->string('rutaLogo');
             $table->string('representanteLegal');
             $table->unsignedSmallInteger('digitoVerificacion');
+
+            $table->unsignedInteger('idPrincipal')->nullable();
+            $table->foreign('idPrincipal')->references('id')->on('company');
+
             $table->timestamps();
         });
     }
