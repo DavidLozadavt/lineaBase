@@ -4,18 +4,11 @@ namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rol;
-use App\Permission\PermissionConst;
-use App\Util\QueryUtil;
 use Illuminate\Http\Request;
-use Spatie\Permission\Contracts\Permission;
-use Spatie\Permission\Models\Role;
 
 class RolController extends Controller
 {
-  public function __construct()
-  {
-    // $this->middleware('permission:' . PermissionConst::GESTION_ROLES);
-  }
+  public function __construct() {}
 
   /**
    * Display a listing of the resource.
@@ -101,10 +94,4 @@ class RolController extends Controller
     return response()->json([], 204);
   }
 
-  // public function index()
-  // {
-  //     $roles = Rol::with('company')->get();
-
-  //     return response()->json($roles);
-  // }
 }
