@@ -30,7 +30,7 @@ class ActivationCompanyUser extends Model
     {
         $now = Carbon::now();
         return $query
-            ->where('state_id', Estado::ID_ACTIVE)
+            ->where('idEstado', Estado::ID_ACTIVE)
             ->whereDate('fechaInicio', '<=', $now)
             ->whereDate('fechaFin', '>=', $now);
     }

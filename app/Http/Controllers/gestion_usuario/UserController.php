@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    public function getUsers()
+    public function index()
     {
         $id = Session::get("idCompany");
         $user = ActivationCompanyUser::with('company', 'user', 'user.persona', 'roles', 'estado')
@@ -37,7 +37,7 @@ class UserController extends Controller
 
         $activacion = new ActivationCompanyUser();
         $activacion->idUser = $usuario->id;
-        $activacion->state_id = 1;
+        $activacion->idEstado = 1;
         $activacion->idCompany = Session::get("idCompany");
         $activacion->fechaInicio = date('Y-m-d');
         $activacion->fechaFin = date('Y-m-d');

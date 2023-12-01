@@ -50,7 +50,6 @@ Route::group([
 
     Route::resource('users', UserController::class);
 
-    Route::get('lista_usuarios', [UserController::class, 'getUsers']);
 });
 
 Route::group([
