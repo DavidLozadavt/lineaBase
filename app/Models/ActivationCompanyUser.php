@@ -19,11 +19,11 @@ class ActivationCompanyUser extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'idUser');
     }
     public function estado()
     {
-        return $this->belongsTo(Estado::class, 'state_id');
+        return $this->belongsTo(Estado::class, 'idEstado');
     }
 
     public function scopeActive($query)
@@ -37,6 +37,6 @@ class ActivationCompanyUser extends Model
 
     public function scopeByUser($query, $idUser)
     {
-        return $query->where('user_id', $idUser);
+        return $query->where('idUser', $idUser);
     }
 }

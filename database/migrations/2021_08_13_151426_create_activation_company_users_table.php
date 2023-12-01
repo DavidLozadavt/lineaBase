@@ -14,15 +14,15 @@ class CreateActivationCompanyUsersTable extends Migration
     public function up()
     {
         Schema::create('activation_company_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
-            $table->unsignedInteger('state_id');
-            $table->foreign('state_id')->references('id')->on('estado');
+            $table->unsignedInteger('idUser');
+            $table->foreign('idUser')->references('id')->on('user');
+            $table->unsignedInteger('idEstado');
+            $table->foreign('idEstado')->references('id')->on('estado');
             $table->unsignedInteger('idCompany');
             $table->foreign('idCompany')->references('id')->on('company');
             $table->date('fechaInicio');
             $table->date('fechaFin');
+            $table->primary(['idUser','idCompany']);
             $table->timestamps();
         });
     }
