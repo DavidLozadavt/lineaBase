@@ -28,9 +28,9 @@ class QueryUtil
 
     public static function whereUser(Builder $query): Builder
     {
-        $user_id = auth()->id();
-        $query = $query->whereHas('user', function ($query) use ($user_id) {
-            $query->where('id', $user_id);
+        $idUser = auth()->id();
+        $query = $query->whereHas('user', function ($query) use ($idUser) {
+            $query->where('id', $idUser);
         });
         return $query;
     }

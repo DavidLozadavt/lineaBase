@@ -63,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function activationCompanyUsers()
     {
-        return $this->hasMany(ActivationCompanyUser::class, 'user_id');
+        return $this->hasMany(ActivationCompanyUser::class, 'idUser');
     }
 
     /**

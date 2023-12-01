@@ -36,7 +36,7 @@ class UserController extends Controller
         $usuario->save();
 
         $activacion = new ActivationCompanyUser();
-        $activacion->user_id = $usuario->id;
+        $activacion->idUser = $usuario->id;
         $activacion->state_id = 1;
         $activacion->idCompany = Session::get("idCompany");
         $activacion->fechaInicio = date('Y-m-d');
@@ -55,7 +55,7 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-        ActivationCompanyUser::where('user_id', $id)->delete();
+        ActivationCompanyUser::where('idUser', $id)->delete();
         $user = User::findOrFail($id);
         $idPersona = $user->idPersona;
         User::where('id', $id)->delete();

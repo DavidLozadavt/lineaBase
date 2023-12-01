@@ -86,7 +86,6 @@ class AuthController extends Controller
         $data = $request -> all();
 
         $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
-            ->where('id', $data['idUserActive'])
             ->where(function ($query) {
                 QueryUtil::whereUser($query);
                 QueryUtil::whereActive($query);
