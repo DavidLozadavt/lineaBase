@@ -19,8 +19,8 @@ class CreateNotificacionesTable extends Migration
             $table->time('hora');
             $table->char('asunto', 50);
             $table->text('mensaje');
-            $table->unsignedInteger('estado_id');
-            $table->foreign('estado_id')->references('id')->on('estado');
+            $table->unsignedInteger('idEstado');
+            $table->foreign('idEstado')->references('id')->on('estado');
             $table->foreign('idUsuarioReceptor')->references('id')->on('user');
             $table->unsignedInteger('idUsuarioReceptor');
             $table->foreign('idUsuarioRemitente')->references('id')->on('user');

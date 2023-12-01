@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\gestion_notificacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Estado;
 use App\Models\Notificacion;
 use App\Models\Status;
 use Illuminate\Http\Request;
@@ -123,7 +124,7 @@ class NotificacionController extends Controller
     public function read(int $id, Request $request)
     {
         $notificacion = Notificacion::where('idUsuarioReceptor', $request->user()->idpersona)->findOrFail($id);
-        $notificacion->estado_id = Status::ID_INACTIVO;
+        $notificacion->idEstado = Estado::ID_INACTIVO;
         $notificacion->save();
         return response()->json($notificacion);
     }
