@@ -94,8 +94,9 @@ class AuthController extends Controller
         if ($user_active -> exists()) {
             $user_active = $user_active -> first();
             Session::put('idCompany',$user_active -> idCompany);
-            // var_dump(Session::get('idCompany'));
+            var_dump(Session::get('idCompany'));
             $roles = $user_active -> roles;
+            // var_dump($roles);
             Session::put('roles',$roles);
             $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id')-> pluck('name');
             Session::put('permissions',$permissions);
