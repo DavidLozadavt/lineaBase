@@ -3,6 +3,8 @@
 use App\Http\Controllers\gestion_empresa\CompanyController;
 use App\Http\Controllers\gestion_rol\RolController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\CiudadController;
+use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
@@ -35,7 +37,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('user', [AuthController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('active_users',[AuthController::class,'getActiveUsers']);
+    Route::post('active_users', [AuthController::class, 'getActiveUsers']);
     Route::post('set_company', [AuthController::class, 'setCompany']);
     Route::post('roles', [AuthController::class, 'getRoles']);
     Route::post('permissions', [AuthController::class, 'getPermissions']);
@@ -43,18 +45,35 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:api',
+    'prefix' => 'permisos'
+], function () {
+
+    Route::apiResource('permisos', AsignacionRolPermiso::class)->only(['index']);
+
+    Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
+
+    Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
+
+    Route::put('asignar_roles', [AsignacionRolPermiso::class, 'asignation']);
+});
+
+Route::group([
+    'middleware' => 'auth:api',
     'prefix' => 'documentos'
-],function (){
+], function () {
     Route::resource('tipo_documento', TipoDocumentoController::class);
 });
 
 Route::group([
     'middleware' => 'auth:api',
     'prefix' => 'procesos'
-],function (){
+], function () {
     Route::resource('proceso', ProcesoController::class);
     Route::resource('tipo_documento_proceso', AsignacionProcesoTipoDocumentoController::class);
 });
+
+Route::resource('ciudades', CiudadController::class);
+Route::resource('departamentos', DepartamentoController::class);
 
 Route::resource('roles', RolController::class);
 Route::get('list_companies', [CompanyController::class, 'index']);
@@ -64,12 +83,6 @@ Route::get('lista_usuarios', [UserController::class, 'getUsers']);
 
 Route::resource('usuarios', UserController::class);
 
-Route::put('asignar_roles', [UserController::class, 'asignation']);
-
-//permisos
-Route::get('permisos', [AsignacionRolPermiso::class, 'index']);
-Route::get('permisos_rol', [AsignacionRolPermiso::class, 'permissionsByRole']);
-Route::put('asignar_rol_permiso', [AsignacionRolPermiso::class, 'assignFunctionality']);
 
 // notificaciones
 Route::resource('notificaciones', NotificacionController::class);
@@ -92,5 +105,4 @@ Route::group([
     Route::apiResource('transacciones', TransaccionController::class);
 
     Route::apiResource('tipo_transacciones', TipoTransaccionController::class);
-
 });

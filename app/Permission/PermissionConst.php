@@ -13,4 +13,5 @@ class PermissionConst
     const GESTION_MEDIO_PAGO       = 'GESTION_MEDIO_PAGO';
     const GESTION_TIPO_PAGO        = 'GESTION_TIPO_PAGO';
     const GESTION_TIPO_TRANSACCION = 'GESTION_TIPO_TRANSACCION';
+    const HOME = 'HOME';
 }

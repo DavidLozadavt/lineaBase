@@ -18,7 +18,6 @@ class Persona extends Model
         "apellido2",
         "fechaNac",
         "idCiudadNac",
-        "idCiudad",
         "direccion",
         "email",
         "idTipoIdentificacion",

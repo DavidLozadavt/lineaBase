@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaccion;
 use App\Util\QueryUtil;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -72,30 +73,25 @@ class TransaccionController extends Controller
    * @param  \App\Models\Transaccion  $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function show(Request $request, $id): JsonResponse
+  public function show(Request $request, int $id): JsonResponse
   {
     try {
-      $transaccion = Transaccion::findOrFail($id);
+      $data = json_decode($request->input('data'), true);
 
-      $jsonData = $request->input('data');
+      $columns = $data['columns'] ?? $this->columns;
+      $relations = $data['relations'] ?? $this->relations;
 
-      $data = json_decode($jsonData, true);
+      $transaccion = Transaccion::with($relations)
+        ->findOrFail($id, $columns);
 
-      if (isset($data['numFacturaInicial']) && !empty($data['numFacturaInicial'])) {
-        $transaccion = Transaccion::where('numFacturaInicial', 'like', '%' . $data['numFacturaInicial'] . '%');
-      } else {
-        $transaccion = Transaccion::query();
-      }
-
-      $transaccion->with($data['relations'] ?? $this->relations);
-
-      $result = $transaccion->get($data['columns'] ?? $this->columns);
-
-      return response()->json($result, 200);
+      return response()->json($transaccion);
+    } catch (QueryException $th) {
+      QueryUtil::handleQueryException($th);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
   }
+
 
   /**
    * Update data transaccion by id
@@ -128,9 +124,10 @@ class TransaccionController extends Controller
    * @param  \App\Models\Transaccion  $transaccion
    * @return \Illuminate\Http\JsonResponse
    */
-  public function destroy(Transaccion $transaccion): JsonResponse
+  public function destroy($id): JsonResponse
   {
     try {
+      $transaccion = Transaccion::findOrFail($id);
       $transaccion->delete();
       return response()->json(null, 204);
     } catch (Exception $e) {

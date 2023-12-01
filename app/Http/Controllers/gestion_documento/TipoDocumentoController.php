@@ -27,9 +27,10 @@ class TipoDocumentoController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $request->all();
-
+        
         try {
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
             $tipoDocumentos = TipoDocumento::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
@@ -41,6 +42,7 @@ class TipoDocumentoController extends Controller
         } catch (Exception $th) {
             QueryUtil::showExceptions($th);
         }
+        
     }
 
     /**
@@ -51,7 +53,7 @@ class TipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', TipoDocumento::class);
+        // $this->authorize('create', TipoDocumento::class); 
         $data = $request->all();
         try {
             $tipoDocumentoData = QueryUtil::createWithCompany($data["tipoDocumento"]);
@@ -74,9 +76,10 @@ class TipoDocumentoController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $data = $request->all();
 
         try {
+            $dataEncoded = $request->input('data_encoded');
+            $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
             $tipoDocumento = TipoDocumento::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
@@ -98,7 +101,7 @@ class TipoDocumentoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $this->authorize('update', TipoDocumento::class);
+        // $this->authorize('update', TipoDocumento::class);
         $data = $request->all();
 
         try {
@@ -127,7 +130,7 @@ class TipoDocumentoController extends Controller
      */
     public function destroy(int $id)
     {
-        $this->authorize('delete', TipoDocumento::class);
+        // $this->authorize('delete', TipoDocumento::class);
 
         try {
             $tipoDocumento = TipoDocumento::query()

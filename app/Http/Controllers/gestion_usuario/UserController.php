@@ -27,14 +27,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $Personaaa = new Persona($data);
-        $Personaaa->rutaFoto = Persona::RUTA_FOTO_DEFAULT;
-        $Personaaa->identificacion = rand(0, 99999);
-        $Personaaa->save();
+        $person = new Persona($data);
+        $person->rutaFoto = Persona::RUTA_FOTO_DEFAULT;
+        $person->identificacion = $data['identificacion'];
+        $person->save();
 
         $usuario = new User($data);
         $usuario->contrasena = bcrypt($request->input('contrasena'));
-        $usuario->idPersonaaa = $Personaaa->id;
+        $usuario->idPersona = $person->id;
         $usuario->save();
 
         $activacion = new ActivationCompanyUser();
@@ -48,31 +48,13 @@ class UserController extends Controller
         return response()->json($usuario, 201);
     }
 
-    public function asignation(Request $request)
-    {
-
-        DB::table('model_has_roles')
-            ->where('model_id', $request->idActivation)
-            ->delete();
-        $user = ActivationCompanyUser::find($request->input('idActivation'));
-        $user->assignRole($request->input('roles', []));
-        return $user;
-    }
-    // public function update(Request $request, int $id)
-    // {
-    //     $data = $request->all();
-    //     $tipoTransaccion = TipoTransaccion::findOrFail($id);
-    //     $tipoTransaccion->fill($data);
-    //     $tipoTransaccion->save();
-
-    //     return response()->json($tipoTransaccion);
-    // }
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int $id
-    //  * @return \Illuminate\Http\Response
-    //  */
+    
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(int $id)
     {
         ActivationCompanyUser::where('user_id', $id)->delete();

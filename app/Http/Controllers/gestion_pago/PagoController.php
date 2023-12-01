@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Util\QueryUtil;
+use Illuminate\Database\QueryException;
 
 class PagoController extends Controller
 {
@@ -70,26 +71,20 @@ class PagoController extends Controller
    * @param  \App\Models\Pago  $pago
    * @return \Illuminate\Http\JsonResponse
    */
-  public function show(Request $request, $id): JsonResponse
+  public function show(Request $request, int $id): JsonResponse
   {
     try {
-      $pago = Pago::findOrFail($id);
+      $data = json_decode($request->input('data'), true);
 
-      $jsonData = $request->input('data');
+      $columns = $data['columns'] ?? $this->columns;
+      $relations = $data['relations'] ?? $this->relations;
 
-      $data = json_decode($jsonData, true);
+      $transaccion = Pago::with($relations)
+        ->findOrFail($id, $columns);
 
-      if (isset($data['numeroFact']) && !empty($data['numeroFact'])) {
-        $pago = Pago::where('numeroFact', 'like', '%' . $data['numeroFact'] . '%');
-      } else {
-        $pago = Pago::query();
-      }
-
-      $pago->with($data['relations'] ?? $this->relations);
-
-      $result = $pago->get($data['columns'] ?? $this->columns);
-
-      return response()->json($result, 200);
+      return response()->json($transaccion);
+    } catch (QueryException $th) {
+      QueryUtil::handleQueryException($th);
     } catch (Exception $e) {
       return QueryUtil::showExceptions($e);
     }
