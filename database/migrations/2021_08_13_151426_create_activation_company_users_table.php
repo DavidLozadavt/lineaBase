@@ -23,6 +23,7 @@ class CreateActivationCompanyUsersTable extends Migration
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->primary(['idUser','idCompany']);
+            $table->unique(['idUser']);
             $table->timestamps();
         });
     }
