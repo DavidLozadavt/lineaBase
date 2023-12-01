@@ -29,7 +29,7 @@ class UserController extends Controller
         $data = $request->all();
         $person = new Persona($data);
         $person->rutaFoto = Persona::RUTA_FOTO_DEFAULT;
-        $person->identificacion = rand(0, 99999);
+        $person->identificacion = $data['identificacion'];
         $person->save();
 
         $usuario = new User($data);
