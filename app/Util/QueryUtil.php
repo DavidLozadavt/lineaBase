@@ -17,7 +17,7 @@ class QueryUtil
 {
     public static function whereCompany(Builder $query): Builder
     {
-        $idCompany = Session::get('idCompany');
+        $idCompany = KeyUtil::idCompany();
         return $query->where(function ($query) use ($idCompany) {
             $query->where('idCompany', $idCompany)
                 ->orWhereHas('company', function ($query) use ($idCompany) {
@@ -46,7 +46,7 @@ class QueryUtil
 
     public static function createWithCompany(array $request): array
     {
-        $request['idCompany'] = Session::get('idCompany');
+        $request['idCompany'] = KeyUtil::idCompany();
         return $request;
     }
 
