@@ -40,11 +40,20 @@ class DatabaseSeeder extends Seeder
 
         $this->call(CompanySeeder::class);
 
+        $this->call(PermissionSeeder::class);
+        $this->call(RoleSeeder::class);
+
+        // $path = 'database/seeders/sql/person.sql';
+        // DB::unprepared(file_get_contents($path));
+
+        // $path = 'database/seeders/sql/activation_company_user.sql';
+        // DB::unprepared(file_get_contents($path));
+
         $path = 'database/seeders/sql/tipo_documento.sql';
         DB::unprepared(file_get_contents($path));
 
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        // $this->call(PersonSeeder::class);
+        
+
+       
     }
 }

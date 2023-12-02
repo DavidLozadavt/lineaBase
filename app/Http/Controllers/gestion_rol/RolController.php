@@ -5,6 +5,7 @@ namespace App\Http\Controllers\gestion_rol;
 use App\Http\Controllers\Controller;
 use App\Models\Rol;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class RolController extends Controller
 {
@@ -18,7 +19,7 @@ class RolController extends Controller
   public function index(Request $request)
   {
     $nombre = $request->input('name');
-    $idCompany = $request->input('idCompany');
+    $idCompany = Session::get('idCompany');//$request->input('idCompany');
 
     $roles = Rol::with("company");
 

@@ -23,10 +23,10 @@ class RoleSeeder extends Seeder
         $vt->idCompany = 1;
         $vt->save();
 
-        // $rapidoTambo = new Role();
-        // $rapidoTambo->name = "Admin";
-        // $rapidoTambo->idCompany = 2;
-        // $rapidoTambo->save();
+        $fub = new Role();
+        $fub->name = "Admin";
+        $fub->idCompany = 2;
+        $fub->save();
 
         $vt->syncPermissions([
             PermissionConst::GESTION_ROL_PERMISOS,
@@ -41,10 +41,13 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_TIPO_DOCUMENTOS,
         ]);
 
-        // $rapidoTambo->syncPermissions([
-        //     PermissionConst::GESTION_TIPO_CONTRATO,
-        //     PermissionConst::GESTION_USUARIO,
-        // ]);
+        $fub->syncPermissions([
+            PermissionConst::GESTION_ROL_PERMISOS,
+            PermissionConst::GESTION_ROLES,
+            PermissionConst::GESTION_TIPO_CONTRATO,
+            PermissionConst::GESTION_USUARIO,
+            PermissionConst::GESTION_PROCESOS
+        ]);
 
         $emailAdmin = "admin@gmail.com";
         Persona::factory()
@@ -56,18 +59,25 @@ class RoleSeeder extends Seeder
 
         $activation = ActivationCompanyUser::factory()->create([
             'idCompany' => 1,
-            'idUser' => 1,
-            'idEstado' => 1
+            'idUser'    => 1,
+            'idEstado'  => 1
         ]);
 
         $activation->assignRole($vt);
 
-        // $activation = ActivationCompanyUser::factory()->create([
-        //     'idCompany' => 2,
-        //     'user_id' => 1,
-        //     'state_id' => 1
-        // ]);
+        $emailAdmin = "admin@fup.com";
+        Persona::factory()
+            ->hasUsuario(1, ['email' => $emailAdmin])
+            ->create([
+                'email' => $emailAdmin
+            ]);
 
-        // $activation->assignRole($rapidoTambo);
+        $activation = ActivationCompanyUser::factory()->create([
+            'idCompany' => 2,
+            'idUser'    => 2,
+            'idEstado'  => 1
+        ]);
+
+        $activation->assignRole($fub);
     }
 }
