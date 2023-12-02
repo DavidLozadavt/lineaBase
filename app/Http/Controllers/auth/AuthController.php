@@ -105,7 +105,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'usted no tiene un usuario activo', 401]);
         }
         $user_active = $user_active->first();
-        $currentPayload['id_empresa'] = $user_active->idCompany;
+        $currentPayload['idCompany'] = $user_active->idCompany;
         $roles = $user_active->roles;
         $currentPayload['roles'] = $roles->pluck('name');
         $permissions = $roles->pluck('permissions')->flatten()->unique('id')->pluck('name');
