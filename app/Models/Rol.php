@@ -11,6 +11,10 @@ class Rol extends Role
 
     protected $guarded = ['id'];
 
+    static $rules = [
+        'name' => 'required|min:3|max:20|alpha',
+    ];
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'idCompany');

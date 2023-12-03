@@ -50,6 +50,7 @@ class RolController extends Controller
   public function store(Request $request)
   {
     try {
+      request()->validate(Rol::$rules);
       $data = $request->all();
 
       $rol = Rol::create([
@@ -87,6 +88,7 @@ class RolController extends Controller
   public function update(Request $request, int $id)
   {
     try {
+      request()->validate(Rol::$rules);
       $data = $request->all();
 
       $rol = Rol::findOrFail($id);
