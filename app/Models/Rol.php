@@ -9,6 +9,8 @@ class Rol extends Role
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'idCompany');
