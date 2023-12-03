@@ -15,14 +15,13 @@ class CompanySeeder extends Seeder
     public function run()
     {
         Company::factory()->create([
-            'razonSocial' => "Virtual T"
+            'razonSocial' => "Virtual tecnology"
         ]);
 
         Company::factory()->create([
-            'razonSocial' => "Rápido Tambo",
-            'rutaLogo' => '/default/rapido-tambo-logo.jpg'
+            'razonSocial' => "Fundacion universitaria de popayán",
+            'rutaLogo' => '/default/favicon_fup.png'
         ]);
 
-        Company::factory(10)->create();
     }
 }

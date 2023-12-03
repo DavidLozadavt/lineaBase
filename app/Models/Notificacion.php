@@ -19,7 +19,7 @@ class Notificacion extends Model
 
     public function estado()
     {
-        return $this->belongsTo(Status::class, 'estado_id');
+        return $this->belongsTo(Status::class, 'idEstado');
     }
 
     public function personaReceptor()

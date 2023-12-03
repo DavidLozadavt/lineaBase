@@ -6,16 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Models\Persona;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session as FacadesSession;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    public function getUsers()
+    public function index()
     {
-        $id = FacadesSession::get("idCompany");
+        $id = Session::get("idCompany");
         $user = ActivationCompanyUser::with('company', 'user', 'user.persona', 'roles', 'estado')
             ->where('idCompany', $id)
             ->get();
@@ -38,9 +36,9 @@ class UserController extends Controller
         $usuario->save();
 
         $activacion = new ActivationCompanyUser();
-        $activacion->user_id = $usuario->id;
-        $activacion->state_id = 1;
-        $activacion->idCompany = FacadesSession::get("idCompany");
+        $activacion->idUser = $usuario->id;
+        $activacion->idEstado = 1;
+        $activacion->idCompany = Session::get("idCompany");
         $activacion->fechaInicio = date('Y-m-d');
         $activacion->fechaFin = date('Y-m-d');
         $activacion->save();
@@ -57,7 +55,7 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-        ActivationCompanyUser::where('user_id', $id)->delete();
+        ActivationCompanyUser::where('idUser', $id)->delete();
         $user = User::findOrFail($id);
         $idPersona = $user->idPersona;
         User::where('id', $id)->delete();

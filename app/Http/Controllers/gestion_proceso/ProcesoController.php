@@ -30,14 +30,16 @@ class ProcesoController extends Controller
     {
         // var_dump(Session::get('idCompany'));
         try {
+
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
-            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+            $procesos = Proceso::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
                 });
-            $proceso = QueryUtil::whereLike($proceso, $data, 'nombreProceso');
-            return response()->json($proceso->get($data['columns'] ?? $this->columns));
+
+            $procesos = QueryUtil::whereLike($procesos, $data, 'nombreProceso');
+            return response()->json($procesos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -55,12 +57,18 @@ class ProcesoController extends Controller
     {
         // $this->authorize('create', Proceso::class);
         $data = $request->all();
+        // var_dump($data);
         try {
-            $procesoData = QueryUtil::createWithCompany($data["proceso"]);
-            $proceso = Proceso::create($procesoData);
-            $idproceso = $proceso->id;
-            $proceso = Proceso::with($data['relations'] ?? $this->relations);
-            return response()->json($proceso->find($idproceso, $data['columns'] ?? $this->columns), 201);
+            $procesos_id = [];
+            foreach ($data['procesos'] as $key => $proceso) {
+                $procesoData = QueryUtil::createWithCompany($proceso);
+                $new_proceso = Proceso::create($procesoData);
+                $procesos_id[] = $new_proceso->id;
+            }
+            $procesos = Proceso::with($data['relations'] ?? $this->relations)
+                ->whereIn('id', $procesos_id)
+                ->get($data['columns'] ?? $this->columns);
+            return response()->json($procesos, 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {

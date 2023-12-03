@@ -15,23 +15,18 @@ class PolicyUtil
      */
     public static function isAdmin()
     {
-        $idCompany = Session::get('idCompany');
+        $idCompany = KeyUtil::idCompany();
         if ($idCompany != 1) {
             return false;
         }
 
-        return Session::get('roles')
-            ->where('idCompany', $idCompany)
-            ->where('name','Admin')
-            ->contains('name', 'Admin');
+        return in_array("Admin",KeyUtil::roles());
     }
 
     public static function hasPermission(array $expected_permissions)
     {
-        $permissions = Session::get('permissions');
-
-        return collect($expected_permissions)
-            ->intersect($permissions->pluck('name'))
-            ->isNotEmpty();
+        $permissions = KeyUtil::permissions();
+        $has_permission = array_intersect($permissions,$expected_permissions);
+        return !empty($has_permission);
     }
 }
