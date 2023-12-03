@@ -35,6 +35,7 @@ class TipoDocumentoController extends Controller
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
                 });
+            $tipoDocumentos = QueryUtil::whereDoesntHave($tipoDocumentos,$data,'idProceso','procesos');
             $tipoDocumentos = QueryUtil::whereLike($tipoDocumentos, $data, 'tituloDocumento');
             return response()->json($tipoDocumentos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\auth;
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Models\User;
+use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -58,12 +59,12 @@ class AuthController extends Controller
 
     public function getPermissions()
     {
-        return Session::get('permissions');
+        return KeyUtil::permissions();
     }
 
     public function getRoles()
     {
-        $roles = Session::get('roles');
+        $roles = KeyUtil::roles();
         return response()->json($roles);
     }
 

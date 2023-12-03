@@ -4,7 +4,6 @@ namespace App\Util;
 
 use App\Models\Estado;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use Exception;
@@ -62,6 +61,14 @@ class QueryUtil
         if ($data !== null && isset($data[$dataKey])) {
             return $query->where($dataKey,$data[$dataKey]);
         }
+        return $query;
+    }
+
+    public static function whereDoesntHave(Builder $query, ?array $data, string $dataKey,string $relationName): Builder
+    {
+        $query -> whereDoesntHave($relationName,function ($query) use ($data,$dataKey){
+            $query -> where($dataKey,$data[$dataKey]);
+        });
         return $query;
     }
 

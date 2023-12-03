@@ -37,6 +37,7 @@ class ProcesoController extends Controller
                     QueryUtil::whereCompany($query);
                 });
             $proceso = QueryUtil::whereLike($proceso, $data, 'nombreProceso');
+            var_dump($proceso->first());
             return response()->json($proceso->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
@@ -55,12 +56,19 @@ class ProcesoController extends Controller
     {
         // $this->authorize('create', Proceso::class);
         $data = $request->all();
+        // var_dump($data);
         try {
-            $procesoData = QueryUtil::createWithCompany($data["proceso"]);
-            $proceso = Proceso::create($procesoData);
-            $idproceso = $proceso->id;
-            $proceso = Proceso::with($data['relations'] ?? $this->relations);
-            return response()->json($proceso->find($idproceso, $data['columns'] ?? $this->columns), 201);
+            $procesos_id = [];
+            foreach ($data['procesos'] as $key => $proceso) {
+                $procesoData = QueryUtil::createWithCompany($proceso);
+                $new_proceso = Proceso::create($procesoData);
+                $procesos_id[] = $new_proceso->id;
+            }
+            $procesos = Proceso::with($data['relations'] ?? $this->relations)
+                ->whereIn('id', $procesos_id)
+                ->get($data['columns'] ?? $this->columns);
+            var_dump($procesos);
+            return response()->json($procesos, 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
