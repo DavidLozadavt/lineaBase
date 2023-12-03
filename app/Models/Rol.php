@@ -7,16 +7,16 @@ use Spatie\Permission\Models\Role;
 
 class Rol extends Role
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $guarded = ['id'];
+  protected $guarded = ['id'];
 
-    static $rules = [
-        'name' => 'required|min:3|max:20|alpha',
-    ];
+  static $rules = [
+    'name' => 'required|min:3|max:20|regex:/^[A-Za-z\s]+$/',
+  ];
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'idCompany');
-    }
+  public function company()
+  {
+    return $this->belongsTo(Company::class, 'idCompany');
+  }
 }
