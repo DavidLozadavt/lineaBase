@@ -10,6 +10,7 @@ use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
@@ -85,15 +86,12 @@ class AuthController extends Controller
     public function setCompany()
     {
 
+        $user = auth() -> user();
         $token = JWTAuth::getToken();
 
         if (!JWTAuth::check()) {
             return response()->json(['error' => 'Token no válido'], 401);
         }
-
-        $payload = JWTAuth::getPayload($token);
-
-        $currentPayload = $payload->toArray();
 
         $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
             ->where(function ($query) {
@@ -106,12 +104,15 @@ class AuthController extends Controller
             return response()->json(['error' => 'usted no tiene un usuario activo', 401]);
         }
         $user_active = $user_active->first();
-        $currentPayload['idCompany'] = $user_active->idCompany;
         $roles = $user_active->roles;
-        $currentPayload['roles'] = $roles->pluck('name');
         $permissions = $roles->pluck('permissions')->flatten()->unique('id')->pluck('name');
-        $currentPayload['permissions'] = $permissions;
-        $newToken = JWTAuth::refresh($token, $currentPayload);
-        return response()->json(['new_token' => $newToken, 'payload' => $currentPayload]);
+        $token = JWTAuth::claims([
+            'idCompany' => $user_active -> idCompany,
+            'roles' => $roles->pluck('name'),
+            'permissions' => $permissions
+        ])->fromUser($user);
+        $payload = JWTAuth::getPayload($token);
+
+        return response()->json(['new_token' => $token, 'payload' => $payload]);
     }
 }

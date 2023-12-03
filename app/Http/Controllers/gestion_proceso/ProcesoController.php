@@ -30,15 +30,16 @@ class ProcesoController extends Controller
     {
         // var_dump(Session::get('idCompany'));
         try {
+
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
-            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+            $procesos = Proceso::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
                 });
-            $proceso = QueryUtil::whereLike($proceso, $data, 'nombreProceso');
-            var_dump($proceso->first());
-            return response()->json($proceso->get($data['columns'] ?? $this->columns));
+
+            $procesos = QueryUtil::whereLike($procesos, $data, 'nombreProceso');
+            return response()->json($procesos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -67,7 +68,6 @@ class ProcesoController extends Controller
             $procesos = Proceso::with($data['relations'] ?? $this->relations)
                 ->whereIn('id', $procesos_id)
                 ->get($data['columns'] ?? $this->columns);
-            var_dump($procesos);
             return response()->json($procesos, 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
