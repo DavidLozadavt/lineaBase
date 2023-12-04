@@ -28,7 +28,6 @@ class ProcesoController extends Controller
      */
     public function index(Request $request)
     {
-        // var_dump(Session::get('idCompany'));
         try {
 
             $dataEncoded = $request->input('data_encoded');
@@ -55,20 +54,14 @@ class ProcesoController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->authorize('create', Proceso::class);
+        $this->authorize('create', Proceso::class);
         $data = $request->all();
-        // var_dump($data);
         try {
-            $procesos_id = [];
-            foreach ($data['procesos'] as $key => $proceso) {
-                $procesoData = QueryUtil::createWithCompany($proceso);
-                $new_proceso = Proceso::create($procesoData);
-                $procesos_id[] = $new_proceso->id;
-            }
-            $procesos = Proceso::with($data['relations'] ?? $this->relations)
-                ->whereIn('id', $procesos_id)
-                ->get($data['columns'] ?? $this->columns);
-            return response()->json($procesos, 201);
+            $procesoData = QueryUtil::createWithCompany($data["proceso"]);
+            $proceso = Proceso::create($procesoData);
+            $idProceso = $proceso->id;
+            $proceso = Proceso::with($data['relations'] ?? $this->relations);
+            return response()->json($proceso->find($idProceso, $data['columns'] ?? $this->columns), 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -110,7 +103,7 @@ class ProcesoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // $this->authorize('update', Proceso::class);
+        $this->authorize('update', Proceso::class);
         $data = $request->all();
 
         try {
@@ -139,7 +132,7 @@ class ProcesoController extends Controller
      */
     public function destroy(int $id)
     {
-        // $this->authorize('delete', Proceso::class);
+        $this->authorize('delete', Proceso::class);
 
         try {
             $proceso = Proceso::query()
