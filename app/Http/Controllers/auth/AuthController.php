@@ -9,6 +9,7 @@ use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Lcobucci\JWT\Signer\Key;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 
@@ -29,8 +30,32 @@ class AuthController extends Controller
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        
+        JWTAuth::setToken($token);
+        $user = auth() -> user();
 
-        return $this->respondWithToken($token);
+        $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
+            ->where(function ($query) {
+                QueryUtil::whereUser($query);
+                QueryUtil::whereActive($query);
+            });
+
+        if (!$user_active->exists()) {
+            auth()->logout();
+            return response()->json(['error' => 'usted no tiene un usuario activo', 401]);
+        }
+        $user_active = $user_active->first();
+        $roles = $user_active->roles;
+        $permissions = $roles->pluck('permissions')->flatten()->unique('id')->pluck('name');
+        $token = JWTAuth::claims([
+            'idCompany' => $user_active -> idCompany,
+            'roles' => $roles->pluck('name'),
+            'permissions' => $permissions
+        ])->fromUser($user);
+        $user = KeyUtil::user();
+        $payload = JWTAuth::getPayload($token);
+
+        return response()->json(['access_token' => $token, 'payload' => $payload,'user' => $user]);
     }
 
     /**
@@ -40,7 +65,7 @@ class AuthController extends Controller
      */
     public function getUser()
     {
-        $user = User::with(['persona'])->find(auth()->id());
+        $user = KeyUtil::user();
         return response()->json($user);
     }
 
@@ -111,8 +136,9 @@ class AuthController extends Controller
             'roles' => $roles->pluck('name'),
             'permissions' => $permissions
         ])->fromUser($user);
+        $user = KeyUtil::user();
         $payload = JWTAuth::getPayload($token);
 
-        return response()->json(['new_token' => $token, 'payload' => $payload]);
+        return response()->json(['new_token' => $token, 'payload' => $payload,'user' => $user]);
     }
 }

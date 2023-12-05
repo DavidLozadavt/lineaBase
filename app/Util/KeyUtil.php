@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class KeyUtil
@@ -26,5 +27,9 @@ class KeyUtil
         $token = JWTAuth::getToken();
         $payload = JWTAuth::getPayload($token)->toArray();
         return $payload['permissions'];
+    }
+
+    public static function user(){
+        return User::with(['persona'])->find(auth()->id());
     }
 }
