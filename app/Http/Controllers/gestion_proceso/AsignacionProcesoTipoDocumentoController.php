@@ -27,7 +27,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function index(Request $request)
     {
-    
+
         try {
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
@@ -35,7 +35,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
                 ->whereHas('proceso', function ($query) {
                     QueryUtil::whereCompany($query);
                 });
-            $procesoTipoDocumentos = QueryUtil::where($procesoTipoDocumentos,$data,'idProceso');
+            $procesoTipoDocumentos = QueryUtil::where($procesoTipoDocumentos, $data, 'idProceso');
             return response()->json($procesoTipoDocumentos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
@@ -54,15 +54,41 @@ class AsignacionProcesoTipoDocumentoController extends Controller
     {
         $this->authorize('create', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
+
         try {
-            $tipoDocumentosId = [];
-            foreach ($data['asignaciones'] as $key => $asignacion) {
-                $new_asignacion = AsignacionProcesoTipoDocumento::create($asignacion);
-                $tipoDocumentosId[] = $new_asignacion->id;
+            $idProceso = 0;
+            $entrantes = $data['asignaciones'];
+            $actuales = AsignacionProcesoTipoDocumento::select('idProceso', 'idTipoDocumento')->get();
+
+            $eliminar = $actuales->isNotEmpty()
+                ? $actuales->pluck('idProceso', 'idTipoDocumento')
+                ->diffKeys(collect($entrantes)->pluck('idProceso', 'idTipoDocumento'))
+                ->map(function ($idProceso,$idTipoDocumento ) {
+                    return ['idProceso' => $idProceso, 'idTipoDocumento' => $idTipoDocumento];
+                }) ->values(): [];
+
+
+            if (!empty($eliminar)) {
+                AsignacionProcesoTipoDocumento::whereIn('idProceso', $eliminar->pluck('idProceso'))
+                    ->whereIn('idTipoDocumento', $eliminar->pluck('idTipoDocumento'))->delete();
+            }
+
+            foreach ($data['asignaciones'] as $asignacion) {
+
+                if (!$idProceso) {
+                    $idProceso = $asignacion['idProceso'];
+                }
+                $new_asignacion = AsignacionProcesoTipoDocumento::firstOrCreate([
+                    'idProceso' => $asignacion['idProceso'],
+                    'idTipoDocumento' => $asignacion['idTipoDocumento'],
+                ]);
+                if (!$new_asignacion->exists()) {
+                    $new_asignacion->save();
+                }
             }
 
             $asignaciones = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations)
-                ->whereIn('id', $tipoDocumentosId)
+                ->where('idProceso', $idProceso)
                 ->get($data['columns'] ?? $this->columns);
             return response()->json($asignaciones, 201);
         } catch (QueryException $th) {
