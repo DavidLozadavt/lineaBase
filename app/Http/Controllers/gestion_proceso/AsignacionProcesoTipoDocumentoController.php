@@ -52,13 +52,19 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->authorize('create', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('create', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
         try {
-            $procesoTipoDocumento = AsignacionProcesoTipoDocumento::create($data['asignacionProcesoTipoDocumento']);
-            $idProcesoTipoDocumento = $procesoTipoDocumento->id;
-            $procesoTipoDocumento = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations);
-            return response()->json($procesoTipoDocumento->find($idProcesoTipoDocumento, $data['columns'] ?? $this->columns), 201);
+            $tipoDocumentosId = [];
+            foreach ($data['asignaciones'] as $key => $asignacion) {
+                $new_asignacion = AsignacionProcesoTipoDocumento::create($asignacion);
+                $tipoDocumentosId[] = $new_asignacion->id;
+            }
+
+            $asignaciones = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations)
+                ->whereIn('id', $tipoDocumentosId)
+                ->get($data['columns'] ?? $this->columns);
+            return response()->json($asignaciones, 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -98,7 +104,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // $this->authorize('update', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('update', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
 
         try {
@@ -126,7 +132,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function destroy(int $id)
     {
-        // $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
 
         try {
             $procesoTipoDocumento = AsignacionProcesoTipoDocumento::query()

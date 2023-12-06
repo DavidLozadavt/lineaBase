@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Models\Persona;
 use App\Models\User;
+use App\Util\KeyUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -38,7 +39,7 @@ class UserController extends Controller
         $activacion = new ActivationCompanyUser();
         $activacion->idUser = $usuario->id;
         $activacion->idEstado = 1;
-        $activacion->idCompany = Session::get("idCompany");
+        $activacion->idCompany = KeyUtil::idCompany();
         $activacion->fechaInicio = date('Y-m-d');
         $activacion->fechaFin = date('Y-m-d');
         $activacion->save();

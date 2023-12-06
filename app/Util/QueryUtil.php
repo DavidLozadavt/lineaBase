@@ -59,16 +59,20 @@ class QueryUtil
     public static function where(Builder $query, ?array $data, string $dataKey): Builder
     {
         if ($data !== null && isset($data[$dataKey])) {
-            return $query->where($dataKey,$data[$dataKey]);
+            return $query->where($dataKey, $data[$dataKey]);
         }
         return $query;
     }
 
-    public static function whereDoesntHave(Builder $query, ?array $data, string $dataKey,string $relationName): Builder
+    public static function whereDoesntHave(Builder $query, ?array $data, string $dataKey, string $relationName): Builder
     {
-        $query -> whereDoesntHave($relationName,function ($query) use ($data,$dataKey){
-            $query -> where($dataKey,$data[$dataKey]);
-        });
+
+        if ($data !== null && isset($data[$dataKey])) {
+            $query->whereDoesntHave($relationName, function ($query) use ($data, $dataKey) {
+                $query->where($dataKey, $data[$dataKey]);
+            });
+        }
+        // var_dump($query->count());
         return $query;
     }
 
