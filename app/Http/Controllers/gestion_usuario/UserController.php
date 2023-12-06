@@ -18,7 +18,7 @@ class UserController extends Controller
       ->where('idCompany', $id)
       ->get();
 
-    return response()->json($user);
+    return response()->json($user, 200);
   }
 
   public function store(Request $request)
