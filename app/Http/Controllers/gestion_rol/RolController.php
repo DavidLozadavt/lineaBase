@@ -7,6 +7,7 @@ use App\Models\Rol;
 use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -23,6 +24,7 @@ class RolController extends Controller
    */
   public function index(Request $request)
   {
+    // var_dump($request->all());
     $nombre = $request->input('name');
     $idCompany = KeyUtil::idCompany(); //$request->input('idCompany');
 
@@ -41,6 +43,21 @@ class RolController extends Controller
     return response()->json($roles->get());
   }
 
+  public function getRoleByCompany(): JsonResponse
+  {
+    $idCompany = KeyUtil::idCompany();
+
+    $roles = Rol::with("company");
+
+    if ($idCompany) {
+      $roles->whereHas('company', function ($q) use ($idCompany) {
+        $q->where('id', '=', $idCompany);
+      });
+    }
+
+    return response()->json($roles->get(), 200);
+  }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -56,7 +73,6 @@ class RolController extends Controller
       $rol = Rol::create([
         'name' => $data['name'],
         'idCompany' => KeyUtil::idCompany(),
-
       ]);
 
       return response()->json($rol, 201);

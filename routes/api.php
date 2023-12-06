@@ -71,6 +71,8 @@ Route::group([
     'prefix' => 'roles'
 ], function () {
     Route::apiResource('roles', RolController::class);
+
+    Route::get('roles_by_company', [RolController::class, 'getRoleByCompany']);
 });
 
 
