@@ -4,14 +4,10 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
-use App\Models\User;
 use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Lcobucci\JWT\Signer\Key;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
@@ -113,7 +109,6 @@ class AuthController extends Controller
 
         $user = auth() -> user();
         $token = JWTAuth::getToken();
-
         if (!JWTAuth::check()) {
             return response()->json(['error' => 'Token no válido'], 401);
         }
