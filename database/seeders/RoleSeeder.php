@@ -19,12 +19,12 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $vt = new Role();
-        $vt->name = "Admin";
+        $vt->name = "ADMIN";
         $vt->idCompany = 1;
         $vt->save();
 
         $fub = new Role();
-        $fub->name = "Admin";
+        $fub->name = "ADMIN";
         $fub->idCompany = 2;
         $fub->save();
 
@@ -39,6 +39,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_TIPO_PAGO,
             PermissionConst::GESTION_TIPO_TRANSACCION,
             PermissionConst::GESTION_TIPO_DOCUMENTOS,
+            PermissionConst::HOME
         ]);
 
         $fub->syncPermissions([
