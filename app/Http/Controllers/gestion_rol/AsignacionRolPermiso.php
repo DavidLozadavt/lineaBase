@@ -74,7 +74,6 @@ class AsignacionRolPermiso extends Controller
    */
   public function asignation(Request $request)
   {
-
     DB::table('model_has_roles')
       ->where('model_id', $request->idActivation)
       ->delete();

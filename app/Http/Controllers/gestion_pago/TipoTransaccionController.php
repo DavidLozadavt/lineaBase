@@ -18,6 +18,9 @@ class TipoTransaccionController extends Controller
    */
   public function index(): JsonResponse
   {
+
+    
+
     $tipoTransacciones = TipoTransaccion::all();
 
     return response()->json($tipoTransacciones);

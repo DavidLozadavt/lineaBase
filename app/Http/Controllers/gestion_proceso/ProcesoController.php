@@ -28,16 +28,17 @@ class ProcesoController extends Controller
      */
     public function index(Request $request)
     {
-        // var_dump(Session::get('idCompany'));
         try {
+
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
-            $proceso = Proceso::with($data['relations'] ?? $this->relations)
+            $procesos = Proceso::with($data['relations'] ?? $this->relations)
                 ->where(function ($query) {
                     QueryUtil::whereCompany($query);
                 });
-            $proceso = QueryUtil::whereLike($proceso, $data, 'nombreProceso');
-            return response()->json($proceso->get($data['columns'] ?? $this->columns));
+
+            $procesos = QueryUtil::whereLike($procesos, $data, 'nombreProceso');
+            return response()->json($procesos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -53,14 +54,14 @@ class ProcesoController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->authorize('create', Proceso::class);
+        $this->authorize('create', Proceso::class);
         $data = $request->all();
         try {
             $procesoData = QueryUtil::createWithCompany($data["proceso"]);
             $proceso = Proceso::create($procesoData);
-            $idproceso = $proceso->id;
+            $idProceso = $proceso->id;
             $proceso = Proceso::with($data['relations'] ?? $this->relations);
-            return response()->json($proceso->find($idproceso, $data['columns'] ?? $this->columns), 201);
+            return response()->json($proceso->find($idProceso, $data['columns'] ?? $this->columns), 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -102,7 +103,7 @@ class ProcesoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // $this->authorize('update', Proceso::class);
+        $this->authorize('update', Proceso::class);
         $data = $request->all();
 
         try {
@@ -131,7 +132,7 @@ class ProcesoController extends Controller
      */
     public function destroy(int $id)
     {
-        // $this->authorize('delete', Proceso::class);
+        $this->authorize('delete', Proceso::class);
 
         try {
             $proceso = Proceso::query()

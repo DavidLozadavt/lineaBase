@@ -4,11 +4,18 @@ namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rol;
+use App\Util\KeyUtil;
+use App\Util\QueryUtil;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class RolController extends Controller
 {
-  public function __construct() {}
+  public function __construct()
+  {
+  }
 
   /**
    * Display a listing of the resource.
@@ -17,8 +24,9 @@ class RolController extends Controller
    */
   public function index(Request $request)
   {
+    // var_dump($request->all());
     $nombre = $request->input('name');
-    $idCompany = $request->input('idCompany');
+    $idCompany = KeyUtil::idCompany(); //$request->input('idCompany');
 
     $roles = Rol::with("company");
 
@@ -35,6 +43,21 @@ class RolController extends Controller
     return response()->json($roles->get());
   }
 
+  public function getRoleByCompany(): JsonResponse
+  {
+    $idCompany = KeyUtil::idCompany();
+
+    $roles = Rol::with("company");
+
+    if ($idCompany) {
+      $roles->whereHas('company', function ($q) use ($idCompany) {
+        $q->where('id', '=', $idCompany);
+      });
+    }
+
+    return response()->json($roles->get(), 200);
+  }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -43,11 +66,20 @@ class RolController extends Controller
    */
   public function store(Request $request)
   {
-    $data = $request->all();
-    $rol = new Rol($data);
-    $rol->save();
+    try {
+      // $this->authorize('create', Rol::class);
+      request()->validate(Rol::$rules);
+      $data = $request->all();
 
-    return response()->json($rol, 201);
+      $rol = Rol::create([
+        'name' => $data['name'],
+        'idCompany' => KeyUtil::idCompany(),
+      ]);
+
+      return response()->json($rol, 201);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
 
   /**
@@ -72,13 +104,22 @@ class RolController extends Controller
    */
   public function update(Request $request, int $id)
   {
-    $data = $request->all();
-    $rol = Rol::findOrFail($id);
-    $rol->fill($data);
-    $rol->save();
+    try {
+      request()->validate(Rol::$rules);
+      $data = $request->all();
 
-    return response()->json($rol);
+      $rol = Rol::findOrFail($id);
+
+      $rol->update([
+        'name' => $data['name'],
+        'idCompany' => KeyUtil::idCompany(),
+      ]);
+      return response()->json($rol, 200);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
+
 
   /**
    * Remove the specified resource from storage.
@@ -88,10 +129,13 @@ class RolController extends Controller
    */
   public function destroy(int $id)
   {
-    $rol = Rol::findOrFail($id);
-    $rol->delete();
+    try {
+      $rol = Rol::findOrFail($id);
+      $rol->delete();
 
-    return response()->json([], 204);
+      return response()->json(null, 204);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
-
 }

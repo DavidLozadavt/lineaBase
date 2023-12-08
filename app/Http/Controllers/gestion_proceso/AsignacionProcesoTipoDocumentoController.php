@@ -27,7 +27,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function index(Request $request)
     {
-    
+
         try {
             $dataEncoded = $request->input('data_encoded');
             $data = $dataEncoded ? json_decode($dataEncoded, true) : null;
@@ -35,7 +35,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
                 ->whereHas('proceso', function ($query) {
                     QueryUtil::whereCompany($query);
                 });
-            $procesoTipoDocumentos = QueryUtil::where($procesoTipoDocumentos,$data,'idProceso');
+            $procesoTipoDocumentos = QueryUtil::where($procesoTipoDocumentos, $data, 'idProceso');
             return response()->json($procesoTipoDocumentos->get($data['columns'] ?? $this->columns));
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
@@ -52,13 +52,45 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->authorize('create', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('create', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
+
         try {
-            $procesoTipoDocumento = AsignacionProcesoTipoDocumento::create($data['asignacionProcesoTipoDocumento']);
-            $idProcesoTipoDocumento = $procesoTipoDocumento->id;
-            $procesoTipoDocumento = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations);
-            return response()->json($procesoTipoDocumento->find($idProcesoTipoDocumento, $data['columns'] ?? $this->columns), 201);
+            $idProceso = 0;
+            $entrantes = $data['asignaciones'];
+            $actuales = AsignacionProcesoTipoDocumento::select('idProceso', 'idTipoDocumento')->get();
+
+            $eliminar = $actuales->isNotEmpty()
+                ? $actuales->pluck('idProceso', 'idTipoDocumento')
+                ->diffKeys(collect($entrantes)->pluck('idProceso', 'idTipoDocumento'))
+                ->map(function ($idProceso,$idTipoDocumento ) {
+                    return ['idProceso' => $idProceso, 'idTipoDocumento' => $idTipoDocumento];
+                }) ->values(): [];
+
+
+            if (!empty($eliminar)) {
+                AsignacionProcesoTipoDocumento::whereIn('idProceso', $eliminar->pluck('idProceso'))
+                    ->whereIn('idTipoDocumento', $eliminar->pluck('idTipoDocumento'))->delete();
+            }
+
+            foreach ($data['asignaciones'] as $asignacion) {
+
+                if (!$idProceso) {
+                    $idProceso = $asignacion['idProceso'];
+                }
+                $new_asignacion = AsignacionProcesoTipoDocumento::firstOrCreate([
+                    'idProceso' => $asignacion['idProceso'],
+                    'idTipoDocumento' => $asignacion['idTipoDocumento'],
+                ]);
+                if (!$new_asignacion->exists()) {
+                    $new_asignacion->save();
+                }
+            }
+
+            $asignaciones = AsignacionProcesoTipoDocumento::with($data['relations'] ?? $this->relations)
+                ->where('idProceso', $idProceso)
+                ->get($data['columns'] ?? $this->columns);
+            return response()->json($asignaciones, 201);
         } catch (QueryException $th) {
             QueryUtil::handleQueryException($th);
         } catch (Exception $th) {
@@ -98,7 +130,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // $this->authorize('update', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('update', AsignacionProcesoTipoDocumento::class);
         $data = $request->all();
 
         try {
@@ -126,7 +158,7 @@ class AsignacionProcesoTipoDocumentoController extends Controller
      */
     public function destroy(int $id)
     {
-        // $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
+        $this->authorize('delete', AsignacionProcesoTipoDocumento::class);
 
         try {
             $procesoTipoDocumento = AsignacionProcesoTipoDocumento::query()

@@ -45,6 +45,15 @@ Route::group([
 
 Route::group([
     'middleware' => 'auth:api',
+    'prefix' => 'users'
+], function () {
+
+    Route::resource('users', UserController::class);
+
+});
+
+Route::group([
+    'middleware' => 'auth:api',
     'prefix' => 'permisos'
 ], function () {
 
@@ -56,6 +65,16 @@ Route::group([
 
     Route::put('asignar_roles', [AsignacionRolPermiso::class, 'asignation']);
 });
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'roles'
+], function () {
+    Route::apiResource('roles', RolController::class);
+
+    Route::get('roles_by_company', [RolController::class, 'getRoleByCompany']);
+});
+
 
 Route::group([
     'middleware' => 'auth:api',
@@ -75,14 +94,7 @@ Route::group([
 Route::resource('ciudades', CiudadController::class);
 Route::resource('departamentos', DepartamentoController::class);
 
-Route::resource('roles', RolController::class);
 Route::get('list_companies', [CompanyController::class, 'index']);
-
-// traer listado de los usuario por empresa
-Route::get('lista_usuarios', [UserController::class, 'getUsers']);
-
-Route::resource('usuarios', UserController::class);
-
 
 // notificaciones
 Route::resource('notificaciones', NotificacionController::class);

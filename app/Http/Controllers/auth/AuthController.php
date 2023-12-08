@@ -4,10 +4,9 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
-use App\Models\User;
+use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -27,8 +26,32 @@ class AuthController extends Controller
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        
+        JWTAuth::setToken($token);
+        $user = auth() -> user();
 
-        return $this->respondWithToken($token);
+        $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
+            ->where(function ($query) {
+                QueryUtil::whereUser($query);
+                QueryUtil::whereActive($query);
+            });
+
+        if (!$user_active->exists()) {
+            auth()->logout();
+            return response()->json(['error' => 'usted no tiene un usuario activo', 401]);
+        }
+        $user_active = $user_active->first();
+        $roles = $user_active->roles;
+        $permissions = $roles->pluck('permissions')->flatten()->unique('id')->pluck('name');
+        $token = JWTAuth::claims([
+            'idCompany' => $user_active -> idCompany,
+            'roles' => $roles->pluck('name'),
+            'permissions' => $permissions
+        ])->fromUser($user);
+        $user = KeyUtil::user();
+        $payload = JWTAuth::getPayload($token);
+
+        return response()->json(['access_token' => $token, 'payload' => $payload,'user' => $user]);
     }
 
     /**
@@ -38,32 +61,32 @@ class AuthController extends Controller
      */
     public function getUser()
     {
-        $user = User::with(['persona'])->find(auth()->id());
+        $user = KeyUtil::user();
         return response()->json($user);
     }
 
     public function getActiveUsers()
     {
         return ActivationCompanyUser::with(['company'])
-        ->where(function($query){
-            QueryUtil::whereUser($query);
-        })->get();
+            ->where(function ($query) {
+                QueryUtil::whereUser($query);
+            })->get();
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         auth()->logout();
-        $request->session()->invalidate();
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function getPermissions(){
-        return Session::get('permissions');
+    public function getPermissions()
+    {
+        return KeyUtil::permissions();
     }
 
     public function getRoles()
     {
-        $roles = Session::get('roles');
+        $roles = KeyUtil::roles();
         return response()->json($roles);
     }
 
@@ -81,30 +104,36 @@ class AuthController extends Controller
         ]);
     }
 
-    public function setCompany(Request $request)
+    public function setCompany()
     {
-        $data = $request -> all();
+
+        $user = auth() -> user();
+        $token = JWTAuth::getToken();
+        if (!JWTAuth::check()) {
+            return response()->json(['error' => 'Token no válido'], 401);
+        }
 
         $user_active = ActivationCompanyUser::with('company', 'roles.permissions')
-            ->where('id', $data['idUserActive'])
             ->where(function ($query) {
                 QueryUtil::whereUser($query);
                 QueryUtil::whereActive($query);
             });
-        
-        if ($user_active -> exists()) {
-            $user_active = $user_active -> first();
-            Session::put('idCompany',$user_active -> idCompany);
-            // var_dump(Session::get('idCompany'));
-            $roles = $user_active -> roles;
-            Session::put('roles',$roles);
-            $permissions = $roles -> pluck('permissions') -> flatten() -> unique('id')-> pluck('name');
-            Session::put('permissions',$permissions);
-            
-            return response() -> json($permissions,200);
-        }
-        session()->invalidate();
-        return response() -> json(['Usted no tiene un usuario activo para esta empresa'],404);
-    }
 
+        if (!$user_active->exists()) {
+            auth()->logout();
+            return response()->json(['error' => 'usted no tiene un usuario activo', 401]);
+        }
+        $user_active = $user_active->first();
+        $roles = $user_active->roles;
+        $permissions = $roles->pluck('permissions')->flatten()->unique('id')->pluck('name');
+        $token = JWTAuth::claims([
+            'idCompany' => $user_active -> idCompany,
+            'roles' => $roles->pluck('name'),
+            'permissions' => $permissions
+        ])->fromUser($user);
+        $user = KeyUtil::user();
+        $payload = JWTAuth::getPayload($token);
+
+        return response()->json(['new_token' => $token, 'payload' => $payload,'user' => $user]);
+    }
 }

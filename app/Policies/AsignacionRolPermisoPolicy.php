@@ -39,7 +39,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, AsignacionRolPermiso $tipoTransaccion)
+    public function view(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
         //
     }
@@ -62,7 +62,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, AsignacionRolPermiso $tipoTransaccion)
+    public function update(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
         return PolicyUtil::isAdmin();
     }
@@ -74,7 +74,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, AsignacionRolPermiso $tipoTransaccion)
+    public function delete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
         return PolicyUtil::isAdmin();
     }
@@ -86,7 +86,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, AsignacionRolPermiso $tipoTransaccion)
+    public function restore(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
         return PolicyUtil::isAdmin();
     }
@@ -98,7 +98,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, AsignacionRolPermiso $tipoTransaccion)
+    public function forceDelete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
         return PolicyUtil::isAdmin();
     }

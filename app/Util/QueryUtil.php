@@ -4,7 +4,6 @@ namespace App\Util;
 
 use App\Models\Estado;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +16,7 @@ class QueryUtil
 {
     public static function whereCompany(Builder $query): Builder
     {
-        $idCompany = Session::get('idCompany');
+        $idCompany = KeyUtil::idCompany();
         return $query->where(function ($query) use ($idCompany) {
             $query->where('idCompany', $idCompany)
                 ->orWhereHas('company', function ($query) use ($idCompany) {
@@ -28,9 +27,9 @@ class QueryUtil
 
     public static function whereUser(Builder $query): Builder
     {
-        $user_id = auth()->id();
-        $query = $query->whereHas('user', function ($query) use ($user_id) {
-            $query->where('id', $user_id);
+        $idUser = auth()->id();
+        $query = $query->whereHas('user', function ($query) use ($idUser) {
+            $query->where('id', $idUser);
         });
         return $query;
     }
@@ -39,14 +38,14 @@ class QueryUtil
     {
         $now = Carbon::now();
         return $query
-            ->where('state_id', Estado::ID_ACTIVE)
+            ->where('idEstado', Estado::ID_ACTIVE)
             ->whereDate('fechaInicio', '<=', $now)
             ->whereDate('fechaFin', '>=', $now);
     }
 
     public static function createWithCompany(array $request): array
     {
-        $request['idCompany'] = Session::get('idCompany');
+        $request['idCompany'] = KeyUtil::idCompany();
         return $request;
     }
 
@@ -60,8 +59,20 @@ class QueryUtil
     public static function where(Builder $query, ?array $data, string $dataKey): Builder
     {
         if ($data !== null && isset($data[$dataKey])) {
-            return $query->where($dataKey,$data[$dataKey]);
+            return $query->where($dataKey, $data[$dataKey]);
         }
+        return $query;
+    }
+
+    public static function whereDoesntHave(Builder $query, ?array $data, string $dataKey, string $relationName): Builder
+    {
+
+        if ($data !== null && isset($data[$dataKey])) {
+            $query->whereDoesntHave($relationName, function ($query) use ($data, $dataKey) {
+                $query->where($dataKey, $data[$dataKey]);
+            });
+        }
+        // var_dump($query->count());
         return $query;
     }
 
