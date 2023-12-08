@@ -67,6 +67,7 @@ class RolController extends Controller
   public function store(Request $request)
   {
     try {
+      // $this->authorize('create', Rol::class);
       request()->validate(Rol::$rules);
       $data = $request->all();
 
