@@ -46,6 +46,23 @@ class UserController extends Controller
   }
 
   /**
+   * Update user
+   *
+   * @param Request $request
+   * @param int $id
+   * @return void
+   */
+  public function update(Request $request, $id)
+  {
+
+    $person = Persona::findOrFail($id); 
+
+    $person->update($request->all());
+
+    return response()->json($person, 200);
+  }
+
+  /**
    * Remove the specified resource from storage.
    *
    * @param  int $id
