@@ -9,7 +9,6 @@ use App\Util\QueryUtil;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class RolController extends Controller
 {
@@ -24,9 +23,8 @@ class RolController extends Controller
    */
   public function index(Request $request)
   {
-    // var_dump($request->all());
     $nombre = $request->input('name');
-    $idCompany = KeyUtil::idCompany(); //$request->input('idCompany');
+    $idCompany = KeyUtil::idCompany();
 
     $roles = Rol::with("company");
 
@@ -43,6 +41,11 @@ class RolController extends Controller
     return response()->json($roles->get());
   }
 
+  /**
+   * Get roles by company
+   *
+   * @return JsonResponse
+   */
   public function getRoleByCompany(): JsonResponse
   {
     $idCompany = KeyUtil::idCompany();
@@ -67,7 +70,7 @@ class RolController extends Controller
   public function store(Request $request)
   {
     try {
-      // $this->authorize('create', Rol::class);
+      $this->authorize('create', Rol::class);
       request()->validate(Rol::$rules);
       $data = $request->all();
 
@@ -109,6 +112,7 @@ class RolController extends Controller
       $data = $request->all();
 
       $rol = Rol::findOrFail($id);
+      $this->authorize('update', $rol);
 
       $rol->update([
         'name' => $data['name'],
@@ -120,7 +124,6 @@ class RolController extends Controller
     }
   }
 
-
   /**
    * Remove the specified resource from storage.
    *
@@ -131,6 +134,7 @@ class RolController extends Controller
   {
     try {
       $rol = Rol::findOrFail($id);
+      $this->authorize('delete', $rol);
       $rol->delete();
 
       return response()->json(null, 204);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivationCompanyUser;
 use App\Util\QueryUtil;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -19,7 +20,7 @@ class AsignacionRolPermiso extends Controller
    *
    * @return void
    */
-  public function index()
+  public function index(): JsonResponse
   {
     $permisos = Permission::All();
 
@@ -32,7 +33,7 @@ class AsignacionRolPermiso extends Controller
    * @param Request $request
    * @return void
    */
-  public function permissionsByRole(Request  $request)
+  public function permissionsByRole(Request  $request): JsonResponse
   {
     try {
       $rol = $request->input('rol');
@@ -50,9 +51,10 @@ class AsignacionRolPermiso extends Controller
    * @param Request $request
    * @return void
    */
-  public function assignFunctionality(Request $request)
+  public function assignFunctionality(Request $request): JsonResponse
   {
     try {
+      $this->authorize('create', AsignacionRolPermiso::class);
       $roles = Role::find($request->idRol);
 
       DB::table('role_has_permissions')
@@ -72,8 +74,9 @@ class AsignacionRolPermiso extends Controller
    * @param Request $request
    * @return void
    */
-  public function asignation(Request $request)
+  public function asignation(Request $request): JsonResponse
   {
+    $this->authorize('create', AsignacionRolPermiso::class);
     DB::table('model_has_roles')
       ->where('model_id', $request->idActivation)
       ->delete();
