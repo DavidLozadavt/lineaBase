@@ -52,7 +52,10 @@ class AsignacionRolPermisoPolicy
      */
     public function create(User $user)
     {
-        return PolicyUtil::isAdmin();
+        $permissions = [
+            'GESTION_ROL_PERMISOS',
+        ];
+        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
     }
 
     /**
@@ -64,7 +67,10 @@ class AsignacionRolPermisoPolicy
      */
     public function update(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
-        return PolicyUtil::isAdmin();
+        $permissions = [
+            'GESTION_ROL_PERMISOS',
+        ];
+        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
     }
 
     /**
@@ -76,7 +82,10 @@ class AsignacionRolPermisoPolicy
      */
     public function delete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
-        return PolicyUtil::isAdmin();
+        $permissions = [
+            'GESTION_ROL_PERMISOS',
+        ];
+        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
     }
 
     /**
@@ -88,7 +97,10 @@ class AsignacionRolPermisoPolicy
      */
     public function restore(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
-        return PolicyUtil::isAdmin();
+        $permissions = [
+            'GESTION_ROL_PERMISOS',
+        ];
+        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
     }
 
     /**
@@ -100,6 +112,9 @@ class AsignacionRolPermisoPolicy
      */
     public function forceDelete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
     {
-        return PolicyUtil::isAdmin();
+        $permissions = [
+            'GESTION_ROL_PERMISOS',
+        ];
+        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
     }
 }

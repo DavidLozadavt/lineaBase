@@ -52,7 +52,10 @@ class RolPolicy
    */
   public function create(User $user)
   {
-    return PolicyUtil::isAdmin();
+    $permissions = [
+      'GESTION_ROLES'
+    ];
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
   }
 
   /**
@@ -64,7 +67,10 @@ class RolPolicy
    */
   public function update(User $user, Rol $rol)
   {
-    return PolicyUtil::isAdmin();
+    $permissions = [
+      'GESTION_ROLES'
+    ];
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
   }
 
   /**
@@ -76,7 +82,10 @@ class RolPolicy
    */
   public function delete(User $user, Rol $rol)
   {
-    return PolicyUtil::isAdmin();
+    $permissions = [
+      'GESTION_ROLES'
+    ];
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
   }
 
   /**
@@ -88,7 +97,10 @@ class RolPolicy
    */
   public function restore(User $user, Rol $rol)
   {
-    return PolicyUtil::isAdmin();
+    $permissions = [
+      'GESTION_ROLES'
+    ];
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
   }
 
   /**
@@ -100,6 +112,9 @@ class RolPolicy
    */
   public function forceDelete(User $user, Rol $rol)
   {
-    return PolicyUtil::isAdmin();
+    $permissions = [
+      'GESTION_ROLES'
+    ];
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
   }
 }
