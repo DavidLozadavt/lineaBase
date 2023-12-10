@@ -12,11 +12,11 @@ use Illuminate\Http\JsonResponse;
 class PersonaController extends Controller
 {
 
-  private relations = [];
+  private $relations;
 
   public function __construct()
   {
-    
+    $this->relations = [];
   }
 
   /**
