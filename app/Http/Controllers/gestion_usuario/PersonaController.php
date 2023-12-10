@@ -12,12 +12,30 @@ use Illuminate\Http\JsonResponse;
 class PersonaController extends Controller
 {
 
+  private relations = [];
+
+  public function __construct()
+  {
+    
+  }
+
+  /**
+   * Get all people
+   *
+   * @return JsonResponse
+   */
   public function index(): JsonResponse
   {
     $people = Persona::all();
     return response()->json($people, 200);
   }
 
+  /**
+   * Get person by id
+   *
+   * @param int $id
+   * @return JsonResponse
+   */
   public function show($id): JsonResponse
   {
     $person = Persona::findOrFail($id);
@@ -25,12 +43,29 @@ class PersonaController extends Controller
     return response()->json($person, 200);
   }
 
+  /**
+   * Storage person
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
   public function store(Request $request): JsonResponse
   {
-    $person = Persona::create($request->all());
+    $data = $request->all();
+    $person = new Persona($data);
+    $person->rutaFoto = Persona::RUTA_FOTO_DEFAULT;
+    $person->identificacion = $data['identificacion'];
+    $person->save();
     return response()->json($person, 201);
   }
 
+  /**
+   * Update person by id
+   *
+   * @param Request $request
+   * @param int $id
+   * @return JsonResponse
+   */
   public function update(Request $request, $id): JsonResponse
   {
     $person = Persona::findOrFail($id);
@@ -40,6 +75,12 @@ class PersonaController extends Controller
     return response()->json($person, 200);
   }
 
+  /**
+   * Delete person by id
+   *
+   * @param int $id
+   * @return JsonResponse
+   */
   public function destroy($id): JsonResponse
   {
     try {
