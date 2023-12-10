@@ -76,12 +76,16 @@ class AsignacionRolPermiso extends Controller
    */
   public function asignation(Request $request): JsonResponse
   {
-    $this->authorize('create', AsignacionRolPermiso::class);
-    DB::table('model_has_roles')
-      ->where('model_id', $request->idActivation)
-      ->delete();
-    $user = ActivationCompanyUser::find($request->input('idActivation'));
-    $user->assignRole($request->input('roles', []));
-    return $user;
+    try {
+      $this->authorize('create', AsignacionRolPermiso::class);
+      DB::table('model_has_roles')
+        ->where('model_id', $request->idActivation)
+        ->delete();
+      $user = ActivationCompanyUser::find($request->input('idActivation'));
+      $user->assignRole($request->input('roles', []));
+      return response()->json($user, 200);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
 }
