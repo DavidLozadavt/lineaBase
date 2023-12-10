@@ -20,7 +20,7 @@ class PolicyUtil
             return false;
         }
 
-        return in_array("Admin",KeyUtil::roles());
+        return in_array("ADMIN",KeyUtil::roles());
     }
 
     public static function hasPermission(array $expected_permissions)

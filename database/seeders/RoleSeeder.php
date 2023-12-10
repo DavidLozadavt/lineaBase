@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\ActivationCompanyUser;
 use App\Models\Persona;
-use App\Models\User;
 use App\Permission\PermissionConst;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -19,12 +18,12 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $vt = new Role();
-        $vt->name = "Admin";
+        $vt->name = "ADMIN";
         $vt->idCompany = 1;
         $vt->save();
 
         $fub = new Role();
-        $fub->name = "Admin";
+        $fub->name = "ADMIN";
         $fub->idCompany = 2;
         $fub->save();
 
