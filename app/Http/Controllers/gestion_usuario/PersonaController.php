@@ -72,18 +72,13 @@ class PersonaController extends Controller
 
     $data = $request->all();
 
-    // Actualizar el modelo Persona con los datos del request
     $person->update($data);
 
-    // Guardar los cambios en el modelo Persona
     $person->save();
 
-    // Si existe una relación con el modelo User, actualizar solo el correo electrónico
     if ($user = $person->usuario) {
-      // Actualizar solo el correo electrónico en el modelo User
       $user->update(['email' => $data['email']]);
 
-      // Guardar los cambios en el modelo User
       $user->save();
     }
 
