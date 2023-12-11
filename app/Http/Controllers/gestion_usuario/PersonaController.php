@@ -72,9 +72,8 @@ class PersonaController extends Controller
 
     $data = $request->all();
 
-    // Asegúrate de que la fecha esté en formato ISO 8601 antes de actualizar
+    // verificar si llega con un formData desde el front
     if (isset($data['fechaNac']) && !empty($data['fechaNac'])) {
-      // Convierte la fecha a un objeto DateTime en caso de que sea una cadena
       $data['fechaNac'] = is_string($data['fechaNac']) ? new \DateTime($data['fechaNac']) : $data['fechaNac'];
     }
 
