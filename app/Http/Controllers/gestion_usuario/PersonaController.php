@@ -72,14 +72,16 @@ class PersonaController extends Controller
 
     $data = $request->all();
 
-    $person->update($data);
+    // Asegúrate de que la fecha esté en formato ISO 8601 antes de actualizar
+    if (isset($data['fechaNac']) && !empty($data['fechaNac'])) {
+      // Convierte la fecha a un objeto DateTime en caso de que sea una cadena
+      $data['fechaNac'] = is_string($data['fechaNac']) ? new \DateTime($data['fechaNac']) : $data['fechaNac'];
+    }
 
-    $person->save();
+    $person->update($data);
 
     if ($user = $person->usuario) {
       $user->update(['email' => $data['email']]);
-
-      $user->save();
     }
 
     return response()->json($person, 200);
