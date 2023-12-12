@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class WebController extends Controller
 {
-    public function index()
+    /**
+     * Return view
+     *
+     * @return void
+     */
+    public function index(): View
     {
-        return File::get(public_path() . '/index.html');
+        return view('welcome');
     }
 }
