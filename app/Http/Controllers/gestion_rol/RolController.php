@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\gestion_rol;
 
 use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
 use App\Models\Rol;
 use App\Util\KeyUtil;
 use App\Util\QueryUtil;
