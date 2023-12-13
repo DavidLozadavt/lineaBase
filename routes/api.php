@@ -9,6 +9,7 @@ use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Http\Controllers\gestion_documento\TipoDocumentoController;
+use App\Http\Controllers\gestion_jornada\DiaController;
 use App\Http\Controllers\gestion_jornada\JornadaController;
 use Illuminate\Support\Facades\Route;
 
@@ -129,5 +130,7 @@ Route::group([
 ], function () {
 
     Route::apiResource('jornadas', JornadaController::class);
+
+    Route::apiResource('dias', DiaController::class)->only(['index']);
     
 });
