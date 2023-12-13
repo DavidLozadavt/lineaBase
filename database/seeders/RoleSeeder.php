@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\ActivationCompanyUser;
 use App\Models\Persona;
-use App\Models\User;
 use App\Permission\PermissionConst;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -38,6 +37,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_TIPO_PAGO,
             PermissionConst::GESTION_TIPO_TRANSACCION,
             PermissionConst::GESTION_TIPO_DOCUMENTOS,
+            PermissionConst::GESTION_JORNADA,
             PermissionConst::HOME
         ]);
 

@@ -16,12 +16,12 @@ class CompanySeeder extends Seeder
     {
         Company::factory()->create([
             'razonSocial' => "Virtual tecnology",
-            'rutaLogo' => '/default/vTLogo.png'
+            'rutaLogo'    => '/default/vTLogo.png'
         ]);
 
         Company::factory()->create([
             'razonSocial' => "Fundacion universitaria de popayán",
-            'rutaLogo' => '/default/favicon_fup.png'
+            'rutaLogo'    => '/default/favicon_fup.png'
         ]);
 
     }
