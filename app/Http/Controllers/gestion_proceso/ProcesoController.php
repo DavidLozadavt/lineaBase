@@ -114,6 +114,15 @@ class ProcesoController extends Controller
     public function update(Request $request, int $id)
     {
         $this->authorize('update', Proceso::class);
+        $request->validate([
+            'proceso.nombreProceso' => [
+                'required',
+                Rule::unique('proceso', 'nombreProceso')
+                    ->where('idCompany',KeyUtil::idCompany())->ignore($id),
+            ],
+        ], [
+            'proceso.nombreProceso.unique' => 'Ya existe un proceso con ese nombre.',
+        ]);
         $data = $request->all();
 
         try {

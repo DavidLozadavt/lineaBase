@@ -116,6 +116,15 @@ class TipoDocumentoController extends Controller
     public function update(Request $request, int $id)
     {
         $this->authorize('update', TipoDocumento::class);
+        $request->validate([
+            'tipoDocumento.tituloDocumento' => [
+                'required',
+                Rule::unique('tipoDocumento', 'tituloDocumento')
+                    ->where('idCompany',KeyUtil::idCompany())->ignore($id),
+            ],
+        ], [
+            'tipoDocumento.tituloDocumento.unique' => 'Ya existe un tipo de documento con ese nombre.',
+        ]);
         $data = $request->all();
 
         try {
