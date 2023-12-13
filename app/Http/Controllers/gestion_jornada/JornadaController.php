@@ -142,6 +142,7 @@ class JornadaController extends Controller
 
       $idJornada = $jornada->id;
 
+      $jornada->dias()->detach();
       $jornada->dias()->sync($data['dias']);
 
       DB::commit();

@@ -18,8 +18,8 @@ class Jornada extends Model
   static $rules = [
     'nombreJornada' => 'required|string',
     'descripcion'   => 'required|string',
-    'horaInicial'   => 'required|date_format:H:i',
-    'horaFinal'     => 'required|date_format:H:i',
+    'horaInicial'   => 'required',
+    'horaFinal'     => 'required',
     'numeroHoras'   => 'required|integer',
     'dias'          => 'required|array',
   ];
