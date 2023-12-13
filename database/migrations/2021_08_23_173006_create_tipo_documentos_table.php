@@ -22,6 +22,7 @@ class CreateTipoDocumentosTable extends Migration
             $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
 
+            $table -> unique(['tituloDocumento','idCompany']);
         });
     }
 

@@ -21,6 +21,8 @@ class CreateProcesosTable extends Migration
             $table->unsignedInteger('idCompany');
             $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
+
+            $table -> unique(['nombreProceso','idCompany']);
         });
     }
 
