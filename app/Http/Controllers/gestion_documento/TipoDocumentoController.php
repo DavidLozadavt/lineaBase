@@ -4,8 +4,10 @@ namespace App\Http\Controllers\gestion_documento;
 
 use App\Http\Controllers\Controller;
 use App\Models\TipoDocumento;
+use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -57,6 +59,15 @@ class TipoDocumentoController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', TipoDocumento::class); 
+        $request->validate([
+            'tipoDocumento.tituloDocumento' => [
+                'required',
+                Rule::unique('tipoDocumento', 'tituloDocumento')
+                    ->where('idCompany',KeyUtil::idCompany()),
+            ],
+        ], [
+            'tipoDocumento.tituloDocumento.unique' => 'Ya existe un tipo de documento con ese nombre.',
+        ]);
         $data = $request->all();
         try {
             $tipoDocumentoData = QueryUtil::createWithCompany($data["tipoDocumento"]);

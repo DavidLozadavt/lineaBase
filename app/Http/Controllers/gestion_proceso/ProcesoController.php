@@ -4,10 +4,11 @@ namespace App\Http\Controllers\gestion_proceso;
 
 use App\Http\Controllers\Controller;
 use App\Models\Proceso;
+use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Exception;
 
 class ProcesoController extends Controller
@@ -55,6 +56,15 @@ class ProcesoController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Proceso::class);
+        $request->validate([
+            'proceso.nombreProceso' => [
+                'required',
+                Rule::unique('proceso', 'nombreProceso')
+                    ->where('idCompany',KeyUtil::idCompany()),
+            ],
+        ], [
+            'proceso.nombreProceso.unique' => 'Ya existe un proceso con ese nombre.',
+        ]);
         $data = $request->all();
         try {
             $procesoData = QueryUtil::createWithCompany($data["proceso"]);
