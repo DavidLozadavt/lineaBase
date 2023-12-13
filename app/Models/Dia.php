@@ -14,6 +14,8 @@ class Dia extends Model
 
   protected $guarded = ['id'];
 
+  public $timestamps = false;
+
   public function jornadas(): BelongsToMany
   {
     return $this->belongsToMany(Jornada::class, 'asignacionDiaJornada', 'idDia', 'idJornada');
