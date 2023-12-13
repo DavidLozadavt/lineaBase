@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Jornada extends Model
 {
@@ -18,5 +19,10 @@ class Jornada extends Model
   {
     return $this->belongsTo(Company::class, 'idCompany');
   }
-  
+
+  public function dias(): BelongsToMany
+  {
+    return $this->belongsToMany(Dia::class, 'asignacionDiaJornada', 'idJornada', 'idDia');
+  }
+
 }
