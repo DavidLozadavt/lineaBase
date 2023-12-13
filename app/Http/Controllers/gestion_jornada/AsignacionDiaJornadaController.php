@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\gestion_jornada;
 
+use App\Http\Controllers\Controller;
 use App\Models\AsignacionDiaJornada;
 use App\Http\Requests\StoreAsignacionDiaJornadaRequest;
 use App\Http\Requests\UpdateAsignacionDiaJornadaRequest;

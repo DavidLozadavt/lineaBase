@@ -4,9 +4,14 @@ namespace App\Http\Controllers\gestion_jornada;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jornada;
-use App\Http\Requests\StoreJornadaRequest;
-use App\Http\Requests\UpdateJornadaRequest;
+use App\Models\AsignacionDiaJornada;
+use App\Util\KeyUtil;
+use App\Util\QueryUtil;
+use Exception;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JornadaController extends Controller
 {
@@ -25,7 +30,7 @@ class JornadaController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(Request $request)
+  public function index(Request $request): JsonResponse
   {
     $jsonData = $request->input('data');
 
@@ -45,25 +50,63 @@ class JornadaController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \App\Http\Requests\StoreJornadaRequest  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(StoreJornadaRequest $request)
-  {
-    
-  }
-
-  /**
    * Display the specified resource.
    *
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
-  public function show(Jornada $jornada)
+  public function show(Request $request, Jornada $jornada): JsonResponse
   {
-    
+    try {
+      $data = json_decode($request->input('data'), true);
+
+      $columns = $data['columns'] ?? $this->columns;
+      $relations = $data['relations'] ?? $this->relations;
+
+      $transaccion = Jornada::with($relations)
+        ->findOrFail($jornada->id, $columns);
+
+      return response()->json($transaccion);
+    } catch (QueryException $th) {
+      QueryUtil::handleQueryException($th);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
+  }
+
+  /**
+   * Create jornada
+   *
+   * @param  \App\Http\Requests\StoreJornadaRequest  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request): JsonResponse
+  {
+    try {
+      request()->validate(Jornada::$rules);
+
+      $data = $request->all();
+
+      DB::beginTransaction();
+
+      $jornada = Jornada::create([
+        'nombreJornada' => $data['nombreJornada'],
+        'descripcion'   => $data['descripcion'],
+        'horaInicial'   => $data['horaInicial'],
+        'horaFinal'     => $data['horaFinal'],
+        'numeroHoras'   => $data['numeroHoras'],
+        'idCompany'     => KeyUtil::idCompany(),
+      ]);
+
+      $jornada->dias()->attach($data['dias']);
+
+      DB::commit();
+
+      return response()->json($jornada, 201);
+    } catch (QueryException $e) {
+      DB::rollBack();
+      return QueryUtil::showExceptions($e);
+    }
   }
 
   /**
@@ -73,9 +116,8 @@ class JornadaController extends Controller
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
-  public function update(UpdateJornadaRequest $request, Jornada $jornada)
+  public function update(Request $request, Jornada $jornada) //: JsonResponse
   {
-    
   }
 
   /**
@@ -84,8 +126,7 @@ class JornadaController extends Controller
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Jornada $jornada)
+  public function destroy(Jornada $jornada) //: JsonResponse
   {
-    
   }
 }

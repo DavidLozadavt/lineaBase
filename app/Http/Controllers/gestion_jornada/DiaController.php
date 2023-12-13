@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\gestion_jornada;
 
+use App\Http\Controllers\Controller;
 use App\Models\Dia;
 use App\Http\Requests\StoreDiaRequest;
 use App\Http\Requests\UpdateDiaRequest;

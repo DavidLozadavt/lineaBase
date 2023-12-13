@@ -15,6 +15,15 @@ class Jornada extends Model
 
   protected $guarded = ['id'];
 
+  static $rules = [
+    'nombreJornada' => 'required|string',
+    'descripcion' => 'required|string',
+    'horaInicial' => 'required|date_format:H:i:s',
+    'horaFinal' => 'required|date_format:H:i:s',
+    'numeroHoras' => 'required|integer',
+    'dias' => 'required|array',
+  ];
+
   public function company(): BelongsTo
   {
     return $this->belongsTo(Company::class, 'idCompany');
@@ -24,5 +33,4 @@ class Jornada extends Model
   {
     return $this->belongsToMany(Dia::class, 'asignacionDiaJornada', 'idJornada', 'idDia');
   }
-
 }
