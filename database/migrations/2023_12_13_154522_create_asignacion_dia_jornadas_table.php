@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('asignacionDiaJornada', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('idJornada')->references('id')->on('jornada');
-            $table->foreignId('idDia')->references('id')->on('dia');
+            $table->foreignId('idJornada')->references('id')->on('jornada')->onDelete('cascade');
+            $table->foreignId('idDia')->references('id')->on('dia')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class JornadaController extends Controller
   }
 
   /**
-   * Display a listing of the resource.
+   * Get all jornadas by KeyUtil::idCompany()
    *
    * @return \Illuminate\Http\Response
    */
@@ -44,13 +44,13 @@ class JornadaController extends Controller
 
     $jornadas->with($data['relations'] ?? $this->relations);
 
-    $result = $jornadas->get($data['columns'] ?? $this->columns);
+    $result = $jornadas->get($data['columns'] ?? $this->columns)->where('idCompany', KeyUtil::idCompany());
 
     return response()->json($result, 200);
   }
 
   /**
-   * Display the specified resource.
+   * Get jornada by id
    *
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
@@ -98,11 +98,15 @@ class JornadaController extends Controller
         'idCompany'     => KeyUtil::idCompany(),
       ]);
 
+      $idJornada = $jornada->id;
+
       $jornada->dias()->attach($data['dias']);
 
       DB::commit();
 
-      return response()->json($jornada, 201);
+      $jornada = Jornada::with($request['relations'] ?? $this->relations);
+
+      return response()->json($jornada->find($idJornada, $request['columns'] ?? $this->columns), 201);
     } catch (QueryException $e) {
       DB::rollBack();
       return QueryUtil::showExceptions($e);
@@ -110,7 +114,7 @@ class JornadaController extends Controller
   }
 
   /**
-   * Update the specified resource in storage.
+   * Update Jornada by id
    *
    * @param  \App\Http\Requests\UpdateJornadaRequest  $request
    * @param  \App\Models\Jornada  $jornada
@@ -136,11 +140,15 @@ class JornadaController extends Controller
         'idCompany' => KeyUtil::idCompany(),
       ]);
 
+      $idJornada = $jornada->id;
+
       $jornada->dias()->sync($data['dias']);
 
       DB::commit();
 
-      return response()->json($jornada, 200);
+      $jornada = Jornada::with($request['relations'] ?? $this->relations);
+
+      return response()->json($jornada->find($idJornada, $request['columns'] ?? $this->columns), 200);
     } catch (QueryException $e) {
       DB::rollBack();
       return QueryUtil::showExceptions($e);
@@ -148,15 +156,23 @@ class JornadaController extends Controller
   }
 
   /**
-   * Remove the specified resource from storage.
+   * Remove jornada by id
    *
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
   public function destroy(Jornada $jornada): JsonResponse
   {
-    $newjornada = Jornada::findOrFail($jornada->id);
-    $newjornada->delete();
-    return response()->json(null, 204);
+    try {
+      // $jornada->dias()->detach();
+      $jornada->delete();
+
+      return response()->json(null, 204);
+    } catch (QueryException $e) {
+      return QueryUtil::handleQueryException($e);
+    } catch (Exception $e) {
+      return QueryUtil::showExceptions($e);
+    }
   }
+
 }
