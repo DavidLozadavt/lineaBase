@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('jornada', function (Blueprint $table) {
             $table->id();
             $table->string('nombreJornada');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->time('horaInicial');
             $table->time('horaFinal');
             $table->integer('numeroHoras');
-            $table->unsignedInteger('idCompany')->nullable();
+            $table->unsignedInteger('idCompany');
             $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
         });

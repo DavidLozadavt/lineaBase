@@ -116,8 +116,35 @@ class JornadaController extends Controller
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Jornada $jornada) //: JsonResponse
+  public function update(Request $request, Jornada $jornada): JsonResponse
   {
+    try {
+      request()->validate(Jornada::$rules);
+
+      $data = $request->all();
+
+      DB::beginTransaction();
+
+      $jornada = Jornada::findOrFail($jornada->id);
+
+      $jornada->update([
+        'nombreJornada' => $data['nombreJornada'],
+        'descripcion' => $data['descripcion'],
+        'horaInicial' => $data['horaInicial'],
+        'horaFinal' => $data['horaFinal'],
+        'numeroHoras' => $data['numeroHoras'],
+        'idCompany' => KeyUtil::idCompany(),
+      ]);
+
+      $jornada->dias()->sync($data['dias']);
+
+      DB::commit();
+
+      return response()->json($jornada, 200);
+    } catch (QueryException $e) {
+      DB::rollBack();
+      return QueryUtil::showExceptions($e);
+    }
   }
 
   /**
@@ -126,7 +153,10 @@ class JornadaController extends Controller
    * @param  \App\Models\Jornada  $jornada
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Jornada $jornada) //: JsonResponse
+  public function destroy(Jornada $jornada): JsonResponse
   {
+    $newjornada = Jornada::findOrFail($jornada->id);
+    $newjornada->delete();
+    return response()->json(null, 204);
   }
 }
