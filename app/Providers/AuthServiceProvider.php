@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Models\AsignacionProcesoTipoDocumento;
+use App\Models\Jornada;
 use App\Models\MedioPago;
 use App\Models\Pago;
+use App\Models\Proceso;
+use App\Models\Rol;
 use App\Models\TipoDocumento;
 use App\Models\TipoPago;
 use App\Models\TipoTransaccion;
@@ -13,6 +16,7 @@ use App\Models\Transaccion;
 use App\Models\User;
 use App\Policies\AsignacionProcesoTipoDocumentoPolicy;
 use App\Policies\AsignacionRolPermisoPolicy;
+use App\Policies\JornadaPolicy;
 use App\Policies\MedioPagoPolicy;
 use App\Policies\PagoPolicy;
 use App\Policies\PermisoPolicy;
@@ -24,7 +28,6 @@ use App\Policies\TipoTransaccionPolicy;
 use App\Policies\TransaccionPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 
 class AuthServiceProvider extends ServiceProvider
@@ -45,6 +48,7 @@ class AuthServiceProvider extends ServiceProvider
         Rol::class                  => RolPolicy::class,
         Permission::class           => PermisoPolicy::class,
         User::class                 => UserPolicy::class,
+        Jornada::class              => JornadaPolicy::class,
         AsignacionRolPermiso::class => AsignacionRolPermisoPolicy::class,
         AsignacionProcesoTipoDocumento::class => AsignacionProcesoTipoDocumentoPolicy::class,
     ];

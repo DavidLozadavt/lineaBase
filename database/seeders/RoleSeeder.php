@@ -37,6 +37,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_TIPO_PAGO,
             PermissionConst::GESTION_TIPO_TRANSACCION,
             PermissionConst::GESTION_TIPO_DOCUMENTOS,
+            PermissionConst::GESTION_JORNADA,
             PermissionConst::HOME
         ]);
 
@@ -44,6 +45,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_ROL_PERMISOS,
             PermissionConst::GESTION_ROLES,
             PermissionConst::GESTION_USUARIO,
+            PermissionConst::GESTION_JORNADA,
             PermissionConst::HOME
         ]);
 

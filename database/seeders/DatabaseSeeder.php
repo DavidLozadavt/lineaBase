@@ -43,6 +43,11 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
 
+        $this->call(DiaSeeder::class);
+
+        $path = 'database/seeders/sql/jornada.sql';
+        DB::unprepared(file_get_contents($path));
+
         // $path = 'database/seeders/sql/person.sql';
         // DB::unprepared(file_get_contents($path));
 

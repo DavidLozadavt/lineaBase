@@ -9,6 +9,8 @@ use App\Http\Controllers\gestion_notificacion\NotificacionController;
 use App\Http\Controllers\gestion_proceso\ProcesoController;
 use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Http\Controllers\gestion_documento\TipoDocumentoController;
+use App\Http\Controllers\gestion_jornada\DiaController;
+use App\Http\Controllers\gestion_jornada\JornadaController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\gestion_pago\MedioPagoController;
@@ -120,4 +122,15 @@ Route::group([
     Route::apiResource('transacciones', TransaccionController::class);
 
     Route::apiResource('tipo_transacciones', TipoTransaccionController::class);
+});
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'jornadas'
+], function () {
+
+    Route::apiResource('jornadas', JornadaController::class);
+
+    Route::apiResource('dias', DiaController::class)->only(['index']);
+    
 });
