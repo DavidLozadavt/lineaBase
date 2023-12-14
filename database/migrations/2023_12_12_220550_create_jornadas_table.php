@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->time('horaInicial');
             $table->time('horaFinal');
-            $table->double('numeroHoras', 8, 2);
+            $table->time('numeroHoras');
             $table->unsignedInteger('idCompany');
             $table->foreign('idCompany')->references('id')->on('company');
             $table->timestamps();
