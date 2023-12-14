@@ -2,8 +2,6 @@
 
 namespace App\Util;
 
-use Illuminate\Support\Facades\Session;
-
 class PolicyUtil
 {
 

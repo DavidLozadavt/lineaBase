@@ -17,6 +17,7 @@ use App\Http\Controllers\gestion_pago\PagoController;
 use App\Http\Controllers\gestion_pago\TipoTransaccionController;
 use App\Http\Controllers\gestion_pago\TransaccionController;
 use App\Http\Controllers\gestion_proceso\AsignacionProcesoTipoDocumentoController;
+use App\Http\Controllers\gestion_usuario\PersonaController;
 use App\Http\Controllers\gestion_usuario\UserController;
 
 /*
@@ -49,6 +50,8 @@ Route::group([
 ], function () {
 
     Route::resource('users', UserController::class);
+
+    Route::resource('person', PersonaController::class);
 
 });
 

@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-use App\Http\Controllers\gestion_rol\AsignacionRolPermiso;
 use App\Models\User;
 use App\Util\PolicyUtil;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AsignacionRolPermisoPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -21,7 +20,7 @@ class AsignacionRolPermisoPolicy
         //
     }
 
-    /**
+     /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
@@ -39,7 +38,7 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, AsignacionRolPermiso $asignacionRolPermiso)
+    public function view(User $user, User $idUser)
     {
         //
     }
@@ -52,10 +51,7 @@ class AsignacionRolPermisoPolicy
      */
     public function create(User $user)
     {
-        $permissions = [
-            'GESTION_ROL_PERMISOS',
-        ];
-        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
+        return PolicyUtil::isAdmin();
     }
 
     /**
@@ -65,12 +61,9 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, AsignacionRolPermiso $asignacionRolPermiso)
+    public function update(User $user, User $idUser)
     {
-        $permissions = [
-            'GESTION_ROL_PERMISOS',
-        ];
-        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
+        return PolicyUtil::isAdmin();
     }
 
     /**
@@ -80,12 +73,9 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
+    public function delete(User $user, User $idUser)
     {
-        $permissions = [
-            'GESTION_ROL_PERMISOS',
-        ];
-        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
+        return PolicyUtil::isAdmin();
     }
 
     /**
@@ -95,12 +85,9 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, AsignacionRolPermiso $asignacionRolPermiso)
+    public function restore(User $user, User $idUser)
     {
-        $permissions = [
-            'GESTION_ROL_PERMISOS',
-        ];
-        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
+        return PolicyUtil::isAdmin();
     }
 
     /**
@@ -110,11 +97,10 @@ class AsignacionRolPermisoPolicy
      * @param  \App\Models\TipoTransaccion  $tipoTransaccion
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, AsignacionRolPermiso $asignacionRolPermiso)
+    public function forceDelete(User $user, User $idUser)
     {
-        $permissions = [
-            'GESTION_ROL_PERMISOS',
-        ];
-        return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($permissions);
+        return PolicyUtil::isAdmin();
     }
+
+
 }

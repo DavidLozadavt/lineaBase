@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 // SPA
-Route::get(
-    '/{any?}',
-    [
-        App\Http\Controllers\WebController::class,
-        'index'
-    ]
-);
+Route::get('/',[WebController::class,'index']);
