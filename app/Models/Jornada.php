@@ -20,7 +20,7 @@ class Jornada extends Model
     'descripcion'   => 'nullable',
     'horaInicial'   => 'required',
     'horaFinal'     => 'required',
-    'numeroHoras'   => 'required|integer',
+    'numeroHoras'   => 'required',
     'dias'          => 'array',
   ];
 
