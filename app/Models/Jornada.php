@@ -17,11 +17,11 @@ class Jornada extends Model
 
   static $rules = [
     'nombreJornada' => 'required|string',
-    'descripcion'   => 'required|string',
+    'descripcion'   => 'nullable',
     'horaInicial'   => 'required',
     'horaFinal'     => 'required',
     'numeroHoras'   => 'required|integer',
-    'dias'          => 'required|array',
+    'dias'          => 'array',
   ];
 
   public function company(): BelongsTo

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\gestion_jornada;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jornada;
-use App\Models\AsignacionDiaJornada;
 use App\Util\KeyUtil;
 use App\Util\QueryUtil;
 use Exception;
@@ -63,10 +62,10 @@ class JornadaController extends Controller
       $columns = $data['columns'] ?? $this->columns;
       $relations = $data['relations'] ?? $this->relations;
 
-      $transaccion = Jornada::with($relations)
+      $jornada = Jornada::with($relations)
         ->findOrFail($jornada->id, $columns);
 
-      return response()->json($transaccion);
+      return response()->json($jornada, 200);
     } catch (QueryException $th) {
       QueryUtil::handleQueryException($th);
     } catch (Exception $e) {
