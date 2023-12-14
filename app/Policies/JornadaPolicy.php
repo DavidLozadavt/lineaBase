@@ -11,6 +11,20 @@ class JornadaPolicy
 {
   use HandlesAuthorization;
 
+  private $permissions = [
+    'GESTION_JORNADA'
+  ];
+
+  /**
+   * Create a new policy instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    //
+  }
+
   /**
    * Determine whether the user can view any models.
    *
@@ -42,7 +56,7 @@ class JornadaPolicy
    */
   public function create(User $user)
   {
-    return PolicyUtil::isAdmin();
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($this->permissions);
   }
 
   /**
@@ -54,7 +68,7 @@ class JornadaPolicy
    */
   public function update(User $user, Jornada $jornada)
   {
-    return PolicyUtil::isAdmin();
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($this->permissions);
   }
 
   /**
@@ -66,7 +80,7 @@ class JornadaPolicy
    */
   public function delete(User $user, Jornada $jornada)
   {
-    return PolicyUtil::isAdmin();
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($this->permissions);
   }
 
   /**
@@ -78,7 +92,7 @@ class JornadaPolicy
    */
   public function restore(User $user, Jornada $jornada)
   {
-    return PolicyUtil::isAdmin();
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($this->permissions);
   }
 
   /**
@@ -90,6 +104,6 @@ class JornadaPolicy
    */
   public function forceDelete(User $user, Jornada $jornada)
   {
-    return PolicyUtil::isAdmin();
+    return PolicyUtil::isAdmin() || PolicyUtil::hasPermission($this->permissions);
   }
 }

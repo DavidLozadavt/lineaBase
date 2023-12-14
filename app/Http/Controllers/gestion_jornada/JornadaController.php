@@ -82,6 +82,7 @@ class JornadaController extends Controller
   public function store(Request $request): JsonResponse
   {
     try {
+      $this->authorize('create', Jornada::class);
       request()->validate(Jornada::$rules);
 
       $data = $request->all();
@@ -130,6 +131,8 @@ class JornadaController extends Controller
 
       $jornada = Jornada::findOrFail($jornada->id);
 
+      $this->authorize('update', $jornada);
+
       $jornada->update([
         'nombreJornada' => $data['nombreJornada'],
         'descripcion' => $data['descripcion'],
@@ -164,9 +167,8 @@ class JornadaController extends Controller
   public function destroy(Jornada $jornada): JsonResponse
   {
     try {
-      // $jornada->dias()->detach();
+      $this->authorize('delete', $jornada);
       $jornada->delete();
-
       return response()->json(null, 204);
     } catch (QueryException $e) {
       return QueryUtil::handleQueryException($e);

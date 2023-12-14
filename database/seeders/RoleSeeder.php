@@ -45,6 +45,7 @@ class RoleSeeder extends Seeder
             PermissionConst::GESTION_ROL_PERMISOS,
             PermissionConst::GESTION_ROLES,
             PermissionConst::GESTION_USUARIO,
+            PermissionConst::GESTION_JORNADA,
             PermissionConst::HOME
         ]);
 
